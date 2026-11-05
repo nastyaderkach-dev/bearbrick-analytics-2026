@@ -50,6 +50,11 @@
   .bb-tip { position: absolute; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); border-radius: var(--cds-radius); box-shadow: var(--cds-shadow-popover); padding: var(--cds-pad-xs) var(--cds-pad-sm); font-size: var(--cds-font-size-caption); white-space: nowrap; z-index: 2; }
   .bb-tip .t { color: var(--cds-text-secondary); margin-bottom: 2px; }
   .bb-tablewrap { overflow: auto; max-height: 34rem; }
+  .bb .bb-wraph th { white-space: normal; vertical-align: bottom; min-width: 0; line-height: 1.3; }
+  .bb .bb-wraph th, .bb .bb-wraph td { padding-left: 4px; padding-right: 4px; }
+  .bb .bb-wraph td:first-child { min-width: 8rem; }
+  .bb table.bb-wraph { font-size: 12px; }
+  .bb .bb-wraph th.bb-gstart, .bb .bb-wraph td.bb-gstart { border-left: 2px solid var(--color-border-line); }
   .bb table { width: 100%; border-collapse: collapse; font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; }
   .bb th { position: sticky; top: 0; background: var(--color-panel); text-align: right; font-weight: var(--cds-font-weight-medium); color: var(--color-fg-muted); padding: var(--cds-pad-xs) var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); white-space: nowrap; }
   .bb td { text-align: right; padding: var(--cds-pad-xs) var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); white-space: nowrap; }
@@ -143,6 +148,16 @@
   .bb-donutleg .main { font-weight: 600; }
   .bb-extra { margin-top: var(--cds-gap-md); padding: var(--cds-pad-md) var(--cds-pad-lg); background: color-mix(in srgb, var(--color-ok) 6%, var(--color-panel)); border-radius: var(--cds-radius); }
   .bb-extra .bb-recs b { font-weight: 600; }
+  .bb-tactic { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); gap: var(--cds-gap-md); margin-bottom: var(--cds-gap-md); }
+  .bb-tcol { border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-md) var(--cds-pad-lg); display: flex; flex-direction: column; gap: var(--cds-gap-sm); }
+  .bb-tlist { margin: 0; padding-left: 1.1rem; font-size: var(--cds-font-size-caption); line-height: 1.5; display: flex; flex-direction: column; gap: 6px; }
+  .bb-tlist b { font-weight: 600; }
+  .bb-outside { margin: 0 0 var(--cds-gap-md); padding: var(--cds-pad-sm) var(--cds-pad-md); border-radius: var(--cds-radius); background: color-mix(in srgb, var(--color-fg-muted) 8%, var(--color-panel)); }
+  .bb-chip-now { color: var(--color-bad); background: color-mix(in srgb, var(--color-bad) 12%, transparent); }
+  .bb-chip-next { color: var(--color-warn); background: color-mix(in srgb, var(--color-warn) 14%, transparent); }
+  .bb-chip-ongoing { color: var(--color-ok); background: color-mix(in srgb, var(--color-ok) 12%, transparent); }
+  #plan td { white-space: normal; vertical-align: top; text-align: left; }
+  #plan th { text-align: left; }
   .bb-legend .sq.k-none, .bb-legend .k-none { background: #d1d5db; }
   .bb-h3 { font-size: var(--cds-font-size-body); font-weight: 600; margin: var(--cds-gap-md) 0 var(--cds-gap-xs); }
   .bb-chart-short { min-height: 70px; }
@@ -152,7 +167,7 @@
 <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
 <script>
 (function () {
-  const RAW = {"ads_weekly": "week,label,spend,clicks,atc,co,pur,val\n2026-10-03,3–9 жовт,2749.71,17072.0,99.0,58.0,10.0,7123.31\n2026-10-10,10–16 жовт,3259.96,6705.0,135.0,70.0,11.0,7055.05\n2026-10-17,17–23 жовт,3673.08,5404.0,136.0,62.0,20.0,14510.74\n2026-10-24,24–30 жовт,4379.98,6335.0,128.0,44.0,14.0,10248.03\n2026-10-31,31 жовт – 1 лист (2 дні),1259.23,1597.0,31.0,14.0,4.0,2561.6\n", "adsets": "adset,campaign,geo,status,mapping,spend,meta_orders,meta_revenue,ga_orders,ga_revenue,shop_orders,shop_revenue,shop_gross_profit,margin_region\nCOLD · NA · US+CA,COLD 1509,US+CA,active,ID,4358.18,22,14212.47,18,11384.79,19,12149.66,7592.14,217\nNP-STRUCT · New Creative Tests,NP-STRUCT,US+CA,active,ID,1470.11,6,6032.19,7,6632.51,7,6436.88,4320.75,217\nRT · CORE-INTENT,RT,WW,active,ID,1506.02,12,9103.48,7,5659.14,7,5843.55,4181.1,303\nCOLD · APAC,COLD 1509,HK+MO+TW+MY,off,ID,1547.33,7,4626.96,6,3967.0,5,3454.13,2490.78,350\nTEST · Art icon hooks,TEST,HK+TW,off,date,214.72,2,1524.28,1,1019.18,1,1019.3,769.3,350\nNP-STRUCT · Tests 2 Black,NP-STRUCT,US+CA,active,ID,315.59,2,1249.0,1,550.0,1,550.0,425.0,217\nTEST · UGC video 3,TEST,HK+TW,off,ID,416.85,1,508.1,0,0.0,1,509.53,384.53,350\nNP-STRUCT · Winners,NP-STRUCT,US+CA,active,ID,591.05,1,599.0,0,0.0,1,599.0,354.19,217\nARTICON · Winners,ARTICON,HK+TW,active,ID,1261.6,5,2830.32,2,1019.3,2,1019.3,769.3,350\nTEST · Lifestyle static,TEST,HK+TW,off,date,414.27,0,0.0,0,0.0,0,0.0,0.0,350\nTEST · UGC video 2,TEST,HK+TW,off,date,216.73,0,0.0,0,0.0,0,0.0,0.0,350\nCOLD · EUS,COLD 1509,IT+CZ+NL+GB,off,ID,1086.72,1,669.6,1,669.0,1,672.74,430.98,313\nARTICON · UGC + photos,ARTICON,HK+TW,active,ID,1920.89,5,3151.55,2,1019.53,2,1019.82,769.82,350\n", "cog_sources": "source,cog\n\"Таблиця маржі CORE (аркуш Core Pricing & Margins)\",94\n\"Розрахунок доставки та партій товару (той самий файл)\",120\n\"Собівартість у картках товарів Shopify\",125\n", "countries": "Country,country,spend,clicks,atc,pur,val,margin\nUS,США,5839.68,4178.0,154.0,25.0,16757.0,203\nHK,Гонконг,2889.53,2906.0,107.0,10.0,6285.26,362\nTW,Тайвань,2285.52,4533.0,91.0,3.0,1728.78,327\nCA,Канада,946.15,1864.0,41.0,5.0,4636.66,370\nMY,Малайзія,855.15,4110.0,40.0,5.0,3492.33,362\nIT,Італія,628.27,2893.0,17.0,1.0,668.74,313\nPH,Філіппіни,423.52,5510.0,26.0,0.0,0.0,211\nNL,Нідерланди,348.56,419.0,5.0,1.0,669.6,313\nSG,Сінгапур,154.53,221.0,17.0,1.0,621.44,375\nCZ,Чехія,143.67,256.0,0.0,0.0,0.0,313\nKR,Південна Корея,110.09,134.0,7.0,2.0,1493.55,343\nAU,Австралія,104.82,132.0,4.0,2.0,1369.03,348\nAE,ОАЕ,86.71,41.0,3.0,0.0,0.0,297\nBR,Бразилія,85.8,4602.0,2.0,0.0,0.0,318\nID,Індонезія,71.64,4826.0,2.0,0.0,0.0,210\nGB,Велика Британія,64.74,70.0,1.0,2.0,1459.68,356\nDE,Німеччина,49.56,48.0,3.0,0.0,0.0,313\nES,Іспанія,47.12,66.0,3.0,1.0,666.66,313\nCY,Кіпр,41.68,72.0,3.0,0.0,0.0,313\n", "creative_market": "key,creative,market,spend,clicks,atc,co,pur,val,note\nAI Lifestyle 2 | B | static — США + Канада,AI Lifestyle 2 | B | static,США + Канада,202.39,156.0,2.0,2.0,0.0,0.0,Слабкий: дорогий кошик\nArt icon hook1 black | B&W | video — Європа,Art icon hook1 black | B&W | video,Європа,603.11,634.0,12.0,3.0,1.0,669.6,\"Дорогий кошик, мало покупок\"\nArt icon hook1 black | B&W | video — Азія,Art icon hook1 black | B&W | video,Азія,1396.18,2074.0,66.0,30.0,2.0,1016.4,В Азії майже не продає\nArt icon hook1 black | B&W | video — Ретаргет,Art icon hook1 black | B&W | video,Ретаргет,821.67,1511.0,48.0,17.0,7.0,5800.68,Найкращий результат у ретаргеті\nArt icon hook1 black | B&W | video — США + Канада,Art icon hook1 black | B&W | video,США + Канада,3949.89,2607.0,137.0,76.0,20.0,12770.12,\"Головний креатив у США, кошик стабільний\"\nArt icon hook2 black | B&W | video — Азія,Art icon hook2 black | B&W | video,Азія,327.73,231.0,12.0,4.0,2.0,1524.28,Кандидат для тесту з чорною колонкою\nLifestyle 16 v4 | B&W | video — Азія,Lifestyle 16 v4 | B&W | video,Азія,179.93,684.0,6.0,5.0,1.0,560.13,Мала вибірка\nLifestyle static 2 — Азія,Lifestyle static 2,Азія,227.37,224.0,9.0,1.0,0.0,0.0,Вимкнено; без покупок\nPhoto shelf White + Black | B&W — Азія,Photo shelf White + Black | B&W,Азія,183.95,292.0,5.0,4.0,1.0,609.85,Вимкнено; мала вибірка\nReviews CORE_4 render + quote | W | static — Азія,Reviews CORE_4 render + quote | W | static,Азія,184.72,228.0,2.0,1.0,1.0,694.87,Мала вибірка\nReviews CORE_4 render + quote | W | static — США + Канада,Reviews CORE_4 render + quote | W | static,США + Канада,335.7,214.0,15.0,9.0,1.0,699.0,\"Дешевий кошик, мало покупок\"\nUGC 3 | art icon — Азія,UGC 3 | art icon,Азія,317.07,1136.0,24.0,10.0,1.0,508.1,Вимкнено; дорога покупка\nUGC Jeff Martin unboxing | B — Азія,UGC Jeff Martin unboxing | B,Азія,807.85,1322.0,18.0,10.0,1.0,1016.58,\"Дорого, не масштабувати\"\nUGC Jeff Martin unboxing | B — США + Канада,UGC Jeff Martin unboxing | B,США + Канада,433.89,192.0,6.0,2.0,2.0,1901.84,Мала вибірка\nUGC Yuta Minamiura | W — Азія,UGC Yuta Minamiura | W,Азія,718.65,1350.0,30.0,9.0,3.0,1525.12,Стабільний; біла колонка закінчується\nUGC Yuta Minamiura | W — США + Канада,UGC Yuta Minamiura | W,США + Канада,1036.45,530.0,20.0,7.0,4.0,4130.35,Стабільний; біла колонка закінчується\nWarranty 14 t1 | B&W | video — Європа,Warranty 14 t1 | B&W | video,Європа,263.68,179.0,6.0,5.0,0.0,0.0,Без покупок\nWarranty 14 t1 | B&W | video — Азія,Warranty 14 t1 | B&W | video,Азія,657.18,1641.0,37.0,20.0,5.0,3491.32,Найкращий креатив для Азії\nWarranty 2 | W | static — Ретаргет,Warranty 2 | W | static,Ретаргет,232.58,2151.0,12.0,3.0,2.0,1402.86,Добре в ретаргеті; біла колонка\n", "ga_sources": "key,channel,sessions,engaged,purchases,revenue\nmeta_paid,Meta Ads — платна реклама,32315,8486,45,31920.45\nsearch,Пошук — Google та інші,1090,692,10,6622.70\ndirect,Прямі заходи,1396,487,8,4781.86\nnot_set,Джерело не визначене (not set),576,0,6,3804.16\nig_org,Instagram — органіка,499,355,4,2442.85\nfb_org,Facebook — органіка й переходи,134,81,1,612.83\nreferral,Сайти-огляди (referral),81,46,1,599.00\nai,AI-асистенти (ChatGPT),34,25,0,0\nother,Інше (email та ін.),9,3,0,0\n", "junk_creatives": "creative,spend,impr,clicks,atc,pur\nGeneric 5 Missed a drop | B&W | static,510.27,87169,10397.0,9.0,0.0\nLifestyle 3 Art icon | B | static,39.11,2835,285.0,0.0,0.0\nLifestyle 4 Art icon | B&W | static,169.22,95442,5099.0,19.0,0.0\n", "margins": "key,label,margin,source\nlow,Консервативний,209,\"Беззбиткова вартість замовлення у звіті таргетолога (за старої ціни у США)\"\nmid,Середня маржа CORE,303,\"Середня маржа до реклами з розрахунку окупності (таблиця маржі CORE по всіх країнах)\"\n", "market_margins": "key,market,price,cog,royalty,shipping,warehouse,shopify_fee,duty,cpo_actual,cpo_note,mkt_plan\nus_hk_599,\"США, відправка з Гонконгу, ціна $599 (до 26 жовтня)\",599.0,94,25,95,2.18,23.12,173.71,,,120\nus_hk_699,\"США, відправка з Гонконгу, ціна $699\",699.0,94,25,95,2.18,26.98,202.71,244.0,\"США + Канада, тиждень 44\",120\nus_wh_699,\"США, зі складу в США, ціна $699\",699.0,94,25,90,2.5,26.98,27.26,,,120\nca,Канада,722.34,94,25,95,2.18,27.88,108.35,142.0,за два тижні,120\nhk,Гонконг,512.82,94,25,10,2.18,19.8,0.0,243.0,тиждень 44,120\ntw,Тайвань,632.43,94,25,65,2.18,24.41,94.86,716.0,тиждень 44,120\neu,Європа,702.06,94,25,72,2.18,27.1,168.5,,,120\n", "placements": "placement,spend,clicks,lpv,atc,pur,val\nInstagram · Feed,3910.3,2147.0,2138.0,94.0,13.0,9487.26\nInstagram · Instagram Stories,3694.4,17453.0,16575.0,131.0,16.0,10088.89\nFacebook · Feed,2906.26,5519.0,4660.0,137.0,11.0,7811.28\nInstagram · Instagram Reels,2762.74,2000.0,1801.0,73.0,13.0,10247.26\nFacebook · Facebook Reels,1655.89,5996.0,4376.0,71.0,5.0,3355.95\nFacebook · Facebook Stories,144.25,212.0,184.0,6.0,0.0,0.0\nThreads · Threads feed,87.8,1264.0,1045.0,9.0,1.0,508.1\nFacebook · Ads on Facebook Reels,68.78,1729.0,1034.0,4.0,0.0,0.0\nFacebook · In-stream reels,64.38,670.0,508.0,2.0,0.0,0.0\n", "referral_sites": "site,kind,ga_sessions,ga_revenue,shop_orders,shop_revenue\ngadgetreview.com,Огляд техніки,4,599.00,1,658.90\nbearbrick,Сайт BE@RBRICK (у Shopify лише назва),,,4,2580.29\nshop_app,Застосунок Shop від Shopify,10,0,0,0\n\"Галереї веб-дизайну (landing.love, webdesignclip, storefront.design, thenerodesign)\",Добірки дизайну сайтів,28,0,0,0\nrinaro.com,Інший сайт,5,0,0,0\nbrik.co.jp,Японський сайт про BE@RBRICK,3,0,0,0\nuncrate.com,Медіа про чоловічі товари,2,0,0,0\nadfwebmagazine.jp,Японський дизайн-журнал,2,0,0,0\nmedicomtoy.tv,Сайт виробника Medicom Toy,1,0,0,0\n", "shopify_channels": "key,channel,orders,revenue,gross_profit\nmeta_paid,Meta Ads — платна реклама,47,33273.91,22487.89\nsearch,Пошук — Google,11,6644.57,4898.49\ndirect,Прямі заходи,5,3037.67,2130.30\nreferral,Переходи з сайтів (bearbrick і gadgetreview),5,3239.19,2062.92\nig_org,Instagram — органіка,3,1824.29,1280.16\nfb_org,Facebook — без рекламних міток,2,1180.66,850.07\nnot_set,Джерело не визначене (Android-застосунок),2,1295.77,927.97\n", "shopify_sources": "key,source,orders,revenue\nmeta_utm,Meta Ads (UTM-мітки Meta),47,33273.91\nig_social,Instagram — органіка (ig / social),3,1824.29\nnone,Без UTM-міток (direct / пошук / невідомо),25,15397.86\n", "site_totals": "key,source,orders,revenue,gross_profit\nshopify_all,Shopify — усі замовлення,75,50496.06,34637.8\nga_all,GA4 — увесь сайт,75,50783.86,\nshopify_no_utm,Shopify — без Meta-UTM,28,17222.15,12149.91\n", "w44_budget": "line,now,proposed\n\"North America, original (лише США)\",145,145\n\"North America, new structure (лише США)\",200,120\n\"Art icon (лише Гонконг)\",200,120\nКанада окремим адсетом,44,80\nЧорні відео окремим адсетом у США,0,80\nРетаргет,64,64\n", "w44_campaigns": "campaign,spend,carts_per_1000,cost_per_cart,meta_purchases,verdict\n\"North America, original\",1035,0.94,32,5,Найкраща холодна кампанія\n\"North America, new structure\",1406,0.69,47,3,Дорожчий кошик; Winners без покупок\n\"Art icon, Hong Kong\",729,0.27,28,3,Втомлюється, але продає\n\"Art icon, Taiwan\",716,0.06,28,1,Кошики рідко стають замовленнями\nRetargeting,440,0.15,19,3,Instagram працює; Facebook Reels — ні\nEurope + UK,61,0.16,61,0,Зупинено 27 жовтня\n", "w44_funnel": "step,w43,w44\nСесії,6621,7118\nСесії з кошиком,166,148\nПерейшли до оформлення,81,61\nОформили замовлення,25,18\n", "w44_kpi": "key,label,w43,w44\nspend,Витрати Meta,,4386\norders,Замовлення CORE,25,17\nnet_sales,Чисті продажі,15943,9945\ncpo,Вартість замовлення,161,258\nroas,Повернення на витрати,3.95,2.27\n"};
+  const RAW = {"ads_weekly": "week,label,spend,clicks,atc,co,pur,val\n2026-10-03,3–9 жовт,2749.71,17072.0,99.0,58.0,10.0,7123.31\n2026-10-10,10–16 жовт,3259.96,6705.0,135.0,70.0,11.0,7055.05\n2026-10-17,17–23 жовт,3673.08,5404.0,136.0,62.0,20.0,14510.74\n2026-10-24,24–30 жовт,4379.98,6335.0,128.0,44.0,14.0,10248.03\n2026-10-31,31 жовт – 1 лист (2 дні),1259.23,1597.0,31.0,14.0,4.0,2561.6\n", "adsets": "adset,campaign,geo,status,mapping,spend,meta_orders,meta_revenue,ga_orders,ga_revenue,shop_orders,shop_revenue,shop_gross_profit,margin_region\nCOLD · NA · US+CA,COLD 1509,US+CA,active,ID,4358.18,22,14212.47,18,11384.79,19,12149.66,7592.14,217\nNP-STRUCT · New Creative Tests,NP-STRUCT,US+CA,active,ID,1470.11,6,6032.19,7,6632.51,7,6436.88,4320.75,217\nRT · CORE-INTENT,RT,WW,active,ID,1506.02,12,9103.48,7,5659.14,7,5843.55,4181.1,303\nCOLD · APAC,COLD 1509,HK+MO+TW+MY,off,ID,1547.33,7,4626.96,6,3967.0,5,3454.13,2490.78,350\nTEST · Art icon hooks,TEST,HK+TW,off,date,214.72,2,1524.28,1,1019.18,1,1019.3,769.3,350\nNP-STRUCT · Tests 2 Black,NP-STRUCT,US+CA,active,ID,315.59,2,1249.0,1,550.0,1,550.0,425.0,217\nTEST · UGC video 3,TEST,HK+TW,off,ID,416.85,1,508.1,0,0.0,1,509.53,384.53,350\nNP-STRUCT · Winners,NP-STRUCT,US+CA,active,ID,591.05,1,599.0,0,0.0,1,599.0,354.19,217\nARTICON · Winners,ARTICON,HK+TW,active,ID,1261.6,5,2830.32,2,1019.3,2,1019.3,769.3,350\nTEST · Lifestyle static,TEST,HK+TW,off,date,414.27,0,0.0,0,0.0,0,0.0,0.0,350\nTEST · UGC video 2,TEST,HK+TW,off,date,216.73,0,0.0,0,0.0,0,0.0,0.0,350\nCOLD · EUS,COLD 1509,IT+CZ+NL+GB,off,ID,1086.72,1,669.6,1,669.0,1,672.74,430.98,313\nARTICON · UGC + photos,ARTICON,HK+TW,active,ID,1920.89,5,3151.55,2,1019.53,2,1019.82,769.82,350\n", "cog_sources": "source,cog\n\"Таблиця маржі CORE (аркуш Core Pricing & Margins)\",94\n\"Розрахунок доставки та партій товару (той самий файл)\",120\n\"Собівартість у картках товарів Shopify\",125\n", "countries": "Country,country,spend,clicks,atc,pur,val,margin\nUS,США,5619.64,3100.0,151.0,25.0,16757.0,203\nHK,Гонконг,1231.92,1191.0,45.0,4.0,2727.76,362\nTW,Тайвань,1017.38,1798.0,35.0,1.0,610.82,327\nCA,Канада,830.58,806.0,39.0,5.0,4636.66,370\nPH,Філіппіни,351.89,4208.0,21.0,0.0,0.0,211\nSG,Сінгапур,145.49,201.0,12.0,1.0,621.44,375\nKR,Південна Корея,104.26,126.0,6.0,2.0,1493.55,343\nAU,Австралія,97.85,122.0,2.0,2.0,1369.03,348\nAE,ОАЕ,79.91,28.0,3.0,0.0,0.0,297\nGB,Велика Британія,59.22,61.0,1.0,2.0,1459.68,356\nDE,Німеччина,48.11,47.0,3.0,0.0,0.0,313\nES,Іспанія,41.92,41.0,2.0,1.0,666.66,313\nMY,Малайзія,40.97,56.0,1.0,0.0,0.0,362\nCY,Кіпр,35.8,28.0,2.0,0.0,0.0,313\nBR,Бразилія,30.88,38.0,2.0,0.0,0.0,318\nID,Індонезія,24.41,64.0,1.0,0.0,0.0,210\nIT,Італія,20.25,28.0,3.0,1.0,668.74,313\nNL,Нідерланди,6.1,3.0,0.0,0.0,0.0,313\nCZ,Чехія,3.86,0.0,0.0,0.0,0.0,313\n", "creative_market": "key,creative,market,spend,clicks,atc,co,pur,val,note\nAI Lifestyle 2 | B | static — США + Канада,AI Lifestyle 2 | B | static,США + Канада,202.39,156.0,2.0,2.0,0.0,0.0,Слабкий: дорогий кошик\nAI Lifestyle 3 | B | static — Азія,AI Lifestyle 3 | B | static,Азія,134.56,134.0,2.0,1.0,0.0,0.0,\"Новий, поки без покупок\"\nAI Lifestyle 3 | B | static — США + Канада,AI Lifestyle 3 | B | static,США + Канада,94.15,49.0,2.0,1.0,1.0,550.0,Новий; перша покупка\nArt icon hook1 black | B&W | video — Азія,Art icon hook1 black | B&W | video,Азія,779.16,975.0,38.0,10.0,1.0,508.29,В Азії майже не продає\nArt icon hook1 black | B&W | video — Ретаргет,Art icon hook1 black | B&W | video,Ретаргет,821.67,1511.0,48.0,17.0,7.0,5800.68,Найкращий результат у ретаргеті\nArt icon hook1 black | B&W | video — США + Канада,Art icon hook1 black | B&W | video,США + Канада,3949.89,2607.0,137.0,76.0,20.0,12770.12,\"Головний креатив у США, кошик стабільний\"\nArt icon hook2 black | B&W | video — Азія,Art icon hook2 black | B&W | video,Азія,127.64,95.0,4.0,1.0,0.0,0.0,В активних адсетах поки без покупок\nArt icon hook2 black | B&W | video — США + Канада,Art icon hook2 black | B&W | video,США + Канада,116.19,39.0,2.0,1.0,1.0,599.0,Мала вибірка\nGeneric 1 | B | static — США + Канада,Generic 1 | B | static,США + Канада,127.33,49.0,0.0,0.0,0.0,0.0,Без кошиків — кандидат на вимкнення\nLifestyle 16 v4 | B&W | video — Ретаргет,Lifestyle 16 v4 | B&W | video,Ретаргет,131.78,1295.0,1.0,1.0,1.0,725.56,Мала вибірка\nLifestyle 16 v4 | B&W | video — США + Канада,Lifestyle 16 v4 | B&W | video,США + Канада,98.62,27.0,4.0,4.0,1.0,743.35,Мала вибірка\nReviews CORE_4 render + quote | W | static — Азія,Reviews CORE_4 render + quote | W | static,Азія,90.72,89.0,2.0,1.0,1.0,694.87,Мала вибірка\nReviews CORE_4 render + quote | W | static — США + Канада,Reviews CORE_4 render + quote | W | static,США + Канада,335.7,214.0,15.0,9.0,1.0,699.0,\"Дешевий кошик, мало покупок\"\nUGC Jeff Martin unboxing | B — Азія,UGC Jeff Martin unboxing | B,Азія,807.85,1322.0,18.0,10.0,1.0,1016.58,\"Дорого, не масштабувати\"\nUGC Jeff Martin unboxing | B — США + Канада,UGC Jeff Martin unboxing | B,США + Канада,433.89,192.0,6.0,2.0,2.0,1901.84,Мала вибірка\nUGC Yuta Minamiura | W — США + Канада,UGC Yuta Minamiura | W,США + Канада,1036.45,530.0,20.0,7.0,4.0,4130.35,Стабільний; біла колонка закінчується\nWarranty 14 t1 | B&W | video — Азія,Warranty 14 t1 | B&W | video,Азія,265.1,343.0,14.0,8.0,2.0,1118.84,Найкращий креатив для Азії\nWarranty 2 | W | static — Ретаргет,Warranty 2 | W | static,Ретаргет,232.58,2151.0,12.0,3.0,2.0,1402.86,Добре в ретаргеті; біла колонка\n", "ga_sources": "key,channel,sessions,engaged,purchases,revenue\nmeta_paid,Meta Ads — платна реклама,32315,8486,45,31920.45\nsearch,Пошук — Google та інші,1090,692,10,6622.70\ndirect,Прямі заходи,1396,487,8,4781.86\nnot_set,Джерело не визначене (not set),576,0,6,3804.16\nig_org,Instagram — органіка,499,355,4,2442.85\nfb_org,Facebook — органіка й переходи,134,81,1,612.83\nreferral,Сайти-огляди (referral),81,46,1,599.00\nai,AI-асистенти (ChatGPT),34,25,0,0\nother,Інше (email та ін.),9,3,0,0\n", "margins": "key,label,margin,source\nlow,Консервативний,209,\"Беззбиткова вартість замовлення у звіті таргетолога (за старої ціни у США)\"\nmid,Середня маржа CORE,303,\"Середня маржа до реклами з розрахунку окупності (таблиця маржі CORE по всіх країнах)\"\n", "market_margins": "key,market,price,cog,royalty,shipping,warehouse,shopify_fee,duty,cpo_actual,cpo_note,mkt_plan\nus_hk_599,\"США, відправка з Гонконгу, ціна $599 (до 26 жовтня)\",599.0,94,25,95,2.18,23.12,173.71,,,120\nus_hk_699,\"США, відправка з Гонконгу, ціна $699\",699.0,94,25,95,2.18,26.98,202.71,244.0,\"США + Канада, тиждень 44\",120\nus_wh_699,\"США, зі складу в США, ціна $699\",699.0,94,25,90,2.5,26.98,27.26,,,120\nca,Канада,722.34,94,25,95,2.18,27.88,108.35,142.0,за два тижні,120\nhk,Гонконг,512.82,94,25,10,2.18,19.8,0.0,243.0,тиждень 44,120\ntw,Тайвань,632.43,94,25,65,2.18,24.41,94.86,716.0,тиждень 44,120\neu,Європа,702.06,94,25,72,2.18,27.1,168.5,,,120\n", "placements": "placement,spend,clicks,lpv,atc,pur,val\nInstagram · Feed,2591.08,1311.0,1320.0,62.0,11.0,8419.02\nInstagram · Instagram Stories,2405.15,2009.0,2032.0,96.0,13.0,8351.73\nInstagram · Instagram Reels,2040.62,1365.0,1256.0,59.0,12.0,9687.13\nFacebook · Feed,1667.17,2878.0,2449.0,64.0,5.0,3355.63\nFacebook · Facebook Reels,1047.99,3351.0,2686.0,47.0,4.0,2847.84\nFacebook · Facebook Stories,69.57,121.0,95.0,3.0,0.0,0.0\nFacebook · In-stream reels,27.05,424.0,356.0,0.0,0.0,0.0\nFacebook · Ads on Facebook Reels,18.8,545.0,483.0,1.0,0.0,0.0\nThreads · Threads feed,13.4,23.0,16.0,0.0,0.0,0.0\n", "referral_sites": "site,kind,ga_sessions,ga_revenue,shop_orders,shop_revenue\ngadgetreview.com,Огляд техніки,4,599.00,1,658.90\nbearbrick,Сайт BE@RBRICK (у Shopify лише назва),,,4,2580.29\nshop_app,Застосунок Shop від Shopify,10,0,0,0\n\"Галереї веб-дизайну (landing.love, webdesignclip, storefront.design, thenerodesign)\",Добірки дизайну сайтів,28,0,0,0\nrinaro.com,Інший сайт,5,0,0,0\nbrik.co.jp,Японський сайт про BE@RBRICK,3,0,0,0\nuncrate.com,Медіа про чоловічі товари,2,0,0,0\nadfwebmagazine.jp,Японський дизайн-журнал,2,0,0,0\nmedicomtoy.tv,Сайт виробника Medicom Toy,1,0,0,0\n", "shopify_channels": "key,channel,orders,revenue,gross_profit\nmeta_paid,Meta Ads — платна реклама,47,33273.91,22487.89\nsearch,Пошук — Google,11,6644.57,4898.49\ndirect,Прямі заходи,5,3037.67,2130.30\nreferral,Переходи з сайтів (bearbrick і gadgetreview),5,3239.19,2062.92\nig_org,Instagram — органіка,3,1824.29,1280.16\nfb_org,Facebook — без рекламних міток,2,1180.66,850.07\nnot_set,Джерело не визначене (Android-застосунок),2,1295.77,927.97\n", "shopify_sources": "key,source,orders,revenue\nmeta_utm,Meta Ads (UTM-мітки Meta),47,33273.91\nig_social,Instagram — органіка (ig / social),3,1824.29\nnone,Без UTM-міток (direct / пошук / невідомо),25,15397.86\n", "site_totals": "key,source,orders,revenue,gross_profit\nshopify_all,Shopify — усі замовлення,75,50496.06,34637.8\nga_all,GA4 — увесь сайт,75,50783.86,\nshopify_no_utm,Shopify — без Meta-UTM,28,17222.15,12149.91\n", "w44_budget": "line,now,proposed\n\"North America, original (лише США)\",145,145\n\"North America, new structure (лише США)\",200,120\n\"Art icon (лише Гонконг)\",200,120\nКанада окремим адсетом,44,80\nЧорні відео окремим адсетом у США,0,80\nРетаргет,64,64\n", "w44_campaigns": "campaign,spend,carts_per_1000,cost_per_cart,meta_purchases,verdict\n\"North America, original\",1035,0.94,32,5,Найкраща холодна кампанія\n\"North America, new structure\",1406,0.69,47,3,Дорожчий кошик; Winners без покупок\n\"Art icon, Hong Kong\",729,0.27,28,3,\"Втомлюється, але продає\"\n\"Art icon, Taiwan\",716,0.06,28,1,Кошики рідко стають замовленнями\nRetargeting,440,0.15,19,3,Instagram працює; Facebook Reels — ні\n", "w44_funnel": "step,w43,w44\nСесії,6621,7118\nСесії з кошиком,166,148\nПерейшли до оформлення,81,61\nОформили замовлення,25,18\n", "w44_kpi": "key,label,w43,w44\nspend,Витрати Meta,,4386\norders,Замовлення CORE,25,17\nnet_sales,Чисті продажі,15943,9945\ncpo,Вартість замовлення,161,258\nroas,Повернення на витрати,3.95,2.27\n", "auto_rules": "n,rule,applies,period,condition,action,check,why\n1,Вимкнути слабкий новий креатив,Оголошення в тестових адсетах,Останні 3 дні,\"Витрати > $150 і ціна кошика (Cost per add to cart) > $60\",Вимкнути оголошення + сповіщення,Щодня,\"Не чекати $500, щоб позбутися явно слабкого оголошення\"\n2,Вимкнути оголошення без продажів,Усі оголошення,Останні 7 днів,\"Витрати > $500 і покупки (7 днів після кліку) = 0\",Вимкнути оголошення + сповіщення,Щодня,\"Правило Бена: $500 — достатньо, щоб оцінити оголошення\"\n3,Сигнал про дорогі продажі в США,Адсети на США й Канаду,Останні 7 днів,\"Витрати > $400 і ціна покупки > $200\",Зменшити денний бюджет на 20% + сповіщення,Раз на день,\"Беззбитковість у США ~$253; Meta завищує продажі приблизно на 20%, тому поріг у Meta нижчий\"\n4,Сигнал про дорогі продажі в Азії,Адсети на Гонконг,Останні 7 днів,\"Витрати > $400 і ціна покупки > $290\",Зменшити денний бюджет на 20% + сповіщення,Раз на день,\"Беззбитковість у Гонконгу ~$362 з поправкою на завищення Meta\"\n5,Масштабувати переможця,Адсети на США й Канаду,Останні 7 днів,\"Покупки ≥ 3 і ціна покупки < $130\",Збільшити денний бюджет на 15% (не частіше ніж раз на 3 дні; ліміт бюджету задати),Раз на 3 дні,\"Ціна покупки нижча за ціль (~65% маржі) — можна обережно додавати бюджет\"\n6,Захист від малоцінних кліків,Усі оголошення,Останні 3 дні,\"CTR за посиланням > 6%, ціна кліку < $0.15 і додавань у кошик = 0\",Вимкнути оголошення + сповіщення,Щодня,\"Так виглядали креативи, що дали тисячі порожніх сесій на початку жовтня\"\n7,Втома креативу,Оголошення в холодних адсетах,Останні 7 днів,\"Частота > 2.5 і CTR за посиланням < 0.8%\",Лише сповіщення,Щодня,\"Сигнал готувати заміну креативу, а не вимикати одразу\"\n8,Ретаргет без результату,Адсет ретаргету,Останні 7 днів,\"Витрати > $300 і покупки = 0\",Лише сповіщення,Щодня,\"Ретаргет має бути найдешевшим джерелом продажів — нуль покупок означає проблему з аудиторією чи креативом\"\n", "budget_compare": "n,line,now,buyer,ben,ours,ours_note\n1,\"North America, оригінальна (США)\",145,145,145,145,\"Усі згодні: найкраща холодна кампанія, бюджет не чіпаємо\"\n2,\"North America, нова структура (США)\",200,120,200,200,\"Як Бен: об'єднати Winners і Tests 2 в основну кампанію без зміни бюджету; через 7 днів — рішення за автоматичними правилами\"\n3,\"Art icon (Гонконг)\",200,120,200,120,\"Як таргетолог: без Тайваню весь бюджет на Гонконг подвоїв би витрати там, а запас прибутку в Гонконгу невеликий\"\n4,Канада окремим адсетом,44,80,0,0,\"Як Бен: поки не виносимо, Канада лишається в кампанії US+CA; через 2 тижні перевірити її частку бюджету\"\n5,Чорні відео окремим адсетом (США),0,80,0,80,\"Як таргетолог: без окремого бюджету чорні відео не отримають тесту, а незабаром у наявності будуть лише чорні колонки\"\n6,Ретаргет,64,64,64,64,\"Усі згодні щодо бюджету; додатково — лише країни з продажами і без слабких плейсментів\"\n"};
   const parsed = {}, calcs = {}, cache = {}, draws = {};
   Object.keys(RAW).forEach((k) => { parsed[k] = d3.csvParse(RAW[k]); });
   const data = (id) => {
@@ -185,12 +200,12 @@
 <body>
 <div class="page-wrap">
 
-
 <div class="bb">
   <header class="bb-head" id="top">
     <h1>Bearbrick: аудит аналітики 3 жовтня – 1 листопада</h1>
     <div class="bb-period">2026 рік · 30 днів · Meta Ads, GA4, Shopify, таблиця маржі CORE · акаунт ERA TOYS LIMITED, магазин BE@RBRICK AUDIO</div>
     <p class="bb-take">Звірила Meta Ads, GA4 і Shopify за 30 днів, а також таблицю маржі CORE.</p>
+    <p class="note">Звірка даних і загальний прибуток — по всьому рекламному акаунту за 30 днів. Розбивки по адсетах, країнах, плейсментах і креативах — лише по кампаніях, адсетах і оголошеннях, активних на 1 листопада; вимкнені прибрано.</p>
   </header>
 
   <section id="summary">
@@ -210,20 +225,20 @@
       </div>
       <div class="bb-f ok">
         <span class="bb-chip">Ринки</span>
-        <div class="bb-fbig bb-fmid">Канада · Гонконг · Малайзія</div>
+        <div class="bb-fbig bb-fmid">Канада · Гонконг</div>
         <div class="bb-fsub">маржа: Канада <b data-draw="kpi" data-source="market_calc" data-field="margin" data-where="key=ca" data-fmt="money">—</b> · Гонконг <b data-draw="kpi" data-source="market_calc" data-field="margin" data-where="key=hk" data-fmt="money">—</b> · США <b data-draw="kpi" data-source="market_calc" data-field="margin" data-where="key=us_hk_699" data-fmt="money">—</b></div>
         <p>Ці ринки в плюсі. США — близько нуля через мито при відправці з Гонконгу. Тайвань — у мінусі.</p>
       </div>
       <div class="bb-f bad">
         <span class="bb-chip">Збиткові адсети</span>
         <div class="bb-fbig" data-draw="kpi" data-source="kpi" data-field="loss" data-row="0" data-fmt="money">—</div>
-        <div class="bb-fsub">втрати за місяць</div>
-        <p>Тайвань в ARTICON, COLD EUS, Winners і тести. Таргетолог пропонує прибрати саме їх.</p>
+        <div class="bb-fsub">втрати активних адсетів за місяць</div>
+        <p>Найбільше — ARTICON через Тайвань, далі Winners у США. Таргетолог і Бен пропонують прибрати Тайвань і об'єднати Winners.</p>
       </div>
       <div class="bb-f warn">
         <span class="bb-chip">Креативи</span>
         <div class="bb-fbig" data-draw="kpi" data-source="ads_calc" data-field="hook1_share" data-row="0" data-fmt="pct">—</div>
-        <div class="bb-fsub">бюджету на один креатив — Hook 1</div>
+        <div class="bb-fsub">бюджету активних оголошень на один креатив — Hook 1</div>
         <p>Продає в США та ретаргеті, але не в Азії. Для Гонконгу краще працює Warranty 14 t1.</p>
       </div>
       <div class="bb-f bad">
@@ -291,38 +306,56 @@
   <section class="bb-card bb-step" id="step2">
     <div class="bb-stephead"><span class="bb-stepn">Крок 2</span><span class="bb-stepk">Прибуток</span></div>
     <h2>Прибуток рахувався за умовною собівартістю</h2>
-    <p class="bb-lead">У Shopify собівартість колонки заповнена умовно і не враховує доставку, мито й роялті, тому реклама здавалась прибутковою. За таблицею маржі CORE картина інша. Нижче — прибуток за 30 днів у кількох сценаріях маржі.</p>
+    <p class="bb-lead">У Shopify собівартість колонки заповнена умовно і не враховує доставку, мито й роялті, тому реклама здавалась прибутковою. За таблицею маржі CORE картина інша. Нижче — прибуток за 30 днів: замовлення, підтверджені Shopify, × маржа за ринками з таблиці CORE мінус витрати Meta.</p>
     <div class="bb-tablewrap">
       <table data-source="scen" data-row-key="label">
         <thead><tr>
-          <th data-field="label">Сценарій</th>
-          <th data-field="source">Звідки маржа</th>
-          <th data-field="margin">Маржа на замовлення</th>
+          <th data-field="orders">Замовлення, підтверджені Shopify</th>
+          <th data-field="margin">Маржа на замовлення (CORE, за ринками)</th>
+          <th data-field="spend">Витрати Meta</th>
           <th data-field="be_roas">Поріг ROAS</th>
-          <th data-field="profit_utm" class="truth">Прибуток · замовлення, підтверджені Shopify</th>
-          <th data-field="profit_meta">Прибуток · замовлення за Meta</th>
+          <th data-field="profit_utm" class="truth">Прибуток після реклами</th>
         </tr></thead>
         <tbody data-draw="scenTable"></tbody>
       </table>
     </div>
     <h3 class="bb-h3">Маржа по ринках: скільки можна платити за замовлення</h3>
-    <p class="note">Маржа до реклами — максимальна вартість замовлення, за якої реклама не збиткова. Вартість замовлення за місяць — витрати Meta в країні ÷ покупки протягом 7 днів після кліку.</p>
+    <p class="note">Маржа до реклами — максимальна вартість замовлення, за якої реклама не збиткова: ціна мінус усі витрати на одне замовлення, крім реклами.</p>
     <div class="bb-tablewrap">
-      <table data-source="market_calc" data-row-key="market">
+      <table data-source="market_calc" data-row-key="market" class="bb-wraph">
         <thead><tr>
           <th data-field="market">Ринок</th>
-          <th data-field="price">Ціна, $</th>
-          <th data-field="costs">Витрати без реклами</th>
-          <th data-field="duty">з них мито й податки</th>
+          <th data-field="price">Ціна продажу</th>
+          <th data-field="cog">Собівартість</th>
+          <th data-field="royalty">Роялті</th>
+          <th data-field="shipping">Доставка</th>
+          <th data-field="warehouse">Склад</th>
+          <th data-field="shopify_fee">Комісія Shopify</th>
+          <th data-field="duty">Мито, податки</th>
+          <th data-field="costs">Разом витрат</th>
           <th data-field="margin" class="truth">Маржа до реклами</th>
-          <th data-field="spend">Витрати за місяць</th>
-          <th data-field="pur">Покупки</th>
-          <th data-field="cpo_actual">Вартість замовлення за місяць</th>
+          <th data-field="pur" class="bb-gstart">Покупки Meta</th>
+          <th data-field="val">Виручка Meta</th>
+          <th data-field="spend">Витрати Meta</th>
+          <th data-field="cpo_actual">Ціна замовлення</th>
           <th data-field="result">Результат на замовлення</th>
+          <th data-field="result_total">Результат за місяць</th>
         </tr></thead>
-        <tbody data-draw="marketTable"></tbody>
+        <tbody data-draw="marketCostTable"></tbody>
       </table>
     </div>
+    <ul class="bb-caveats bb-srcs">
+      <li><b>Ціна продажу</b> — ціна колонки з таблиці CORE Margins &amp; Pricing у місцевій валюті, переведена в долари за курсом таблиці на 20 січня 2026: Європа €599, Канада C$999, Гонконг HK$3,999, Тайвань NT$19,999. Ціни DDP — мито й податки вже включені. У США ціна з 26 жовтня зросла з $599 до $699.</li>
+      <li><b>Собівартість $94 і роялті $25</b> — однакові для всіх ринків, з таблиці CORE.</li>
+      <li><b>Доставка і склад</b> — з таблиці CORE для кожного маршруту: з Гонконгу в країну покупця або зі складу в США.</li>
+      <li><b>Комісія Shopify</b> — 3.86% від ціни продажу, як у таблиці CORE.</li>
+      <li><b>Мито й податки</b> — з таблиці CORE. При відправці в США з Гонконгу мито рахується від ціни продажу, зі складу в США — від собівартості.</li>
+      <li>Маркетинг $120 на замовлення, закладений у таблиці CORE, сюди не включено: замість нього — фактична вартість замовлення з Meta.</li>
+      <li>Усі витрати до реклами — розрахункові з таблиці CORE. Фактичних доставки й мита по кожному замовленню в Shopify немає.</li>
+      <li><b>Покупки, виручка і витрати Meta</b> — вивантаження Ads Manager з розбивкою за країнами, 3 жовтня – 1 листопада, покупки протягом 7 днів після кліку. Європа — сума Італії, Нідерландів, Чехії, Німеччини, Іспанії та Кіпру.</li>
+      <li><b>Ціна замовлення</b> = витрати Meta ÷ покупки. <b>Результат на замовлення</b> = маржа − ціна замовлення. <b>Результат за місяць</b> = покупки × маржа − витрати Meta.</li>
+      <li>Для США дані Meta однакові в трьох рядках: це той самий ринок, змінюється лише маржа залежно від ціни та звідки відправка.</li>
+    </ul>
     <div class="bb-grid bb-insights">
       <div>
         <h3 class="bb-h3">Що з цього випливає</h3>
@@ -353,14 +386,8 @@
   <section class="bb-card bb-step" id="step3">
     <div class="bb-stephead"><span class="bb-stepn">Крок 3</span><span class="bb-stepk">Куди йде бюджет</span></div>
     <h2>Частина бюджету йде в збиткові ринки й адсети</h2>
-    <p class="bb-lead">Розклала результат по адсетах і країнах: замовлення × маржа ринку мінус витрати.</p>
+    <p class="bb-lead">Розклала результат по активних адсетах і країнах: замовлення × маржа ринку мінус витрати.</p>
     <h3 class="bb-h3">Прибуток після реклами по адсетах</h3>
-      <div class="bb-seg" role="group" aria-label="Сценарій маржі">
-        <button type="button" class="bb-segbtn" data-m="profit" aria-pressed="true">За ринками</button>
-        <button type="button" class="bb-segbtn" data-m="profit_mid" aria-pressed="false">Середня маржа</button>
-        <button type="button" class="bb-segbtn" data-m="profit_low" aria-pressed="false">Консервативний</button>
-        <button type="button" class="bb-segbtn" data-m="profit_high" aria-pressed="false">За собівартістю Shopify</button>
-      </div>
       <div class="bb-chart" data-draw="profitChart" data-source="adset_calc"></div>
     <h3 class="bb-h3">Країни</h3>
     <div class="bb-tablewrap">
@@ -369,20 +396,13 @@
             <tbody data-draw="countryTbl"></tbody>
           </table>
         </div>
-    <div class="bb-so"><b>Висновок.</b> Тайвань, Європа, Winners і тестові адсети — у мінусі. Гонконг, Канада й Малайзія — у плюсі.</div>
+    <div class="bb-so"><b>Висновок.</b> В активних адсетах у мінусі ARTICON (через Тайвань), Winners і Tests 2 Black; основна кампанія в США — близько нуля. У плюсі ретаргет і New Creative Tests. Серед країн у плюсі Канада й Гонконг, у мінусі — Тайвань і Філіппіни з ретаргету.</div>
   </section>
 
   <section class="bb-card bb-step" id="step4">
     <div class="bb-stephead"><span class="bb-stepn">Крок 4</span><span class="bb-stepk">Якість трафіку</span></div>
     <h2>Частина кліків — малоцінний трафік</h2>
-    <p class="bb-lead">У GA4 тисячі сесій тривалістю 0–1 секунда без покупок. Знайшла джерело: кілька статичних креативів з аномально високим CTR, ретаргет на весь світ і слабкі плейсменти.</p>
-    <h3 class="bb-h3">Креативи з дешевими кліками без покупок</h3>
-    <div class="bb-tablewrap">
-      <table data-source="junk_calc" data-row-key="creative">
-        <thead><tr><th data-field="creative">Креатив (вимкнено)</th><th data-field="spend">Витрати</th><th data-field="clicks">Кліки</th><th data-field="ctr">CTR</th><th data-field="pur">Покупки</th></tr></thead>
-        <tbody data-draw="junkTbl"></tbody>
-      </table>
-    </div>
+    <p class="bb-lead">У GA4 тисячі сесій тривалістю 0–1 секунда без покупок. В активних кампаніях їх дають ретаргет на весь світ і слабкі плейсменти. Наприклад, Філіппіни: <b data-draw="kpi" data-source="country_calc" data-field="clicks" data-where="Country=PH" data-fmt="int">—</b> кліків за <b data-draw="kpi" data-source="country_calc" data-field="spend" data-where="Country=PH" data-fmt="money">—</b> і жодної покупки.</p>
     <h3 class="bb-h3">Плейсменти</h3>
     <div class="bb-tablewrap">
           <table data-source="placement_calc" data-row-key="placement">
@@ -390,13 +410,13 @@
             <tbody data-draw="placementTbl"></tbody>
           </table>
         </div>
-    <div class="bb-so"><b>Висновок.</b> Ці креативи вже вимкнені. Далі — обмежити ретаргет країнами, де є продажі, і вимкнути overlay, in-stream і Facebook Stories.</div>
+    <div class="bb-so"><b>Висновок.</b> Обмежити ретаргет країнами, де є продажі, і вимкнути overlay, in-stream і Facebook Stories.</div>
   </section>
 
   <section class="bb-card bb-step" id="step5">
     <div class="bb-stephead"><span class="bb-stepn">Крок 5</span><span class="bb-stepk">Креативи</span></div>
     <h2>Реклама тримається на одному креативі</h2>
-    <p class="bb-lead">На Hook 1 припадає <b data-draw="kpi" data-source="ads_calc" data-field="hook1_share" data-row="0" data-fmt="pct">—</b> бюджету. Він продає в США та ретаргеті, але не в Азії. Чорні відео фактично не протестовані, а AI-статика поки слабка.</p>
+    <p class="bb-lead">Активні оголошення з витратами від $90. На Hook 1 припадає <b data-draw="kpi" data-source="ads_calc" data-field="hook1_share" data-row="0" data-fmt="pct">—</b> бюджету. Він продає в США та ретаргеті, але не в Азії. Чорні відео фактично не протестовані, а AI-статика поки слабка.</p>
     <div class="bb-tablewrap">
       <table data-source="creative_calc" data-row-key="key">
         <thead><tr><th data-field="creative">Креатив</th><th data-field="market">Ринок</th><th data-field="spend">Витрати</th><th data-field="atc">Кошики</th><th data-field="cpa_atc">Ціна кошика</th><th data-field="pur">Покупки</th><th data-field="cpa">Ціна покупки</th><th data-field="roas">ROAS</th><th data-field="note">Висновок</th></tr></thead>
@@ -442,17 +462,51 @@
 
   <section class="bb-card bb-step bb-plan" id="plan">
     <div class="bb-stephead"><span class="bb-stepn">Крок 7</span><span class="bb-stepk">План</span></div>
-    <h2>Що пропоную зробити</h2>
-    <ol class="bb-recs">
-        <li>Підтвердити собівартість колонки (у трьох джерелах вона різна), ціну для Канади й актуальні курси валют. Від цього залежать пороги вартості замовлення для кожного ринку.</li>
-        <li>Погодити пропозиції таргетолога, які прибирають збиткові витрати: вимкнути Тайвань і адсет New в Art icon, поставити на паузу Winners, прибрати неефективні плейсменти. Гонконг залишити — за таблицею маржі він окупається.</li>
-        <li>Посилити Канаду: найвища маржа серед ринків і найнижча вартість замовлення. Пропозиція таргетолога про окремий адсет — пріоритетна. Повернути Малайзію: вона окупалась в адсеті APAC, який зараз вимкнений.</li>
-        <li>Для Гонконгу зробити головним креатив Warranty 14 t1 замість Hook 1. Ретаргет обмежити країнами, де є продажі.</li>
-        <li>Оцінити відправку замовлень у США зі складу в США: за таблицею маржі це суттєво підвищує прибуток з кожної колонки.</li>
-        <li>Ціну в США не знижувати: за старої ціни продажі в США збиткові.</li>
-        <li>Перерахувати план маркетингу: фактична вартість замовлення з реклами значно вища, ніж закладено в таблиці маржі.</li>
-        <li>Зменшити залежність від одного креативу (Hook 1) і пріоритетно протестувати чорні відео — незабаром у наявності будуть лише чорні колонки.</li>
-    </ol>
+    <h2>Що пропоную змінити в таргеті: тактичний план</h2>
+    <div class="bb-tactic">
+      <div class="bb-tcol">
+        <span class="bb-chip bb-chip-now">Цього тижня</span>
+        <ul class="bb-tlist">
+          <li><b>Art icon:</b> прибрати Тайвань з геотаргетингу, Гонконг залишити. У Гонконгу головним зробити Warranty 14 t1, Hook 1 там вимкнути.</li>
+          <li><b>Нова структура US+CA:</b> вимкнути New Creative Tests; оголошення з Winners і Tests 2 продублювати в основну кампанію, старі адсети вимкнути. Бюджети кампаній не змінювати 7 днів, поки йде навчання.</li>
+          <li><b>Ретаргет:</b> гео — лише країни, де є продажі; виключити Бразилію, Індонезію, Філіппіни. Аудиторії — додали в кошик і почали оформлення за 30 днів; виключити покупців.</li>
+          <li><b>Плейсменти:</b> у всіх кампаніях вимкнути overlay у Facebook Reels, In-stream і Facebook Stories. Facebook Reels залишити лише для креативів у форматі 9:16.</li>
+          <li><b>Hook 1 у форматі 9:16</b> для Reels і Stories — зараз заголовок обрізається.</li>
+          <li><b>UTM у всіх оголошеннях:</b> utm_source={{site_source_name}} · utm_medium=paid_social · utm_campaign={{campaign.id}} · utm_content={{ad.id}} · utm_term={{placement}}.</li>
+          <li><b>Увімкнути автоматичні правила</b> з таблиці нижче.</li>
+        </ul>
+      </div>
+      <div class="bb-tcol">
+        <span class="bb-chip bb-chip-next">Наступні 2 тижні</span>
+        <ul class="bb-tlist">
+          <li><b>Чорні відео — окремий адсет у США</b> з власним бюджетом, щоб Meta не віддавала гроші статичним креативам. Чорну версію Hook 1 тестувати проти білої.</li>
+          <li><b>Тестова кампанія креативів:</b> до 4 нових креативів на тиждень (UGC, AI-статика, чорні відео). Переможців переносити в основні кампанії по одному, не більше 20% від оголошень в адсеті.</li>
+          <li><b>Малайзія:</b> повернути в азійську холодну кампанію — в адсеті APAC вона окупалась.</li>
+          <li><b>Канада:</b> через 2 тижні перевірити її частку бюджету в кампанії US+CA. Якщо мала, а замовлення там дешевші, ніж у США, — окремий тестовий адсет, Канаду виключити з адсетів на США.</li>
+          <li><b>Black Friday:</b> окремі оголошення з подарунковим кутом на чорну колонку за тиждень до 27 листопада; ретаргет на відвідувачів і кошики, виключити покупців.</li>
+        </ul>
+      </div>
+      <div class="bb-tcol">
+        <span class="bb-chip bb-chip-ongoing">Щотижня</span>
+        <ul class="bb-tlist">
+          <li><b>Рішення — за ціною замовлення по ринку,</b> а не за загальним ROAS: максимальна ціна замовлення для США, Канади й Гонконгу різна (Крок 2).</li>
+          <li><b>Звіти в Ads Manager — за 7 днів після кліку,</b> без переглядів: так цифри ближчі до Shopify.</li>
+          <li><b>Бюджет:</b> зміни до 20% за раз і не частіше ніж раз на 3 дні; гроші переносити в ринки, де ціна замовлення нижча за ціль.</li>
+          <li><b>Креативи:</b> не більше 20% нових оголошень в адсет на тиждень; переможця підтверджувати на витратах від $500.</li>
+          <li><b>Розбивка по країнах і плейсментах:</b> перевіряти, чи не з'явились дешеві кліки без кошиків у нових країнах чи плейсментах.</li>
+        </ul>
+      </div>
+    </div>
+    <p class="note bb-outside"><b>Поза таргетом</b> (сайт і розсилки, без цього реклама теж окупатиметься гірше): лист про покинуте оформлення, оплата частинами, ціна й мито в місцевій валюті на оформленні для Азії, повна собівартість колонки в Shopify.</p>
+
+    <h3 class="bb-h3">Автоматичні правила в Meta Ads Manager</h3>
+    <p class="note">Налаштовуються в Ads Manager → Rules → Create rule. Пороги рахуються від маржі по ринках з таблиці CORE з поправкою на те, що Meta приписує собі більше продажів, ніж підтверджує Shopify. Покупки — за 7 днів після кліку.</p>
+    <div class="bb-tablewrap">
+      <table data-source="auto_rules" data-row-key="n">
+        <thead><tr><th data-field="n">#</th><th data-field="rule">Правило</th><th data-field="applies">До чого</th><th data-field="period">Період</th><th data-field="condition">Умова</th><th data-field="action">Дія</th><th data-field="check">Перевірка</th><th data-field="why">Навіщо</th></tr></thead>
+        <tbody data-draw="rulesTbl"></tbody>
+      </table>
+    </div>
     <div class="bb-grid bb-insights">
       <div>
         <h3 class="bb-h3">Де згодна з таргетологом і радником з Meta</h3>
@@ -473,24 +527,12 @@
         </ul>
       </div>
     </div>
-    <div class="bb-extra">
-      <h3 class="bb-h3">Додатково: що могло б поліпшити ситуацію</h3>
-      <ol class="bb-recs">
-        <li><b>Повернути тих, хто кинув оформлення.</b> За місяць з реклами почали оформлення <b data-draw="kpi" data-source="ads_calc" data-field="co" data-row="0" data-fmt="int">—</b> людей, а купили <b data-draw="kpi" data-source="ads_calc" data-field="pur" data-row="0" data-fmt="int">—</b>. Автоматичний лист про покинутий кошик і окремий ретаргет на цих людей — найдешевші додаткові продажі.</li>
-        <li><b>Оплата частинами</b> (Shop Pay Installments, Klarna чи Afterpay) для колонки за $699: на дорогу покупку легше наважитися, коли платіж розбитий на кілька частин.</li>
-        <li><b>Прозорі ціна, доставка й мито на оформленні для Азії:</b> ціна в місцевій валюті, заздалегідь показані мито й доставка, звичні місцеві способи оплати. В Азії кошиків багато, але до оплати доходять одиниці.</li>
-        <li><b>Сторінка товару для покупки за $699:</b> лімітованість і колекційна цінність, гарантія, відгуки й огляди (наприклад, Hypebeast), відео розпаковки, чіткі терміни доставки.</li>
-        <li><b>Розсилка по базі підписників до Black Friday</b> з акцентом на подарунок і чорну колонку, якої буде в наявності найбільше.</li>
-        <li><b>Захистити пошук:</b> пошук Google приносить замовлення без витрат на рекламу. Невелика кампанія на брендові запити й Google Shopping не дасть конкурентам і перекупникам перехоплювати цих покупців.</li>
-        <li><b>Справжня собівартість у Shopify:</b> вписати в «Cost per item» повну собівартість колонки, щоб звіти про прибуток у Shopify показували реальну картину без ручних розрахунків.</li>
-        <li><b>Щотижневий звіт за єдиними правилами:</b> по кожному ринку — витрати, ціна замовлення за Shopify і максимальна ціна замовлення з таблиці маржі. Рішення про бюджет — лише за ним.</li>
-      </ol>
-    </div>
-    <h3 class="bb-h3">Пропозиція таргетолога: перерозподіл денного бюджету</h3>
+    <h3 class="bb-h3">Перерозподіл денного бюджету: таргетолог, Бен і моя пропозиція</h3>
+    <p class="note">Денний бюджет у доларах. Загальний бюджет у всіх трьох варіантах однаковий — <b data-draw="kpi" data-source="budget_calc" data-field="ours" data-where="key=total" data-fmt="money">—</b> на день. Моя пропозиція поєднує структуру Бена (об'єднати адсети, не різати бюджет під час навчання) з двома кроками таргетолога: прибрати Тайвань і дати окремий бюджет чорним відео.</p>
     <div class="bb-tablewrap">
-      <table data-source="w44_budget" data-row-key="line">
-        <thead><tr><th data-field="line">Напрям</th><th data-field="now">Зараз, $ на день</th><th data-field="proposed">Пропонується, $ на день</th><th data-field="delta">Зміна</th></tr></thead>
-        <tbody data-draw="w44Budget"></tbody>
+      <table data-source="budget_calc" data-row-key="line">
+        <thead><tr><th data-field="line">Напрям</th><th data-field="now">Зараз</th><th data-field="buyer">Таргетолог</th><th data-field="ben">Бен</th><th data-field="ours" class="truth">Моя пропозиція</th><th data-field="ours_note">Чому</th></tr></thead>
+        <tbody data-draw="budgetTbl"></tbody>
       </table>
     </div>
   </section>
@@ -578,7 +620,7 @@
         <ul class="bb-caveats">
           <li>Замовлення з Meta-мітками: <b data-draw="kpi" data-source="shopify_sources" data-field="orders" data-where="key=meta_utm" data-fmt="int">—</b> на <b data-draw="kpi" data-source="shopify_sources" data-field="revenue" data-where="key=meta_utm" data-fmt="money">—</b> — з точністю до адсету та плейсменту.</li>
           <li>Органічний Instagram: <b data-draw="kpi" data-source="shopify_sources" data-field="orders" data-where="key=ig_social" data-fmt="int">—</b> замовлення.</li>
-          <li>Собівартість і валовий прибуток кожного замовлення. Але собівартість у магазині заповнена умовно, тому для прибутку використано сценарії маржі.</li>
+          <li>Собівартість і валовий прибуток кожного замовлення. Але собівартість у магазині заповнена умовно, тому прибуток рахую за маржею з таблиці CORE.</li>
         </ul>
       </div>
       <div>
@@ -615,7 +657,6 @@
           <th data-field="confirm">Shopify ÷ Meta</th>
           <th data-field="roas_shop" class="truth">ROAS за Shopify</th>
           <th data-field="profit" class="truth">Прибуток після реклами · за ринками</th>
-          <th data-field="profit_low">Прибуток · консервативний</th>
         </tr></thead>
         <tbody data-draw="adsetTable"></tbody>
       </table>
@@ -660,8 +701,6 @@
   </details>
 </div>
 
-
-</div>
 <script>
   const N = (v) => { const x = Number(v); return Number.isFinite(x) ? x : 0; };
   window.bbFmt = {
@@ -681,9 +720,9 @@
 
   dash.calc('adset_calc', {
     title: 'Адсети: ROAS і прибуток',
-    description: 'ROAS у кожному джерелі та прибуток після реклами для кожного адсету у трьох сценаріях маржі: базовий і консервативний (замовлення Shopify × маржа мінус витрати) і за валовим прибутком Shopify.',
+    description: 'Лише адсети, активні на 1 листопада: ROAS у кожному джерелі та прибуток після реклами (замовлення Shopify × маржа ринку з таблиці CORE мінус витрати).',
     inputs: ['adsets', 'margins'],
-    fn: (adsets, margins) => adsets.map((r) => {
+    fn: (adsets, margins) => adsets.filter((r) => r.status === 'active').map((r) => {
       const n = (v) => Number(v) || 0;
       const m = (key) => n((margins.find((x) => x.key === key) || {}).margin);
       const spend = n(r.spend);
@@ -738,7 +777,7 @@
         n_adsets: adsets.filter((r) => (Number(r.spend) || 0) > 0).length,
         extra_orders: s('meta_orders') - s('shop_orders'),
         overclaim: metaRev / shopRev - 1,
-        loss: adsets.reduce((a, r) => { const p = (Number(r.shop_orders) || 0) * (Number(r.margin_region) || 0) - (Number(r.spend) || 0); return p < 0 ? a + p : a; }, 0),
+        loss: adsets.filter((r) => r.status === 'active').reduce((a, r) => { const p = (Number(r.shop_orders) || 0) * (Number(r.margin_region) || 0) - (Number(r.spend) || 0); return p < 0 ? a + p : a; }, 0),
         ga_meta_match: gaRev / shopRev,
         ga_site_match: tot('ga_all', 'revenue') / tot('shopify_all', 'revenue'),
       }];
@@ -746,8 +785,8 @@
   });
 
   dash.calc('scen', {
-    title: 'Сценарії маржі',
-    description: 'Прибуток після реклами за 30 днів для кожного сценарію маржі (базовий — за ринками з таблиці маржі CORE): за замовленнями, підтвердженими Shopify, і за замовленнями, які приписує собі Meta; поріг ROAS = середній чек ÷ маржа.',
+    title: 'Прибуток після реклами',
+    description: 'Прибуток після реклами за 30 днів: замовлення, підтверджені Shopify (UTM Meta), × маржа за ринками з таблиці CORE (середнє, зважене за замовленнями адсетів) мінус витрати Meta; поріг ROAS = середній чек ÷ маржа.',
     inputs: ['adsets', 'margins'],
     fn: (adsets, margins) => {
       const s = (k) => adsets.reduce((a, r) => a + (Number(r[k]) || 0), 0);
@@ -757,7 +796,7 @@
       const mr = adsets.reduce((a, r) => a + (Number(r.shop_orders) || 0) * (Number(r.margin_region) || 0), 0) / so;
       rows.unshift({ key: 'region', label: 'Базовий: за ринками', source: 'Таблиця маржі CORE за ринком кожного адсету (середнє, зважене за замовленнями)', margin: mr });
       rows.push({ key: 'high', label: 'За собівартістю Shopify', source: 'Валовий прибуток Shopify на замовлення (умовна собівартість)', margin: gp / so });
-      return rows.map((r) => ({ ...r, be_roas: aov / r.margin, profit_utm: so * r.margin - spend, profit_meta: mo * r.margin - spend }));
+      return rows.filter((r) => r.key === 'region').map((r) => ({ ...r, orders: so, spend, be_roas: aov / r.margin, profit_utm: so * r.margin - spend }));
     },
   });
 
@@ -773,9 +812,9 @@
         const costs = ['cog', 'royalty', 'shipping', 'warehouse', 'shopify_fee', 'duty'].reduce((a, k) => a + (n(r[k]) || 0), 0);
         const margin = n(r.price) - costs;
         const codes = geo[r.key] || [];
-        const spend = sum(codes, 'spend'), pur = sum(codes, 'pur');
+        const spend = sum(codes, 'spend'), pur = sum(codes, 'pur'), val = sum(codes, 'val');
         const cpo = pur ? spend / pur : null;
-        return { key: r.key, market: r.market, price: n(r.price), costs, duty: n(r.duty), margin, spend, pur, cpo_actual: cpo, result: cpo == null ? null : margin - cpo, mkt_plan: n(r.mkt_plan) };
+        return { key: r.key, market: r.market, price: n(r.price), cog: n(r.cog), royalty: n(r.royalty), shipping: n(r.shipping), warehouse: n(r.warehouse), shopify_fee: n(r.shopify_fee), costs, duty: n(r.duty), margin, spend, pur, val, cpo_actual: cpo, result: cpo == null ? null : margin - cpo, result_total: pur ? pur * margin - spend : null, mkt_plan: n(r.mkt_plan) };
       });
       const hk = (rows.find((r) => r.key === 'us_hk_699') || {}).margin;
       return rows.map((r) => ({ ...r, gain_vs_hk: r.key === 'us_wh_699' ? r.margin - hk : null }));
@@ -801,7 +840,7 @@
     title: 'Країни: результат з урахуванням маржі',
     description: 'Ціна покупки й результат = покупки × маржа до реклами з таблиці маржі CORE мінус витрати, для кожної країни.',
     inputs: ['countries'],
-    fn: (countries) => adsum(countries).map((r) => ({ ...r, margin: Number(r.margin) || 0, res: r.pur * (Number(r.margin) || 0) - r.spend })),
+    fn: (countries) => adsum(countries).filter((r) => r.spend >= 30).map((r) => ({ ...r, margin: Number(r.margin) || 0, res: r.pur * (Number(r.margin) || 0) - r.spend })),
   });
 
   dash.calc('placement_calc', {
@@ -818,21 +857,26 @@
     fn: (ads_weekly) => adsum(ads_weekly),
   });
 
-  dash.calc('junk_calc', {
-    title: 'Креативи з малоцінними кліками',
-    description: 'CTR = кліки ÷ покази для креативів, що дали багато кліків без покупок.',
-    inputs: ['junk_creatives'],
-    fn: (junk_creatives) => junk_creatives.map((r) => ({ ...r, spend: Number(r.spend) || 0, clicks: Number(r.clicks) || 0, pur: Number(r.pur) || 0, ctr: (Number(r.clicks) || 0) / (Number(r.impr) || 1) })),
-  });
-
   dash.calc('ads_calc', {
     title: 'Покупки за кліком і частка Hook 1',
-    description: 'Сума покупок протягом 7 днів після кліку по всіх оголошеннях за період і частка витрат на креатив Hook 1 від усіх витрат.',
-    inputs: ['ads_weekly', 'creative_market'],
-    fn: (ads_weekly, creative_market) => {
-      const tot = ads_weekly.reduce((a, r) => a + (Number(r.spend) || 0), 0);
+    description: 'Сума покупок протягом 7 днів після кліку по всіх оголошеннях за період і частка витрат на креатив Hook 1 від витрат активних оголошень (сума по країнах).',
+    inputs: ['ads_weekly', 'creative_market', 'countries'],
+    fn: (ads_weekly, creative_market, countries) => {
+      const tot = countries.reduce((a, r) => a + (Number(r.spend) || 0), 0);
       const h1 = creative_market.filter((r) => String(r.creative).startsWith('Art icon hook1')).reduce((a, r) => a + (Number(r.spend) || 0), 0);
       return [{ pur: ads_weekly.reduce((a, r) => a + (Number(r.pur) || 0), 0), co: ads_weekly.reduce((a, r) => a + (Number(r.co) || 0), 0), hook1_share: h1 / tot }];
+    },
+  });
+
+  dash.calc('budget_calc', {
+    title: 'Перерозподіл бюджету: три варіанти',
+    description: 'Денний бюджет по напрямах зараз, у пропозиції таргетолога, у плані Бена і в моїй пропозиції, плюс рядок «Разом».',
+    inputs: ['budget_compare'],
+    fn: (budget_compare) => {
+      const n = (v) => Number(v) || 0;
+      const rows = budget_compare.map((r) => ({ key: 'r' + r.n, n: n(r.n), line: r.line, now: n(r.now), buyer: n(r.buyer), ben: n(r.ben), ours: n(r.ours), ours_note: r.ours_note }));
+      const sum = (f) => rows.reduce((a, r) => a + r[f], 0);
+      return [...rows, { key: 'total', n: 99, line: 'Разом на день', now: sum('now'), buyer: sum('buyer'), ben: sum('ben'), ours: sum('ours'), ours_note: '' }];
     },
   });
 
@@ -973,11 +1017,7 @@
   });
 
   window.bbM = 'profit';
-  document.querySelectorAll('.bb-segbtn').forEach((b) => b.addEventListener('click', () => {
-    window.bbM = b.dataset.m;
-    document.querySelectorAll('.bb-segbtn').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
-    dash.draw('profitChart');
-  }));
+
 
   dash.draw('profitChart', (el) => {
     const d = dash.data('adset_calc');
@@ -1033,20 +1073,22 @@
   };
 
   dash.draw('scenTable', (tb) => {
-    const F = window.bbFmt, order = { region: 0, mid: 1, low: 2, high: 3 };
-    fillRows(tb, 'scen', (a, b) => order[a.key] - order[b.key], (r) => [
-      [r.label, r.key === 'region' ? 'claim-strong' : ''], [r.source, 'muted'], [F.money(r.margin)], [F.roas(r.be_roas)],
-      [F.signed(r.profit_utm), 'truth ' + (r.profit_utm >= 0 ? 'pos' : 'neg')], [F.signed(r.profit_meta), r.profit_meta >= 0 ? 'pos' : 'neg'],
+    const F = window.bbFmt;
+    fillRows(tb, 'scen', () => 0, (r) => [
+      [F.int(r.orders)], [F.money(r.margin)], [F.money(r.spend)], [F.roas(r.be_roas)],
+      [F.signed(r.profit_utm), 'truth claim-strong ' + (r.profit_utm >= 0 ? 'pos' : 'neg')],
     ]);
   });
 
-  dash.draw('marketTable', (tb) => {
+  dash.draw('marketCostTable', (tb) => {
     const F = window.bbFmt;
     fillRows(tb, 'market_calc', () => 0, (r) => [
-      [r.market], [F.money(r.price)], [F.money(r.costs)], [F.money(r.duty), 'muted'], [F.money(r.margin), 'truth claim-strong'],
-      [F.money(r.spend)], [F.int(r.pur)],
+      [r.market], [F.money(r.price)], [F.money(r.cog), 'muted'], [F.money(r.royalty), 'muted'], [F.money(r.shipping)], [F.money(r.warehouse), 'muted'],
+      [F.money(r.shopify_fee), 'muted'], [F.money(r.duty)], [F.money(r.costs), 'claim-strong'], [F.money(r.margin), 'truth claim-strong'],
+      [F.int(r.pur), 'bb-gstart'], [F.money(r.val), 'muted'], [F.money(r.spend)],
       [r.cpo_actual == null ? '—' : F.money(r.cpo_actual)],
       [r.result == null ? '—' : F.signed(r.result), r.result == null ? 'muted' : r.result >= 0 ? 'lvl-ok' : 'lvl-bad'],
+      [r.result_total == null ? '—' : F.signed(r.result_total), r.result_total == null ? 'muted' : r.result_total >= 0 ? 'pos' : 'neg'],
     ]);
   });
 
@@ -1086,10 +1128,19 @@
     ]);
   });
 
-  dash.draw('junkTbl', (tb) => {
+  dash.draw('budgetTbl', (tb) => {
     const F = window.bbFmt;
-    fillRows(tb, 'junk_calc', (a, b) => b.clicks - a.clicks, (r) => [
-      [r.creative.replace(/ \| /g, ' · ')], [F.money(r.spend)], [F.int(r.clicks)], [d3.format('.1%')(r.ctr), 'lvl-bad'], [F.int(r.pur)],
+    const cell = (v, base) => [v === 0 ? '—' : F.money(v), v !== base ? 'claim-strong' : 'muted'];
+    fillRows(tb, 'budget_calc', (a, b) => a.n - b.n, (r) => {
+      const tot = r.key === 'total';
+      return [[r.line, tot ? 'claim-strong' : ''], [r.now === 0 ? '—' : F.money(r.now), 'muted'], cell(r.buyer, r.now), cell(r.ben, r.now),
+        [r.ours === 0 ? '—' : F.money(r.ours), 'truth claim-strong'], [r.ours_note, 'muted']];
+    });
+  });
+
+  dash.draw('rulesTbl', (tb) => {
+    fillRows(tb, 'auto_rules', (a, b) => N(a.n) - N(b.n), (r) => [
+      [r.n, 'muted'], [r.rule, 'claim-strong'], [r.applies], [r.period, 'muted'], [r.condition], [r.action], [r.check, 'muted'], [r.why, 'muted'],
     ]);
   });
 
@@ -1509,7 +1560,6 @@
         [r.confirm == null ? '—' : F.pct(r.confirm), 'lvl-' + window.bbLevel(r.confirm)],
         [F.roas(r.roas_shop), 'truth'],
         [F.signed(r.profit), 'truth ' + (r.profit >= 0 ? 'pos' : 'neg')],
-        [F.signed(r.profit_low), r.profit_low >= 0 ? 'pos' : 'neg'],
       ];
       cells.forEach(([v, c]) => { const td = document.createElement('td'); td.textContent = v; if (c) td.className = c; tr.append(td); });
       tb.append(tr);
@@ -1532,6 +1582,7 @@
   });
 </script>
 
+</div>
 <script>window.dash._runAll();</script>
 </body>
 </html>
