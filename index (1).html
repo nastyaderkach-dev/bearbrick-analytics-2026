@@ -1,0 +1,1537 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bearbrick: аудит аналітики 3 жовтня – 1 листопада</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cds-font-size-caption: 0.8125rem; --cds-font-size-body: 0.9375rem; --cds-font-size-heading: 1.0625rem; --cds-font-size-title: 1.75rem;
+    --cds-font-weight-medium: 500;
+    --cds-gap-xs: 4px; --cds-gap-sm: 8px; --cds-gap-md: 16px; --cds-gap-lg: 24px; --cds-gap-xl: 32px;
+    --cds-pad-xs: 4px; --cds-pad-sm: 8px; --cds-pad-md: 12px; --cds-pad-lg: 20px; --cds-pad-xl: 32px;
+    --cds-radius: 10px; --cds-dur-slow: 300ms; --cds-ease-out: cubic-bezier(.2,.8,.2,1);
+    color-scheme: light;
+  }
+  html, body { margin: 0; background: #f6f7f9; }
+  body { font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif; color: #1b1d21; -webkit-font-smoothing: antialiased; }
+  .page-wrap { max-width: 1240px; margin: 0 auto; padding: 24px 16px 64px; }
+  * { box-sizing: border-box; }
+</style>
+<style>
+  .bb {
+    --color-bg: #ffffff; --color-panel: #ffffff; --color-fg: #1b1d21; --color-fg-muted: #6b7280; --color-border-line: #e5e7eb;
+    --color-ok: #1f7a4d; --color-warn: #b7791f; --color-bad: #c0392b;
+    --cds-chart-grid: #eef0f3; --cds-chart-axis: #c4c9d1; --cds-chart-reference: #4b5563; --cds-chart-muted: #c4c9d1; --cds-chart-status-critical: #c0392b;
+    --cds-surface-popover: #ffffff; --cds-border: #e5e7eb; --cds-text-secondary: #6b7280; --cds-shadow-popover: 0 4px 16px rgba(17,24,39,.08);
+    background: #ffffff; color-scheme: light; border-radius: var(--cds-radius); padding: var(--cds-pad-xl);
+    font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif; color: var(--color-fg); display: flex; flex-direction: column; gap: var(--cds-gap-xl); }
+  .bb-card, .bb-tile, .bb-src { box-shadow: 0 1px 2px rgba(17,24,39,.04); }
+  .bb-head h1 { font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif; font-weight: 700; letter-spacing: -0.01em; font-size: var(--cds-font-size-title); margin: 0 0 var(--cds-gap-xs); }
+  .bb-period { display: inline-block; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: 2px var(--cds-pad-sm); margin-bottom: var(--cds-gap-sm); }
+  .bb-take { font-size: var(--cds-font-size-body); margin: 0; max-width: 60rem; line-height: 1.5; }
+  .bb-take b, .bb-tile b { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .bb-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr)); gap: var(--cds-gap-md); }
+  .bb-tile { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: flex; flex-direction: column; gap: var(--cds-gap-xs); }
+  .bb-tile .lbl { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .bb-tile .big { font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif; font-weight: 600; letter-spacing: -0.01em; font-size: var(--cds-font-size-title); font-variant-numeric: tabular-nums; }
+  .bb-tile .sub { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .bb-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 26rem), 1fr)); gap: var(--cds-gap-md); }
+  .bb-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); position: relative; min-width: 0; }
+  .bb-card h2 { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: 0 0 var(--cds-gap-xs); }
+  .bb-card .note { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin: 0 0 var(--cds-gap-md); line-height: 1.45; }
+  .bb-chart { min-height: 380px; position: relative; }
+  .bb-legend { display: flex; flex-wrap: wrap; gap: var(--cds-gap-md); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin-bottom: var(--cds-gap-sm); }
+  .bb-legend span.sw { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
+  .bb-legend span.ln { display: inline-block; width: 14px; border-top: 1.5px dashed var(--cds-chart-reference); margin-right: 6px; vertical-align: 3px; }
+  .bb-tip { position: absolute; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); border-radius: var(--cds-radius); box-shadow: var(--cds-shadow-popover); padding: var(--cds-pad-xs) var(--cds-pad-sm); font-size: var(--cds-font-size-caption); white-space: nowrap; z-index: 2; }
+  .bb-tip .t { color: var(--cds-text-secondary); margin-bottom: 2px; }
+  .bb-tablewrap { overflow: auto; max-height: 34rem; }
+  .bb table { width: 100%; border-collapse: collapse; font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; }
+  .bb th { position: sticky; top: 0; background: var(--color-panel); text-align: right; font-weight: var(--cds-font-weight-medium); color: var(--color-fg-muted); padding: var(--cds-pad-xs) var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); white-space: nowrap; }
+  .bb td { text-align: right; padding: var(--cds-pad-xs) var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); white-space: nowrap; }
+  .bb th:first-child, .bb td:first-child { text-align: left; white-space: normal; min-width: 11rem; }
+  .bb td.neg { color: var(--color-bad); }
+  .bb td.pos { color: var(--color-ok); }
+  .bb td.muted, .bb .muted { color: var(--color-fg-muted); }
+  .bb-recs { margin: 0; padding-left: 1.2rem; font-size: var(--cds-font-size-body); line-height: 1.55; }
+  .bb-recs li { margin-bottom: var(--cds-gap-xs); }
+  .bb-caveats { margin: 0; padding-left: 1.2rem; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); line-height: 1.55; }
+  .bb-fail { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 120px; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+  .bb-fail::before { content: ""; width: .375rem; height: .375rem; border-radius: 50%; background: var(--color-bad); }
+  [data-dash-source-state=empty] { color: transparent; }
+  [data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
+  .bb svg text { font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif; }
+  .bb-guide { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); gap: var(--cds-gap-md); }
+  .bb-src { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: flex; flex-direction: column; gap: var(--cds-gap-sm); border-top-width: 4px; }
+  .bb-src.truth { border-top-color: var(--color-ok); }
+  .bb-src.check { border-top-color: var(--cds-chart-reference); }
+  .bb-src.claim { border-top-color: var(--color-warn); }
+  .bb-src h3 { margin: 0; font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); }
+  .bb-badge { align-self: flex-start; font-size: var(--cds-font-size-caption); font-weight: var(--cds-font-weight-medium); border-radius: 999px; padding: 2px 10px; }
+  .truth .bb-badge { color: var(--color-ok); background: color-mix(in srgb, var(--color-ok) 14%, transparent); }
+  .check .bb-badge { color: var(--color-fg-muted); background: color-mix(in srgb, var(--color-fg-muted) 14%, transparent); }
+  .claim .bb-badge { color: var(--color-warn); background: color-mix(in srgb, var(--color-warn) 16%, transparent); }
+  .bb-src p { margin: 0; font-size: var(--cds-font-size-body); line-height: 1.5; }
+  .bb-src p.use { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .bb-src b { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .bb-rule { background: color-mix(in srgb, var(--color-ok) 9%, var(--color-panel)); border: 1px solid color-mix(in srgb, var(--color-ok) 35%, var(--color-border-line)); border-radius: var(--cds-radius); padding: var(--cds-pad-md) var(--cds-pad-lg); font-size: var(--cds-font-size-body); line-height: 1.55; }
+  .bb-rule b { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .bb-rule ul { margin: var(--cds-gap-xs) 0 0; padding-left: 1.2rem; }
+  .bb td.lvl-ok { color: var(--color-ok); background: color-mix(in srgb, var(--color-ok) 12%, transparent); font-weight: 600; }
+  .bb td.lvl-warn { color: var(--color-warn); background: color-mix(in srgb, var(--color-warn) 14%, transparent); font-weight: 600; }
+  .bb td.lvl-bad { color: var(--color-bad); background: color-mix(in srgb, var(--color-bad) 14%, transparent); font-weight: 600; }
+  .bb td.truth, .bb th.truth { background: color-mix(in srgb, var(--color-ok) 6%, var(--color-panel)); }
+  .bb td.claim { color: var(--color-fg-muted); }
+  .bb td.claim-strong { font-weight: 600; }
+  .bb tr.row-truth td { font-weight: 600; }
+  .bb tr.row-claim td { background: color-mix(in srgb, var(--color-warn) 10%, transparent); }
+  .bb-legend span.sq { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+  .bb-summary { border-left: 4px solid var(--color-ok); }
+  .bb-summary .bb-recs b, .bb-accent .bb-recs b { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .bb-accent { border-left: 4px solid var(--color-warn); }
+  .bb-insights { margin-top: var(--cds-gap-md); }
+  .bb-chart-ga { min-height: 260px; }
+  .bb .note b { font-weight: 600; color: var(--color-fg); }
+  .bb-seg { display: inline-flex; gap: 0; border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); overflow: hidden; margin-bottom: var(--cds-gap-md); }
+  .bb-segbtn { font: inherit; font-size: var(--cds-font-size-caption); padding: 6px 12px; background: var(--color-panel); color: var(--color-fg-muted); border: 0; border-right: 1px solid var(--color-border-line); cursor: pointer; }
+  .bb-segbtn:last-child { border-right: 0; }
+  .bb-segbtn[aria-pressed="true"] { background: var(--color-ok); color: #fff; font-weight: 600; }
+  #week44 .bb-tile .big { font-size: var(--cds-font-size-heading); }
+  .bb-sumh { font-size: var(--cds-font-size-heading); font-weight: 600; margin: 0 0 var(--cds-gap-sm); }
+  .bb-fx { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: var(--cds-gap-md); }
+  .bb-f { background: var(--color-panel); border: 1px solid var(--color-border-line); border-top: 4px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-md) var(--cds-pad-lg); display: flex; flex-direction: column; gap: 6px; }
+  .bb-f.ok { border-top-color: var(--color-ok); } .bb-f.warn { border-top-color: var(--color-warn); } .bb-f.bad { border-top-color: var(--color-bad); }
+  .bb-chip { align-self: flex-start; font-size: var(--cds-font-size-caption); font-weight: 600; border-radius: 999px; padding: 2px 10px; }
+  .ok .bb-chip { color: var(--color-ok); background: color-mix(in srgb, var(--color-ok) 12%, transparent); }
+  .warn .bb-chip { color: var(--color-warn); background: color-mix(in srgb, var(--color-warn) 14%, transparent); }
+  .bad .bb-chip { color: var(--color-bad); background: color-mix(in srgb, var(--color-bad) 12%, transparent); }
+  .bb-fbig { font-size: var(--cds-font-size-title); font-weight: 700; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; line-height: 1.1; }
+  .bb-fmid { font-size: var(--cds-font-size-heading); }
+  .bb-fwas { font-size: var(--cds-font-size-body); font-weight: 500; color: var(--color-fg-muted); }
+  .bb-fsub { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .bb-fsub b, .bb-f p b { color: var(--color-fg); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .bb-f p { margin: 0; font-size: var(--cds-font-size-caption); line-height: 1.45; }
+  .bb-step { display: flex; flex-direction: column; gap: var(--cds-gap-sm); }
+  .bb-step h2 { font-size: var(--cds-font-size-title); font-weight: 700; letter-spacing: -0.01em; margin: 0; line-height: 1.2; }
+  .bb-stephead { display: flex; gap: var(--cds-gap-sm); align-items: center; }
+  .bb-stepn { font-size: var(--cds-font-size-caption); font-weight: 700; color: #fff; background: var(--color-fg); border-radius: 999px; padding: 2px 10px; }
+  .bb-stepk { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); text-transform: uppercase; letter-spacing: .04em; }
+  .bb-lead { margin: 0 0 var(--cds-gap-sm); font-size: var(--cds-font-size-body); line-height: 1.55; max-width: 62rem; }
+  .bb-lead b { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .bb-so { margin-top: var(--cds-gap-sm); padding: var(--cds-pad-sm) var(--cds-pad-md); border-left: 4px solid var(--color-ok); background: color-mix(in srgb, var(--color-ok) 7%, var(--color-panel)); border-radius: var(--cds-radius); font-size: var(--cds-font-size-body); line-height: 1.5; }
+  .bb-plan { border-left: 4px solid var(--color-fg); }
+  .bb-step .bb-guide { margin-bottom: var(--cds-gap-sm); }
+  .bb-app { border: 1px dashed var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-md) var(--cds-pad-lg); }
+  .bb-app > summary { cursor: pointer; font-weight: 600; font-size: var(--cds-font-size-body); }
+  .bb-appbody { display: flex; flex-direction: column; gap: var(--cds-gap-lg); margin-top: var(--cds-gap-md); }
+  .bb-reconbox { border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-md) var(--cds-pad-lg); margin-bottom: var(--cds-gap-sm); }
+  .bb-reconhead { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--cds-gap-sm); }
+  .bb-reconhead .bb-h3 { margin: 0; }
+  .bb-reconhead .bb-seg { margin-bottom: 0; }
+  .bb-reconchart { min-height: 360px; }
+  .bb-donutgrid { display: grid; grid-template-columns: minmax(0, 15rem) minmax(0, 1fr); gap: var(--cds-gap-lg); align-items: center; }
+  @media (max-width: 640px) { .bb-donutgrid { grid-template-columns: minmax(0, 1fr); } }
+  .bb-donut { min-height: 220px; max-width: 15rem; }
+  .bb-donutleg { display: flex; flex-direction: column; gap: 4px; font-size: var(--cds-font-size-caption); }
+  .bb-donutleg .row { display: grid; grid-template-columns: 12px 1fr auto auto; gap: 8px; align-items: center; }
+  .bb-donutleg .sw2 { width: 10px; height: 10px; border-radius: 2px; }
+  .bb-donutleg .num { font-variant-numeric: tabular-nums; text-align: right; color: var(--color-fg-muted); }
+  .bb-donutleg .main { font-weight: 600; }
+  .bb-extra { margin-top: var(--cds-gap-md); padding: var(--cds-pad-md) var(--cds-pad-lg); background: color-mix(in srgb, var(--color-ok) 6%, var(--color-panel)); border-radius: var(--cds-radius); }
+  .bb-extra .bb-recs b { font-weight: 600; }
+  .bb-legend .sq.k-none, .bb-legend .k-none { background: #d1d5db; }
+  .bb-h3 { font-size: var(--cds-font-size-body); font-weight: 600; margin: var(--cds-gap-md) 0 var(--cds-gap-xs); }
+  .bb-chart-short { min-height: 70px; }
+  .bb-caveats b { font-weight: 600; color: var(--color-fg); font-variant-numeric: tabular-nums; }
+  .bb-legend .k-ok { background: var(--color-ok); } .bb-legend .k-warn { background: var(--color-warn); } .bb-legend .k-bad { background: var(--color-bad); }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+<script>
+(function () {
+  const RAW = {"ads_weekly": "week,label,spend,clicks,atc,co,pur,val\n2026-10-03,3–9 жовт,2749.71,17072.0,99.0,58.0,10.0,7123.31\n2026-10-10,10–16 жовт,3259.96,6705.0,135.0,70.0,11.0,7055.05\n2026-10-17,17–23 жовт,3673.08,5404.0,136.0,62.0,20.0,14510.74\n2026-10-24,24–30 жовт,4379.98,6335.0,128.0,44.0,14.0,10248.03\n2026-10-31,31 жовт – 1 лист (2 дні),1259.23,1597.0,31.0,14.0,4.0,2561.6\n", "adsets": "adset,campaign,geo,status,mapping,spend,meta_orders,meta_revenue,ga_orders,ga_revenue,shop_orders,shop_revenue,shop_gross_profit,margin_region\nCOLD · NA · US+CA,COLD 1509,US+CA,active,ID,4358.18,22,14212.47,18,11384.79,19,12149.66,7592.14,217\nNP-STRUCT · New Creative Tests,NP-STRUCT,US+CA,active,ID,1470.11,6,6032.19,7,6632.51,7,6436.88,4320.75,217\nRT · CORE-INTENT,RT,WW,active,ID,1506.02,12,9103.48,7,5659.14,7,5843.55,4181.1,303\nCOLD · APAC,COLD 1509,HK+MO+TW+MY,off,ID,1547.33,7,4626.96,6,3967.0,5,3454.13,2490.78,350\nTEST · Art icon hooks,TEST,HK+TW,off,date,214.72,2,1524.28,1,1019.18,1,1019.3,769.3,350\nNP-STRUCT · Tests 2 Black,NP-STRUCT,US+CA,active,ID,315.59,2,1249.0,1,550.0,1,550.0,425.0,217\nTEST · UGC video 3,TEST,HK+TW,off,ID,416.85,1,508.1,0,0.0,1,509.53,384.53,350\nNP-STRUCT · Winners,NP-STRUCT,US+CA,active,ID,591.05,1,599.0,0,0.0,1,599.0,354.19,217\nARTICON · Winners,ARTICON,HK+TW,active,ID,1261.6,5,2830.32,2,1019.3,2,1019.3,769.3,350\nTEST · Lifestyle static,TEST,HK+TW,off,date,414.27,0,0.0,0,0.0,0,0.0,0.0,350\nTEST · UGC video 2,TEST,HK+TW,off,date,216.73,0,0.0,0,0.0,0,0.0,0.0,350\nCOLD · EUS,COLD 1509,IT+CZ+NL+GB,off,ID,1086.72,1,669.6,1,669.0,1,672.74,430.98,313\nARTICON · UGC + photos,ARTICON,HK+TW,active,ID,1920.89,5,3151.55,2,1019.53,2,1019.82,769.82,350\n", "cog_sources": "source,cog\n\"Таблиця маржі CORE (аркуш Core Pricing & Margins)\",94\n\"Розрахунок доставки та партій товару (той самий файл)\",120\n\"Собівартість у картках товарів Shopify\",125\n", "countries": "Country,country,spend,clicks,atc,pur,val,margin\nUS,США,5839.68,4178.0,154.0,25.0,16757.0,203\nHK,Гонконг,2889.53,2906.0,107.0,10.0,6285.26,362\nTW,Тайвань,2285.52,4533.0,91.0,3.0,1728.78,327\nCA,Канада,946.15,1864.0,41.0,5.0,4636.66,370\nMY,Малайзія,855.15,4110.0,40.0,5.0,3492.33,362\nIT,Італія,628.27,2893.0,17.0,1.0,668.74,313\nPH,Філіппіни,423.52,5510.0,26.0,0.0,0.0,211\nNL,Нідерланди,348.56,419.0,5.0,1.0,669.6,313\nSG,Сінгапур,154.53,221.0,17.0,1.0,621.44,375\nCZ,Чехія,143.67,256.0,0.0,0.0,0.0,313\nKR,Південна Корея,110.09,134.0,7.0,2.0,1493.55,343\nAU,Австралія,104.82,132.0,4.0,2.0,1369.03,348\nAE,ОАЕ,86.71,41.0,3.0,0.0,0.0,297\nBR,Бразилія,85.8,4602.0,2.0,0.0,0.0,318\nID,Індонезія,71.64,4826.0,2.0,0.0,0.0,210\nGB,Велика Британія,64.74,70.0,1.0,2.0,1459.68,356\nDE,Німеччина,49.56,48.0,3.0,0.0,0.0,313\nES,Іспанія,47.12,66.0,3.0,1.0,666.66,313\nCY,Кіпр,41.68,72.0,3.0,0.0,0.0,313\n", "creative_market": "key,creative,market,spend,clicks,atc,co,pur,val,note\nAI Lifestyle 2 | B | static — США + Канада,AI Lifestyle 2 | B | static,США + Канада,202.39,156.0,2.0,2.0,0.0,0.0,Слабкий: дорогий кошик\nArt icon hook1 black | B&W | video — Європа,Art icon hook1 black | B&W | video,Європа,603.11,634.0,12.0,3.0,1.0,669.6,\"Дорогий кошик, мало покупок\"\nArt icon hook1 black | B&W | video — Азія,Art icon hook1 black | B&W | video,Азія,1396.18,2074.0,66.0,30.0,2.0,1016.4,В Азії майже не продає\nArt icon hook1 black | B&W | video — Ретаргет,Art icon hook1 black | B&W | video,Ретаргет,821.67,1511.0,48.0,17.0,7.0,5800.68,Найкращий результат у ретаргеті\nArt icon hook1 black | B&W | video — США + Канада,Art icon hook1 black | B&W | video,США + Канада,3949.89,2607.0,137.0,76.0,20.0,12770.12,\"Головний креатив у США, кошик стабільний\"\nArt icon hook2 black | B&W | video — Азія,Art icon hook2 black | B&W | video,Азія,327.73,231.0,12.0,4.0,2.0,1524.28,Кандидат для тесту з чорною колонкою\nLifestyle 16 v4 | B&W | video — Азія,Lifestyle 16 v4 | B&W | video,Азія,179.93,684.0,6.0,5.0,1.0,560.13,Мала вибірка\nLifestyle static 2 — Азія,Lifestyle static 2,Азія,227.37,224.0,9.0,1.0,0.0,0.0,Вимкнено; без покупок\nPhoto shelf White + Black | B&W — Азія,Photo shelf White + Black | B&W,Азія,183.95,292.0,5.0,4.0,1.0,609.85,Вимкнено; мала вибірка\nReviews CORE_4 render + quote | W | static — Азія,Reviews CORE_4 render + quote | W | static,Азія,184.72,228.0,2.0,1.0,1.0,694.87,Мала вибірка\nReviews CORE_4 render + quote | W | static — США + Канада,Reviews CORE_4 render + quote | W | static,США + Канада,335.7,214.0,15.0,9.0,1.0,699.0,\"Дешевий кошик, мало покупок\"\nUGC 3 | art icon — Азія,UGC 3 | art icon,Азія,317.07,1136.0,24.0,10.0,1.0,508.1,Вимкнено; дорога покупка\nUGC Jeff Martin unboxing | B — Азія,UGC Jeff Martin unboxing | B,Азія,807.85,1322.0,18.0,10.0,1.0,1016.58,\"Дорого, не масштабувати\"\nUGC Jeff Martin unboxing | B — США + Канада,UGC Jeff Martin unboxing | B,США + Канада,433.89,192.0,6.0,2.0,2.0,1901.84,Мала вибірка\nUGC Yuta Minamiura | W — Азія,UGC Yuta Minamiura | W,Азія,718.65,1350.0,30.0,9.0,3.0,1525.12,Стабільний; біла колонка закінчується\nUGC Yuta Minamiura | W — США + Канада,UGC Yuta Minamiura | W,США + Канада,1036.45,530.0,20.0,7.0,4.0,4130.35,Стабільний; біла колонка закінчується\nWarranty 14 t1 | B&W | video — Європа,Warranty 14 t1 | B&W | video,Європа,263.68,179.0,6.0,5.0,0.0,0.0,Без покупок\nWarranty 14 t1 | B&W | video — Азія,Warranty 14 t1 | B&W | video,Азія,657.18,1641.0,37.0,20.0,5.0,3491.32,Найкращий креатив для Азії\nWarranty 2 | W | static — Ретаргет,Warranty 2 | W | static,Ретаргет,232.58,2151.0,12.0,3.0,2.0,1402.86,Добре в ретаргеті; біла колонка\n", "ga_sources": "key,channel,sessions,engaged,purchases,revenue\nmeta_paid,Meta Ads — платна реклама,32315,8486,45,31920.45\nsearch,Пошук — Google та інші,1090,692,10,6622.70\ndirect,Прямі заходи,1396,487,8,4781.86\nnot_set,Джерело не визначене (not set),576,0,6,3804.16\nig_org,Instagram — органіка,499,355,4,2442.85\nfb_org,Facebook — органіка й переходи,134,81,1,612.83\nreferral,Сайти-огляди (referral),81,46,1,599.00\nai,AI-асистенти (ChatGPT),34,25,0,0\nother,Інше (email та ін.),9,3,0,0\n", "junk_creatives": "creative,spend,impr,clicks,atc,pur\nGeneric 5 Missed a drop | B&W | static,510.27,87169,10397.0,9.0,0.0\nLifestyle 3 Art icon | B | static,39.11,2835,285.0,0.0,0.0\nLifestyle 4 Art icon | B&W | static,169.22,95442,5099.0,19.0,0.0\n", "margins": "key,label,margin,source\nlow,Консервативний,209,\"Беззбиткова вартість замовлення у звіті таргетолога (за старої ціни у США)\"\nmid,Середня маржа CORE,303,\"Середня маржа до реклами з розрахунку окупності (таблиця маржі CORE по всіх країнах)\"\n", "market_margins": "key,market,price,cog,royalty,shipping,warehouse,shopify_fee,duty,cpo_actual,cpo_note,mkt_plan\nus_hk_599,\"США, відправка з Гонконгу, ціна $599 (до 26 жовтня)\",599.0,94,25,95,2.18,23.12,173.71,,,120\nus_hk_699,\"США, відправка з Гонконгу, ціна $699\",699.0,94,25,95,2.18,26.98,202.71,244.0,\"США + Канада, тиждень 44\",120\nus_wh_699,\"США, зі складу в США, ціна $699\",699.0,94,25,90,2.5,26.98,27.26,,,120\nca,Канада,722.34,94,25,95,2.18,27.88,108.35,142.0,за два тижні,120\nhk,Гонконг,512.82,94,25,10,2.18,19.8,0.0,243.0,тиждень 44,120\ntw,Тайвань,632.43,94,25,65,2.18,24.41,94.86,716.0,тиждень 44,120\neu,Європа,702.06,94,25,72,2.18,27.1,168.5,,,120\n", "placements": "placement,spend,clicks,lpv,atc,pur,val\nInstagram · Feed,3910.3,2147.0,2138.0,94.0,13.0,9487.26\nInstagram · Instagram Stories,3694.4,17453.0,16575.0,131.0,16.0,10088.89\nFacebook · Feed,2906.26,5519.0,4660.0,137.0,11.0,7811.28\nInstagram · Instagram Reels,2762.74,2000.0,1801.0,73.0,13.0,10247.26\nFacebook · Facebook Reels,1655.89,5996.0,4376.0,71.0,5.0,3355.95\nFacebook · Facebook Stories,144.25,212.0,184.0,6.0,0.0,0.0\nThreads · Threads feed,87.8,1264.0,1045.0,9.0,1.0,508.1\nFacebook · Ads on Facebook Reels,68.78,1729.0,1034.0,4.0,0.0,0.0\nFacebook · In-stream reels,64.38,670.0,508.0,2.0,0.0,0.0\n", "referral_sites": "site,kind,ga_sessions,ga_revenue,shop_orders,shop_revenue\ngadgetreview.com,Огляд техніки,4,599.00,1,658.90\nbearbrick,Сайт BE@RBRICK (у Shopify лише назва),,,4,2580.29\nshop_app,Застосунок Shop від Shopify,10,0,0,0\n\"Галереї веб-дизайну (landing.love, webdesignclip, storefront.design, thenerodesign)\",Добірки дизайну сайтів,28,0,0,0\nrinaro.com,Інший сайт,5,0,0,0\nbrik.co.jp,Японський сайт про BE@RBRICK,3,0,0,0\nuncrate.com,Медіа про чоловічі товари,2,0,0,0\nadfwebmagazine.jp,Японський дизайн-журнал,2,0,0,0\nmedicomtoy.tv,Сайт виробника Medicom Toy,1,0,0,0\n", "shopify_channels": "key,channel,orders,revenue,gross_profit\nmeta_paid,Meta Ads — платна реклама,47,33273.91,22487.89\nsearch,Пошук — Google,11,6644.57,4898.49\ndirect,Прямі заходи,5,3037.67,2130.30\nreferral,Переходи з сайтів (bearbrick і gadgetreview),5,3239.19,2062.92\nig_org,Instagram — органіка,3,1824.29,1280.16\nfb_org,Facebook — без рекламних міток,2,1180.66,850.07\nnot_set,Джерело не визначене (Android-застосунок),2,1295.77,927.97\n", "shopify_sources": "key,source,orders,revenue\nmeta_utm,Meta Ads (UTM-мітки Meta),47,33273.91\nig_social,Instagram — органіка (ig / social),3,1824.29\nnone,Без UTM-міток (direct / пошук / невідомо),25,15397.86\n", "site_totals": "key,source,orders,revenue,gross_profit\nshopify_all,Shopify — усі замовлення,75,50496.06,34637.8\nga_all,GA4 — увесь сайт,75,50783.86,\nshopify_no_utm,Shopify — без Meta-UTM,28,17222.15,12149.91\n", "w44_budget": "line,now,proposed\n\"North America, original (лише США)\",145,145\n\"North America, new structure (лише США)\",200,120\n\"Art icon (лише Гонконг)\",200,120\nКанада окремим адсетом,44,80\nЧорні відео окремим адсетом у США,0,80\nРетаргет,64,64\n", "w44_campaigns": "campaign,spend,carts_per_1000,cost_per_cart,meta_purchases,verdict\n\"North America, original\",1035,0.94,32,5,Найкраща холодна кампанія\n\"North America, new structure\",1406,0.69,47,3,Дорожчий кошик; Winners без покупок\n\"Art icon, Hong Kong\",729,0.27,28,3,Втомлюється, але продає\n\"Art icon, Taiwan\",716,0.06,28,1,Кошики рідко стають замовленнями\nRetargeting,440,0.15,19,3,Instagram працює; Facebook Reels — ні\nEurope + UK,61,0.16,61,0,Зупинено 27 жовтня\n", "w44_funnel": "step,w43,w44\nСесії,6621,7118\nСесії з кошиком,166,148\nПерейшли до оформлення,81,61\nОформили замовлення,25,18\n", "w44_kpi": "key,label,w43,w44\nspend,Витрати Meta,,4386\norders,Замовлення CORE,25,17\nnet_sales,Чисті продажі,15943,9945\ncpo,Вартість замовлення,161,258\nroas,Повернення на витрати,3.95,2.27\n"};
+  const parsed = {}, calcs = {}, cache = {}, draws = {};
+  Object.keys(RAW).forEach((k) => { parsed[k] = d3.csvParse(RAW[k]); });
+  const data = (id) => {
+    if (parsed[id]) return { status: 'ok', data: parsed[id] };
+    if (calcs[id]) {
+      if (!cache[id]) { const c = calcs[id]; cache[id] = c.fn(...c.inputs.map((i) => data(i).data)); }
+      return { status: 'ok', data: cache[id] };
+    }
+    return { status: 'missing', data: [] };
+  };
+  const run = (name) => {
+    document.querySelectorAll('[data-draw="' + name + '"]').forEach((el) => {
+      try { draws[name](el); } catch (e) { console.error('draw ' + name, e); }
+    });
+  };
+  window.dash = {
+    data,
+    calc: (id, def) => { calcs[id] = def; },
+    draw: (name, fn) => { if (fn) draws[name] = fn; else if (draws[name]) run(name); },
+    onData: (fn) => fn(),
+    colors: ['#1f7a4d', '#64748b', '#d08a0e', '#2563eb', '#9333ea', '#dc2626', '#0891b2', '#65a30d'],
+    setLink: () => {}, params: () => ({}), setParams: () => {}, resetParams: () => {},
+    _runAll: () => Object.keys(draws).forEach(run),
+  };
+  let tmr; window.addEventListener('resize', () => { clearTimeout(tmr); tmr = setTimeout(() => window.dash._runAll(), 150); });
+  document.addEventListener('toggle', () => window.dash._runAll(), true);
+})();
+</script>
+</head>
+<body>
+<div class="page-wrap">
+
+
+<div class="bb">
+  <header class="bb-head" id="top">
+    <h1>Bearbrick: аудит аналітики 3 жовтня – 1 листопада</h1>
+    <div class="bb-period">2026 рік · 30 днів · Meta Ads, GA4, Shopify, таблиця маржі CORE · акаунт ERA TOYS LIMITED, магазин BE@RBRICK AUDIO</div>
+    <p class="bb-take">Звірила Meta Ads, GA4 і Shopify за 30 днів, а також таблицю маржі CORE.</p>
+  </header>
+
+  <section id="summary">
+    <h2 class="bb-sumh">Головні висновки</h2>
+    <div class="bb-fx">
+      <div class="bb-f warn">
+        <span class="bb-chip">Окупність реклами</span>
+        <div class="bb-fbig">≈ 0</div>
+        <div class="bb-fsub">від <b data-draw="kpi" data-source="kpi" data-field="profit" data-row="0" data-fmt="signed">—</b> до <b data-draw="kpi" data-source="kpi" data-field="profit_meta_orders" data-row="0" data-fmt="signed">—</b> за 30 днів</div>
+        <p>Мінус — якщо рахувати лише замовлення, підтверджені Shopify; плюс — якщо вірити всім замовленням, які приписує собі Meta. Meta дає <b data-draw="kpi" data-source="shop_calc" data-field="rev_share" data-where="key=meta_paid" data-fmt="pct">—</b> виручки магазину.</p>
+      </div>
+      <div class="bb-f bad">
+        <span class="bb-chip">Ціна замовлення</span>
+        <div class="bb-fbig" data-draw="kpi" data-source="kpi" data-field="cpo_utm" data-row="0" data-fmt="money">—</div>
+        <div class="bb-fsub">у плані маржі — <b data-draw="kpi" data-source="market_calc" data-field="mkt_plan" data-where="key=us_hk_699" data-fmt="money">—</b> на колонку</div>
+        <p>Реклама коштує в рази дорожче, ніж закладено в таблиці маржі.</p>
+      </div>
+      <div class="bb-f ok">
+        <span class="bb-chip">Ринки</span>
+        <div class="bb-fbig bb-fmid">Канада · Гонконг · Малайзія</div>
+        <div class="bb-fsub">маржа: Канада <b data-draw="kpi" data-source="market_calc" data-field="margin" data-where="key=ca" data-fmt="money">—</b> · Гонконг <b data-draw="kpi" data-source="market_calc" data-field="margin" data-where="key=hk" data-fmt="money">—</b> · США <b data-draw="kpi" data-source="market_calc" data-field="margin" data-where="key=us_hk_699" data-fmt="money">—</b></div>
+        <p>Ці ринки в плюсі. США — близько нуля через мито при відправці з Гонконгу. Тайвань — у мінусі.</p>
+      </div>
+      <div class="bb-f bad">
+        <span class="bb-chip">Збиткові адсети</span>
+        <div class="bb-fbig" data-draw="kpi" data-source="kpi" data-field="loss" data-row="0" data-fmt="money">—</div>
+        <div class="bb-fsub">втрати за місяць</div>
+        <p>Тайвань в ARTICON, COLD EUS, Winners і тести. Таргетолог пропонує прибрати саме їх.</p>
+      </div>
+      <div class="bb-f warn">
+        <span class="bb-chip">Креативи</span>
+        <div class="bb-fbig" data-draw="kpi" data-source="ads_calc" data-field="hook1_share" data-row="0" data-fmt="pct">—</div>
+        <div class="bb-fsub">бюджету на один креатив — Hook 1</div>
+        <p>Продає в США та ретаргеті, але не в Азії. Для Гонконгу краще працює Warranty 14 t1.</p>
+      </div>
+      <div class="bb-f bad">
+        <span class="bb-chip">Останній тиждень</span>
+        <div class="bb-fbig"><span data-draw="kpi" data-source="w44_kpi" data-field="w44" data-where="key=orders" data-fmt="int">—</span> <span class="bb-fwas">зам.</span></div>
+        <div class="bb-fsub">тижнем раніше — <b data-draw="kpi" data-source="w44_kpi" data-field="w43" data-where="key=orders" data-fmt="int">—</b></div>
+        <p>Ціна замовлення зросла з <b data-draw="kpi" data-source="w44_kpi" data-field="w43" data-where="key=cpo" data-fmt="money">—</b> до <b data-draw="kpi" data-source="w44_kpi" data-field="w44" data-where="key=cpo" data-fmt="money">—</b> (26 жовтня – 1 листопада).</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bb-card bb-step" id="step1">
+    <div class="bb-stephead"><span class="bb-stepn">Крок 1</span><span class="bb-stepk">Перевірка даних</span></div>
+    <h2>Рішення приймались за даними Meta, а вони завищують результат</h2>
+    <p class="bb-lead">Звірила три системи: Shopify (реальні замовлення), GA4 і Meta Ads Manager. Shopify і GA4 між собою збігаються, а Meta приписує собі на <b data-draw="kpi" data-source="kpi" data-field="overclaim" data-row="0" data-fmt="pctSigned">—</b> більше виручки, ніж підтверджує Shopify: <b data-draw="kpi" data-source="kpi" data-field="meta_orders" data-row="0" data-fmt="int">—</b> замовлень проти <b data-draw="kpi" data-source="kpi" data-field="shop_orders" data-row="0" data-fmt="int">—</b>.</p>
+    <div class="bb-reconbox bb-donutbox">
+      <div class="bb-donutgrid">
+        <div class="bb-chart bb-donut" data-draw="donutChart" data-source="shop_calc"></div>
+        <div>
+          <h3 class="bb-h3">Яка частка замовлень магазину приходить з реклами Meta</h3>
+          <p class="note">За Shopify, за 30 днів: з реклами Meta — <b data-draw="kpi" data-source="shop_calc" data-field="orders" data-where="key=meta_paid" data-fmt="int">—</b> з <b data-draw="kpi" data-source="shop_calc" data-field="tot_orders" data-where="key=meta_paid" data-fmt="int">—</b> замовлень. Сама Meta вважає своїми <b data-draw="kpi" data-source="kpi" data-field="meta_orders" data-row="0" data-fmt="int">—</b> — тобто майже всі продажі магазину, хоча частина з них насправді прийшла з пошуку, прямих заходів і органіки.</p>
+          <div class="bb-donutleg" data-draw="donutLegend" data-source="shop_calc"></div>
+        </div>
+      </div>
+    </div>
+    <div class="bb-reconbox">
+      <div class="bb-reconhead">
+        <h3 class="bb-h3">Звірка всіх каналів: Shopify, GA4 і Meta</h3>
+        <div class="bb-seg" role="group" aria-label="Показник">
+          <button type="button" class="bb-cmpbtn bb-segbtn" data-v="orders" aria-pressed="true">Замовлення</button>
+          <button type="button" class="bb-cmpbtn bb-segbtn" data-v="revenue" aria-pressed="false">Виручка</button>
+        </div>
+      </div>
+      <div class="bb-legend">
+        <span><span class="sw" data-draw="sw" data-i="0"></span>Shopify — реальні замовлення</span>
+        <span><span class="sw" data-draw="sw" data-i="1"></span>GA4</span>
+        <span><span class="sw" data-draw="sw" data-i="2"></span>Meta Ads Manager (бачить лише свою рекламу)</span>
+      </div>
+      <div class="bb-chart bb-reconchart" data-draw="reconChart" data-source="recon_all"></div>
+      <p class="note">Shopify і GA4 збігаються і загалом, і по кожному каналу. Розходиться лише Meta: вона приписує рекламі більше замовлень, ніж бачать обидві незалежні системи. Різниця — замовлення, які Shopify і GA4 записали на пошук, прямі заходи й органіку.</p>
+    </div>
+    <div class="bb-guide">
+      <div class="bb-src truth">
+        <span class="bb-badge">Основне джерело даних</span>
+        <h3>Shopify</h3>
+        <p>Фактичні замовлення, гроші й собівартість: <b data-draw="kpi" data-source="site_totals" data-field="orders" data-where="key=shopify_all" data-fmt="int">—</b> замовлень на <b data-draw="kpi" data-source="site_totals" data-field="revenue" data-where="key=shopify_all" data-fmt="money">—</b>.</p>
+        <p class="use">Основа для рішень про бюджет, окупність і прибуток кампаній.</p>
+      </div>
+      <div class="bb-src check">
+        <span class="bb-badge">Контроль трекінгу</span>
+        <h3>GA4</h3>
+        <p>Збігається з Shopify по всьому сайту на <b data-draw="kpi" data-source="kpi" data-field="ga_site_match" data-row="0" data-fmt="pct">—</b>, а по Meta-трафіку на <b data-draw="kpi" data-source="kpi" data-field="ga_meta_match" data-row="0" data-fmt="pct">—</b>.</p>
+        <p class="use">Використовується для контролю трекінгу, каналів і якості трафіку. Окупність рахується за Shopify.</p>
+      </div>
+      <div class="bb-src claim">
+        <span class="bb-badge">Завищує результат</span>
+        <h3>Meta Ads Manager</h3>
+        <p>Приписує собі на <b data-draw="kpi" data-source="kpi" data-field="overclaim" data-row="0" data-fmt="pctSigned">—</b> більше виручки, ніж підтверджує Shopify (<b data-draw="kpi" data-source="kpi" data-field="meta_revenue" data-row="0" data-fmt="money">—</b> проти <b data-draw="kpi" data-source="kpi" data-field="shop_revenue" data-row="0" data-fmt="money">—</b>).</p>
+        <p class="use">Придатний для порівняння креативів і адсетів між собою всередині Meta, але не для оцінки реальної окупності.</p>
+      </div>
+    </div>
+    <div class="bb-so"><b>Висновок.</b> Окупність реклами рахую лише за Shopify. Дані Meta придатні тільки для порівняння оголошень між собою.</div>
+  </section>
+
+  <section class="bb-card bb-step" id="step2">
+    <div class="bb-stephead"><span class="bb-stepn">Крок 2</span><span class="bb-stepk">Прибуток</span></div>
+    <h2>Прибуток рахувався за умовною собівартістю</h2>
+    <p class="bb-lead">У Shopify собівартість колонки заповнена умовно і не враховує доставку, мито й роялті, тому реклама здавалась прибутковою. За таблицею маржі CORE картина інша. Нижче — прибуток за 30 днів у кількох сценаріях маржі.</p>
+    <div class="bb-tablewrap">
+      <table data-source="scen" data-row-key="label">
+        <thead><tr>
+          <th data-field="label">Сценарій</th>
+          <th data-field="source">Звідки маржа</th>
+          <th data-field="margin">Маржа на замовлення</th>
+          <th data-field="be_roas">Поріг ROAS</th>
+          <th data-field="profit_utm" class="truth">Прибуток · замовлення, підтверджені Shopify</th>
+          <th data-field="profit_meta">Прибуток · замовлення за Meta</th>
+        </tr></thead>
+        <tbody data-draw="scenTable"></tbody>
+      </table>
+    </div>
+    <h3 class="bb-h3">Маржа по ринках: скільки можна платити за замовлення</h3>
+    <p class="note">Маржа до реклами — максимальна вартість замовлення, за якої реклама не збиткова. Вартість замовлення за місяць — витрати Meta в країні ÷ покупки протягом 7 днів після кліку.</p>
+    <div class="bb-tablewrap">
+      <table data-source="market_calc" data-row-key="market">
+        <thead><tr>
+          <th data-field="market">Ринок</th>
+          <th data-field="price">Ціна, $</th>
+          <th data-field="costs">Витрати без реклами</th>
+          <th data-field="duty">з них мито й податки</th>
+          <th data-field="margin" class="truth">Маржа до реклами</th>
+          <th data-field="spend">Витрати за місяць</th>
+          <th data-field="pur">Покупки</th>
+          <th data-field="cpo_actual">Вартість замовлення за місяць</th>
+          <th data-field="result">Результат на замовлення</th>
+        </tr></thead>
+        <tbody data-draw="marketTable"></tbody>
+      </table>
+    </div>
+    <div class="bb-grid bb-insights">
+      <div>
+        <h3 class="bb-h3">Що з цього випливає</h3>
+        <ul class="bb-caveats">
+          <li>Відправка в США з Гонконгу дорога через мито: його рахують від ціни продажу. Зі складу в США мито рахується від собівартості, і маржа на колонку вища на <b data-draw="kpi" data-source="market_calc" data-field="gain_vs_hk" data-where="key=us_wh_699" data-fmt="money">—</b>.</li>
+          <li>Канада й Гонконг — найприбутковіші ринки: маржа висока, а вартість замовлення нижча за неї. Тайвань — навпаки.</li>
+          <li>Підвищення ціни в США було необхідним: за старої ціни маржа нижча за фактичну вартість замовлення.</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="bb-h3">Собівартість колонки в різних джерелах</h3>
+        <div class="bb-tablewrap">
+          <table data-source="cog_sources" data-row-key="source">
+            <thead><tr><th data-field="source">Джерело</th><th data-field="cog">Собівартість, $</th></tr></thead>
+            <tbody data-draw="cogTable"></tbody>
+          </table>
+        </div>
+        <ul class="bb-caveats bb-insights">
+          <li>Таблиця закладає на маркетинг фіксовану суму на кожну колонку; у прибутку після реклами її замінено на фактичні витрати Meta, щоб не рахувати двічі.</li>
+          <li>Курси валют у таблиці — станом на січень; ціна для Канади в таблиці й у звіті таргетолога різна.</li>
+          <li>Колонка «Average shipping fee» не входить у витрати — незрозуміло, чи сплачує її покупець, бо в Shopify доставка записана як нульова.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="bb-so"><b>Висновок.</b> Реклама працює приблизно в нуль. Максимальна ціна замовлення різна для кожного ринку: у США вона найнижча через мито при відправці з Гонконгу.</div>
+  </section>
+
+  <section class="bb-card bb-step" id="step3">
+    <div class="bb-stephead"><span class="bb-stepn">Крок 3</span><span class="bb-stepk">Куди йде бюджет</span></div>
+    <h2>Частина бюджету йде в збиткові ринки й адсети</h2>
+    <p class="bb-lead">Розклала результат по адсетах і країнах: замовлення × маржа ринку мінус витрати.</p>
+    <h3 class="bb-h3">Прибуток після реклами по адсетах</h3>
+      <div class="bb-seg" role="group" aria-label="Сценарій маржі">
+        <button type="button" class="bb-segbtn" data-m="profit" aria-pressed="true">За ринками</button>
+        <button type="button" class="bb-segbtn" data-m="profit_mid" aria-pressed="false">Середня маржа</button>
+        <button type="button" class="bb-segbtn" data-m="profit_low" aria-pressed="false">Консервативний</button>
+        <button type="button" class="bb-segbtn" data-m="profit_high" aria-pressed="false">За собівартістю Shopify</button>
+      </div>
+      <div class="bb-chart" data-draw="profitChart" data-source="adset_calc"></div>
+    <h3 class="bb-h3">Країни</h3>
+    <div class="bb-tablewrap">
+          <table data-source="country_calc" data-row-key="country">
+            <thead><tr><th data-field="country">Країна</th><th data-field="spend">Витрати</th><th data-field="pur">Покупки</th><th data-field="cpa">Ціна покупки</th><th data-field="margin">Маржа до реклами</th><th data-field="res">Результат</th></tr></thead>
+            <tbody data-draw="countryTbl"></tbody>
+          </table>
+        </div>
+    <div class="bb-so"><b>Висновок.</b> Тайвань, Європа, Winners і тестові адсети — у мінусі. Гонконг, Канада й Малайзія — у плюсі.</div>
+  </section>
+
+  <section class="bb-card bb-step" id="step4">
+    <div class="bb-stephead"><span class="bb-stepn">Крок 4</span><span class="bb-stepk">Якість трафіку</span></div>
+    <h2>Частина кліків — малоцінний трафік</h2>
+    <p class="bb-lead">У GA4 тисячі сесій тривалістю 0–1 секунда без покупок. Знайшла джерело: кілька статичних креативів з аномально високим CTR, ретаргет на весь світ і слабкі плейсменти.</p>
+    <h3 class="bb-h3">Креативи з дешевими кліками без покупок</h3>
+    <div class="bb-tablewrap">
+      <table data-source="junk_calc" data-row-key="creative">
+        <thead><tr><th data-field="creative">Креатив (вимкнено)</th><th data-field="spend">Витрати</th><th data-field="clicks">Кліки</th><th data-field="ctr">CTR</th><th data-field="pur">Покупки</th></tr></thead>
+        <tbody data-draw="junkTbl"></tbody>
+      </table>
+    </div>
+    <h3 class="bb-h3">Плейсменти</h3>
+    <div class="bb-tablewrap">
+          <table data-source="placement_calc" data-row-key="placement">
+            <thead><tr><th data-field="placement">Плейсмент</th><th data-field="spend">Витрати</th><th data-field="lpv_rate">Доходять до сайту</th><th data-field="pur">Покупки</th><th data-field="cpa">Ціна покупки</th><th data-field="roas">ROAS</th></tr></thead>
+            <tbody data-draw="placementTbl"></tbody>
+          </table>
+        </div>
+    <div class="bb-so"><b>Висновок.</b> Ці креативи вже вимкнені. Далі — обмежити ретаргет країнами, де є продажі, і вимкнути overlay, in-stream і Facebook Stories.</div>
+  </section>
+
+  <section class="bb-card bb-step" id="step5">
+    <div class="bb-stephead"><span class="bb-stepn">Крок 5</span><span class="bb-stepk">Креативи</span></div>
+    <h2>Реклама тримається на одному креативі</h2>
+    <p class="bb-lead">На Hook 1 припадає <b data-draw="kpi" data-source="ads_calc" data-field="hook1_share" data-row="0" data-fmt="pct">—</b> бюджету. Він продає в США та ретаргеті, але не в Азії. Чорні відео фактично не протестовані, а AI-статика поки слабка.</p>
+    <div class="bb-tablewrap">
+      <table data-source="creative_calc" data-row-key="key">
+        <thead><tr><th data-field="creative">Креатив</th><th data-field="market">Ринок</th><th data-field="spend">Витрати</th><th data-field="atc">Кошики</th><th data-field="cpa_atc">Ціна кошика</th><th data-field="pur">Покупки</th><th data-field="cpa">Ціна покупки</th><th data-field="roas">ROAS</th><th data-field="note">Висновок</th></tr></thead>
+        <tbody data-draw="creativeTbl"></tbody>
+      </table>
+    </div>
+    <div class="bb-so"><b>Висновок.</b> Hook 1 залишити в США, доки його не переможе новий креатив. Для Гонконгу зробити головним Warranty 14 t1. Чорні відео протестувати окремо — незабаром у наявності будуть лише чорні колонки.</div>
+  </section>
+
+  <section class="bb-card bb-step" id="step6">
+    <div class="bb-stephead"><span class="bb-stepn">Крок 6</span><span class="bb-stepk">Останній тиждень</span></div>
+    <h2>Останній тиждень погіршився</h2>
+    <p class="bb-lead">Тиждень 44 (26 жовтня – 1 листопада) порівняно з тижнем 43, за звітом таргетолога.</p>
+    <div class="bb-tiles bb-insights">
+      <div class="bb-tile"><span class="lbl">Витрати Meta</span><span class="big" data-draw="kpi" data-source="w44_kpi" data-field="w44" data-where="key=spend" data-fmt="money">—</span><span class="sub">більше, ніж тижнем раніше</span></div>
+      <div class="bb-tile"><span class="lbl">Замовлення CORE</span><span class="big" data-draw="kpi" data-source="w44_kpi" data-field="w44" data-where="key=orders" data-fmt="int">—</span><span class="sub">тиждень 43: <b data-draw="kpi" data-source="w44_kpi" data-field="w43" data-where="key=orders" data-fmt="int">—</b></span></div>
+      <div class="bb-tile"><span class="lbl">Вартість замовлення</span><span class="big" data-draw="kpi" data-source="w44_kpi" data-field="w44" data-where="key=cpo" data-fmt="money">—</span><span class="sub">тиждень 43: <b data-draw="kpi" data-source="w44_kpi" data-field="w43" data-where="key=cpo" data-fmt="money">—</b></span></div>
+      <div class="bb-tile"><span class="lbl">Повернення на витрати</span><span class="big" data-draw="kpi" data-source="w44_kpi" data-field="w44" data-where="key=roas" data-fmt="roas">—</span><span class="sub">тиждень 43: <b data-draw="kpi" data-source="w44_kpi" data-field="w43" data-where="key=roas" data-fmt="roas">—</b></span></div>
+      <div class="bb-tile"><span class="lbl">Чисті продажі</span><span class="big" data-draw="kpi" data-source="w44_kpi" data-field="w44" data-where="key=net_sales" data-fmt="money">—</span><span class="sub">тиждень 43: <b data-draw="kpi" data-source="w44_kpi" data-field="w43" data-where="key=net_sales" data-fmt="money">—</b></span></div>
+    </div>
+    <div class="bb-grid bb-insights">
+      <div>
+        <h3 class="bb-h3">Кампанії</h3>
+        <div class="bb-tablewrap">
+          <table data-source="w44_campaigns" data-row-key="campaign">
+            <thead><tr><th data-field="campaign">Кампанія</th><th data-field="spend">Витрати</th><th data-field="cost_per_cart">Вартість кошика</th><th data-field="meta_purchases">Покупки за Meta</th><th data-field="verdict">Висновок таргетолога</th></tr></thead>
+            <tbody data-draw="w44Camp"></tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <h3 class="bb-h3">Де відвалюються покупці (Shopify)</h3>
+        <div class="bb-tablewrap">
+          <table data-source="w44_funnel" data-row-key="step">
+            <thead><tr><th data-field="step">Етап</th><th data-field="w43">Тиждень 43</th><th data-field="w44">Тиждень 44</th><th data-field="chg">Зміна</th></tr></thead>
+            <tbody data-draw="w44Funnel"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="bb-so"><b>Висновок.</b> Кошиків стало менше, а частка тих, хто завершує оформлення, не змінилась. Проблема до кошика: реклама, креатив і ціна у США.</div>
+  </section>
+
+  <section class="bb-card bb-step bb-plan" id="plan">
+    <div class="bb-stephead"><span class="bb-stepn">Крок 7</span><span class="bb-stepk">План</span></div>
+    <h2>Що пропоную зробити</h2>
+    <ol class="bb-recs">
+        <li>Підтвердити собівартість колонки (у трьох джерелах вона різна), ціну для Канади й актуальні курси валют. Від цього залежать пороги вартості замовлення для кожного ринку.</li>
+        <li>Погодити пропозиції таргетолога, які прибирають збиткові витрати: вимкнути Тайвань і адсет New в Art icon, поставити на паузу Winners, прибрати неефективні плейсменти. Гонконг залишити — за таблицею маржі він окупається.</li>
+        <li>Посилити Канаду: найвища маржа серед ринків і найнижча вартість замовлення. Пропозиція таргетолога про окремий адсет — пріоритетна. Повернути Малайзію: вона окупалась в адсеті APAC, який зараз вимкнений.</li>
+        <li>Для Гонконгу зробити головним креатив Warranty 14 t1 замість Hook 1. Ретаргет обмежити країнами, де є продажі.</li>
+        <li>Оцінити відправку замовлень у США зі складу в США: за таблицею маржі це суттєво підвищує прибуток з кожної колонки.</li>
+        <li>Ціну в США не знижувати: за старої ціни продажі в США збиткові.</li>
+        <li>Перерахувати план маркетингу: фактична вартість замовлення з реклами значно вища, ніж закладено в таблиці маржі.</li>
+        <li>Зменшити залежність від одного креативу (Hook 1) і пріоритетно протестувати чорні відео — незабаром у наявності будуть лише чорні колонки.</li>
+    </ol>
+    <div class="bb-grid bb-insights">
+      <div>
+        <h3 class="bb-h3">Де згодна з таргетологом і радником з Meta</h3>
+        <ul class="bb-caveats">
+          <li>Вимкнути Тайвань, залишити Гонконг.</li>
+          <li>Об'єднати адсети, щоб бюджет не розпорошувався.</li>
+          <li>Не піднімати бюджет заради швидших тестів.</li>
+          <li>Нові креативи додавати поступово, переможців підтверджувати на достатніх витратах.</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="bb-h3">Відкриті питання</h3>
+        <ul class="bb-caveats">
+          <li>Канада: виносити окремо чи ні — перевірити через 2 тижні, скільки бюджету їй віддає Meta.</li>
+          <li>Ціль за ціною продажу — окремо для кожного ринку, а не одна для всіх.</li>
+          <li>Запаси: білі колонки закінчуються раніше, ніж приїдуть чорні.</li>
+          <li>Чому в Азії покупці кидають на оплаті — питання до сайту, а не до реклами.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="bb-extra">
+      <h3 class="bb-h3">Додатково: що могло б поліпшити ситуацію</h3>
+      <ol class="bb-recs">
+        <li><b>Повернути тих, хто кинув оформлення.</b> За місяць з реклами почали оформлення <b data-draw="kpi" data-source="ads_calc" data-field="co" data-row="0" data-fmt="int">—</b> людей, а купили <b data-draw="kpi" data-source="ads_calc" data-field="pur" data-row="0" data-fmt="int">—</b>. Автоматичний лист про покинутий кошик і окремий ретаргет на цих людей — найдешевші додаткові продажі.</li>
+        <li><b>Оплата частинами</b> (Shop Pay Installments, Klarna чи Afterpay) для колонки за $699: на дорогу покупку легше наважитися, коли платіж розбитий на кілька частин.</li>
+        <li><b>Прозорі ціна, доставка й мито на оформленні для Азії:</b> ціна в місцевій валюті, заздалегідь показані мито й доставка, звичні місцеві способи оплати. В Азії кошиків багато, але до оплати доходять одиниці.</li>
+        <li><b>Сторінка товару для покупки за $699:</b> лімітованість і колекційна цінність, гарантія, відгуки й огляди (наприклад, Hypebeast), відео розпаковки, чіткі терміни доставки.</li>
+        <li><b>Розсилка по базі підписників до Black Friday</b> з акцентом на подарунок і чорну колонку, якої буде в наявності найбільше.</li>
+        <li><b>Захистити пошук:</b> пошук Google приносить замовлення без витрат на рекламу. Невелика кампанія на брендові запити й Google Shopping не дасть конкурентам і перекупникам перехоплювати цих покупців.</li>
+        <li><b>Справжня собівартість у Shopify:</b> вписати в «Cost per item» повну собівартість колонки, щоб звіти про прибуток у Shopify показували реальну картину без ручних розрахунків.</li>
+        <li><b>Щотижневий звіт за єдиними правилами:</b> по кожному ринку — витрати, ціна замовлення за Shopify і максимальна ціна замовлення з таблиці маржі. Рішення про бюджет — лише за ним.</li>
+      </ol>
+    </div>
+    <h3 class="bb-h3">Пропозиція таргетолога: перерозподіл денного бюджету</h3>
+    <div class="bb-tablewrap">
+      <table data-source="w44_budget" data-row-key="line">
+        <thead><tr><th data-field="line">Напрям</th><th data-field="now">Зараз, $ на день</th><th data-field="proposed">Пропонується, $ на день</th><th data-field="delta">Зміна</th></tr></thead>
+        <tbody data-draw="w44Budget"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <details class="bb-app" id="appendix">
+    <summary>Додаток: детальні дані й методологія</summary>
+    <div class="bb-appbody">
+  <section class="bb-card" id="ga-channels">
+    <h2>Звідки приходять продажі · GA4</h2>
+    <p class="note">Покупки й виручка за джерелом сесії, з якої оформлено замовлення (останній клік). Усього <b data-draw="kpi" data-source="ga_calc" data-field="tot_purchases" data-row="0" data-fmt="int">—</b> покупок на <b data-draw="kpi" data-source="ga_calc" data-field="tot_revenue" data-row="0" data-fmt="money">—</b> — це збігається з Shopify.</p>
+    <div class="bb-chart bb-chart-ga" data-draw="gaChart" data-source="ga_calc"></div>
+    <div class="bb-tablewrap">
+      <table data-source="ga_calc" data-row-key="channel">
+        <thead><tr><th data-field="channel">Канал</th><th data-field="sessions">Сесії</th><th data-field="purchases">Покупки</th><th data-field="revenue">Виручка</th><th data-field="rev_share">Частка виручки</th><th data-field="conv">Конверсія сесії в покупку</th></tr></thead>
+        <tbody data-draw="gaTable"></tbody>
+      </table>
+    </div>
+    <div class="bb-grid bb-insights">
+      <div>
+        <h3 class="bb-h3">Що це означає</h3>
+        <ul class="bb-caveats">
+          <li>Meta — головне джерело трафіку і продажів, але сесія з реклами конвертується в покупку значно рідше (<b data-draw="kpi" data-source="ga_calc" data-field="conv" data-where="key=meta_paid" data-fmt="pct2">—</b>), ніж з пошуку (<b data-draw="kpi" data-source="ga_calc" data-field="conv" data-where="key=search" data-fmt="pct2">—</b>). Частина рекламного трафіку — малоцінні сесії з дуже коротким перебуванням на сайті.</li>
+          <li>Пошук, прямі заходи й органіка Instagram разом дають <b data-draw="kpi" data-source="ga_calc" data-field="organic_share" data-row="0" data-fmt="pct">—</b> виручки без прямих рекламних витрат. Частина з них — люди, які раніше бачили рекламу і повернулися самі.</li>
+          <li><b data-draw="kpi" data-source="ga_calc" data-field="purchases" data-where="key=not_set" data-fmt="int">—</b> покупок на <b data-draw="kpi" data-source="ga_calc" data-field="revenue" data-where="key=not_set" data-fmt="money">—</b> записані без джерела: покупка зафіксована, але сесію не вдалося прив'язати до каналу.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  <section class="bb-card" id="shop-channels">
+    <h2>Звідки приходять продажі · Shopify</h2>
+    <p class="note">Канал визначено за UTM-мітками замовлення, а де їх немає — за сайтом, з якого прийшов покупець (referrer). Усього <b data-draw="kpi" data-source="shop_calc" data-field="tot_orders" data-row="0" data-fmt="int">—</b> замовлень на <b data-draw="kpi" data-source="shop_calc" data-field="tot_revenue" data-row="0" data-fmt="money">—</b>.</p>
+    <div class="bb-chart bb-chart-ga" data-draw="shopChart" data-source="shop_calc"></div>
+    <div class="bb-tablewrap">
+      <table data-source="shop_calc" data-row-key="channel">
+        <thead><tr><th data-field="channel">Канал</th><th data-field="orders">Замовлення</th><th data-field="revenue">Виручка</th><th data-field="rev_share">Частка виручки</th><th data-field="gross_profit">Валовий прибуток</th><th data-field="aov">Середній чек</th></tr></thead>
+        <tbody data-draw="shopTable"></tbody>
+      </table>
+    </div>
+  </section>
+  <section class="bb-card" id="compare-table">
+    <h2>Порівняння по каналах: таблиця</h2>
+    <div class="bb-tablewrap">
+      <table data-source="compare" data-row-key="channel">
+        <thead><tr>
+          <th data-field="channel">Канал</th>
+          <th data-field="meta_orders">Meta, зам.</th>
+          <th data-field="meta_revenue">Meta, виручка</th>
+          <th data-field="ga_orders">GA4, зам.</th>
+          <th data-field="ga_revenue">GA4, виручка</th>
+          <th data-field="shop_orders" class="truth">Shopify, зам.</th>
+          <th data-field="shop_revenue" class="truth">Shopify, виручка</th>
+          <th data-field="ga_vs_shop">GA4 vs Shopify</th>
+        </tr></thead>
+        <tbody data-draw="cmpTable"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="bb-card" id="referrals">
+    <h2>З яких сайтів приходять відвідувачі та покупці</h2>
+    <p class="note">Переходи з інших сайтів (без пошуку й соцмереж). Покупки дали лише два сайти; решта — поодинокі відвідування.</p>
+    <div class="bb-tablewrap">
+      <table data-source="referral_sites" data-row-key="site">
+        <thead><tr><th data-field="site">Сайт</th><th data-field="kind">Що це</th><th data-field="ga_sessions">Відвідування (GA4)</th><th data-field="shop_orders" class="truth">Замовлення (Shopify)</th><th data-field="shop_revenue" class="truth">Виручка (Shopify)</th></tr></thead>
+        <tbody data-draw="refTable"></tbody>
+      </table>
+    </div>
+    <ul class="bb-caveats bb-insights">
+      <li>Shopify записує лише назву сайту-джерела, без адреси. «bearbrick», найімовірніше, — сайт бренду BE@RBRICK; GA4 такі переходи окремо не показує.</li>
+      <li>Не показані службові переходи (Ads Manager, агентські посилання) і разові заходи з невідомих сайтів, схожі на спам.</li>
+    </ul>
+  </section>
+  <section class="bb-card" id="shopify-source">
+    <h2>Чи видно в Shopify джерело конверсії</h2>
+    <p class="note">Так, для замовлень, оформлених після переходу за посиланням з UTM-мітками. Shopify зберігає мітки сесії, з якої оформлено замовлення: source, medium і campaign. У Meta-мітках campaign містить ID адсету, а medium — плейсмент, тому кожне таке замовлення прив'язується до конкретного адсету.</p>
+    <div class="bb-legend">
+      <span><span class="sq" data-draw="sw" data-i="0"></span>Meta Ads — видно адсет і плейсмент</span>
+      <span><span class="sq" data-draw="sw" data-i="1"></span>Instagram органіка</span>
+      <span><span class="sq k-none"></span>Без UTM — джерело невідоме</span>
+    </div>
+    <div class="bb-chart bb-chart-short" data-draw="srcBar" data-source="shopify_sources"></div>
+    <div class="bb-grid">
+      <div>
+        <h3 class="bb-h3">Що видно в Shopify</h3>
+        <ul class="bb-caveats">
+          <li>Замовлення з Meta-мітками: <b data-draw="kpi" data-source="shopify_sources" data-field="orders" data-where="key=meta_utm" data-fmt="int">—</b> на <b data-draw="kpi" data-source="shopify_sources" data-field="revenue" data-where="key=meta_utm" data-fmt="money">—</b> — з точністю до адсету та плейсменту.</li>
+          <li>Органічний Instagram: <b data-draw="kpi" data-source="shopify_sources" data-field="orders" data-where="key=ig_social" data-fmt="int">—</b> замовлення.</li>
+          <li>Собівартість і валовий прибуток кожного замовлення. Але собівартість у магазині заповнена умовно, тому для прибутку використано сценарії маржі.</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="bb-h3">Чого не видно</h3>
+        <ul class="bb-caveats">
+          <li><b data-draw="kpi" data-source="shopify_sources" data-field="orders" data-where="key=none" data-fmt="int">—</b> замовлень на <b data-draw="kpi" data-source="shopify_sources" data-field="revenue" data-where="key=none" data-fmt="money">—</b> без міток: прямі заходи, пошук, повторні візити.</li>
+          <li>Покупки після перегляду реклами без кліку і покупки з іншого пристрою — Shopify їх не бачить. Саме в цій групі шукати замовлення, які Meta рахує своїми понад UTM-дані.</li>
+          <li>Показів реклами Shopify не бачить, тож view-through атрибуцію Meta перевірити неможливо.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  <section class="bb-card" id="gap">
+    <h2>Наскільки Meta завищує виручку по адсетах</h2>
+    <p class="note">Виручка в Ads Manager мінус виручка Shopify з UTM цього адсету. Підпис — яку частку заявленої Meta виручки підтверджує Shopify.</p>
+    <div class="bb-legend">
+      <span><span class="sq k-ok"></span>Збігається: Shopify підтверджує від <b data-draw="thr" data-k="ok">—</b></span>
+      <span><span class="sq k-warn"></span>Помірно завищує: від <b data-draw="thr" data-k="warn">—</b></span>
+      <span><span class="sq k-bad"></span>Сильно завищує: менше <b data-draw="thr" data-k="warn">—</b></span>
+    </div>
+    <div class="bb-chart" data-draw="gapChart" data-source="adset_calc"></div>
+  </section>
+  <section class="bb-card" id="adsets">
+    <h2>Усі адсети</h2>
+    <p class="note">Зеленим фоном виділено стовпці Shopify — основні для оцінки. «Shopify ÷ Meta» — яку частку виручки з Ads Manager підтверджує Shopify; колір показує рівень довіри до Meta для цього адсету.</p>
+    <div class="bb-tablewrap">
+      <table data-source="adset_calc" data-row-key="adset">
+        <thead><tr>
+          <th data-field="adset">Адсет</th>
+          <th data-field="geo">Гео</th>
+          <th data-field="spend">Витрати</th>
+          <th data-field="meta_revenue">Виручка за Meta</th>
+          <th data-field="shop_revenue" class="truth">Виручка за Shopify</th>
+          <th data-field="confirm">Shopify ÷ Meta</th>
+          <th data-field="roas_shop" class="truth">ROAS за Shopify</th>
+          <th data-field="profit" class="truth">Прибуток після реклами · за ринками</th>
+          <th data-field="profit_low">Прибуток · консервативний</th>
+        </tr></thead>
+        <tbody data-draw="adsetTable"></tbody>
+      </table>
+    </div>
+  </section>
+  <section class="bb-card" id="weekly-ads">
+    <h2>Реклама по тижнях</h2>
+    <div class="bb-tablewrap">
+          <table data-source="weekly_calc" data-row-key="label">
+            <thead><tr><th data-field="label">Тиждень</th><th data-field="spend">Витрати</th><th data-field="cpa_atc">Ціна кошика</th><th data-field="cpa_co">Ціна оформлення</th><th data-field="pur">Покупки</th></tr></thead>
+            <tbody data-draw="weeklyTbl"></tbody>
+          </table>
+        </div>
+  </section>
+
+  <section class="bb-grid">
+    <div class="bb-card" id="method">
+      <h2>Методологія</h2>
+      <ul class="bb-caveats">
+        <li><b>ROAS.</b> Shopify сам по собі ROAS не рахує, бо не знає витрат на рекламу; витрати та ROAS у ньому з'являються лише для каналів, підключених через застосунок, що передає витрати. У дашборді ROAS = виручка Shopify із замовлень з UTM-мітками адсету ÷ витрати цього адсету з Meta Ads Manager.</li>
+        <li><b>Собівартість.</b> Shopify рахує її з поля «Cost per item» (собівартість одиниці) у картці товару: собівартість проданих одиниць = собівартість × кількість; валовий прибуток = чисті продажі (після знижок і повернень, без податків і доставки) мінус собівартість.</li>
+        <li><b>Прибуток після реклами</b> = кількість замовлень адсету в Shopify × маржа на замовлення до витрат на рекламу мінус витрати адсету в Meta. Базова маржа — з таблиці маржі CORE за ринком адсету: ціна мінус собівартість, роялті, доставка, склад, комісія Shopify і мито, без закладених у таблицю витрат на маркетинг. Додатково показано середню маржу CORE, беззбиткову вартість замовлення таргетолога і валовий прибуток Shopify.</li>
+        <li><b>Поріг ROAS</b> = середній чек замовлення з реклами ÷ маржа на замовлення.</li>
+        <li><b>Ринок адсету.</b> Адсети на US+CA рахуються за маржею США з невеликою часткою Канади, на HK+TW і APAC — за маржею Гонконгу й Тайваню, ретаргет — за середньою маржею. Для жовтня взято маржу США за старої ціни, бо нова діяла лише останній тиждень.</li>
+        <li><b>Атрибуція.</b> Shopify і GA4 зараховують замовлення джерелу сесії, з якої його оформлено (останній клік з UTM). Meta зараховує покупки протягом 7 днів після кліку та 1 дня після перегляду реклами, тому її цифри вищі.</li>
+        <li><b>Зіставлення.</b> UTM-мітки Meta містять ID адсету (utm_campaign) і плейсмент (utm_medium); за ними замовлення Shopify і сесії GA4 прив'язані до адсетів Meta.</li>
+      </ul>
+    </div>
+    <div class="bb-card" id="caveats">
+      <h2>Обмеження даних</h2>
+      <ul class="bb-caveats">
+        <li>Собівартість колонки в таблиці маржі, розрахунку доставки і Shopify різна — потрібне підтвердження клієнта. Прибуток за собівартістю Shopify, найімовірніше, завищений.</li>
+        <li>Розподіл замовлень адсетів між країнами оцінено приблизно: Shopify-звіт за UTM не показує країну.</li>
+        <li>Маржа рахується на замовлення; у деяких замовленнях більше однієї колонки, тож для них прибуток трохи занижений.</li>
+        <li>Доставка в Shopify записана як $0, комісії платіжних систем не враховані, тож реальний прибуток нижчий.</li>
+        <li><b data-draw="kpi" data-source="kpi" data-field="extra_orders" data-row="0" data-fmt="int">—</b> замовлень, які Meta рахує своїми понад UTM-дані, не підтверджені: частина могла прийти після перегляду реклами. З ними прибуток міг би бути вищим.</li>
+        <li>Дані зібрані вручну з Ads Manager, GA4 і Shopify 2 листопада 2026 і не оновлюються автоматично. Дані тижня 44 взято зі звіту таргетолога без окремої перевірки.</li>
+      </ul>
+    </div>
+  </section>
+    </div>
+  </details>
+</div>
+
+
+</div>
+<script>
+  const N = (v) => { const x = Number(v); return Number.isFinite(x) ? x : 0; };
+  window.bbFmt = {
+    money: (v) => (v < 0 ? '−' : '') + d3.format('$,.0f')(Math.abs(v)),
+    signed: (v) => (v > 0 ? '+' : v < 0 ? '−' : '') + d3.format('$,.0f')(Math.abs(v)),
+    int: d3.format(','),
+    roas: (v) => d3.format('.2f')(v),
+    pct: d3.format('.0%'),
+    pct2: d3.format('.2%'),
+    pctSigned: (v) => (v > 0 ? '+' : v < 0 ? '−' : '') + d3.format('.0%')(Math.abs(v)),
+  };
+  window.bbC = ['#1f7a4d', '#64748b', '#d08a0e'];
+  window.bbThr = { ok: 0.9, warn: 0.6 };
+  window.bbLevel = (c) => c == null ? 'na' : c >= window.bbThr.ok ? 'ok' : c >= window.bbThr.warn ? 'warn' : 'bad';
+  window.bbLevelColor = { ok: 'var(--color-ok)', warn: 'var(--color-warn)', bad: 'var(--color-bad)', na: 'var(--cds-chart-muted)' };
+  window.bbLevelText = { ok: 'збігається', warn: 'помірно завищує', bad: 'сильно завищує', na: 'немає даних Meta' };
+
+  dash.calc('adset_calc', {
+    title: 'Адсети: ROAS і прибуток',
+    description: 'ROAS у кожному джерелі та прибуток після реклами для кожного адсету у трьох сценаріях маржі: базовий і консервативний (замовлення Shopify × маржа мінус витрати) і за валовим прибутком Shopify.',
+    inputs: ['adsets', 'margins'],
+    fn: (adsets, margins) => adsets.map((r) => {
+      const n = (v) => Number(v) || 0;
+      const m = (key) => n((margins.find((x) => x.key === key) || {}).margin);
+      const spend = n(r.spend);
+      return {
+        adset: r.adset, campaign: r.campaign, geo: r.geo, status: r.status, mapping: r.mapping,
+        spend,
+        meta_orders: n(r.meta_orders), meta_revenue: n(r.meta_revenue),
+        ga_orders: n(r.ga_orders), ga_revenue: n(r.ga_revenue),
+        shop_orders: n(r.shop_orders), shop_revenue: n(r.shop_revenue),
+        shop_gross_profit: n(r.shop_gross_profit),
+        roas_meta: spend ? n(r.meta_revenue) / spend : 0,
+        roas_ga: spend ? n(r.ga_revenue) / spend : 0,
+        roas_shop: spend ? n(r.shop_revenue) / spend : 0,
+        profit: n(r.shop_orders) * n(r.margin_region) - spend,
+        profit_mid: n(r.shop_orders) * m('mid') - spend,
+        profit_low: n(r.shop_orders) * m('low') - spend,
+        profit_high: n(r.shop_gross_profit) - spend,
+        confirm: n(r.meta_revenue) > 0 ? n(r.shop_revenue) / n(r.meta_revenue) : null,
+        gap: n(r.meta_revenue) - n(r.shop_revenue),
+      };
+    }),
+  });
+
+  dash.calc('kpi', {
+    title: 'Підсумки Meta за період',
+    description: 'Суми по всіх адсетах, ROAS у кожному джерелі, прибуток після реклами у трьох сценаріях маржі, поріг ROAS за базовою маржею (середній чек ÷ маржа), частка заявленої Meta виручки, яку підтверджують Shopify та GA4, і збіг GA4 з Shopify.',
+    inputs: ['adsets', 'site_totals', 'margins'],
+    fn: (adsets, site_totals, margins) => {
+      const m = (key) => Number((margins.find((x) => x.key === key) || {}).margin) || 0;
+      const tot = (key, f) => Number((site_totals.find((r) => r.key === key) || {})[f]) || 0;
+      const s = (k) => adsets.reduce((a, r) => a + (Number(r[k]) || 0), 0);
+      const spend = s('spend'), metaRev = s('meta_revenue'), gaRev = s('ga_revenue'), shopRev = s('shop_revenue'), gp = s('shop_gross_profit');
+      return [{
+        spend,
+        meta_orders: s('meta_orders'), meta_revenue: metaRev,
+        ga_orders: s('ga_orders'), ga_revenue: gaRev,
+        shop_orders: s('shop_orders'), shop_revenue: shopRev,
+        gross_profit: gp,
+        profit: adsets.reduce((a, r) => a + (Number(r.shop_orders) || 0) * (Number(r.margin_region) || 0), 0) - spend,
+        profit_mid: s('shop_orders') * m('mid') - spend,
+        profit_meta_orders: s('meta_orders') * adsets.reduce((a, r) => a + (Number(r.shop_orders) || 0) * (Number(r.margin_region) || 0), 0) / s('shop_orders') - spend,
+        cpo_utm: spend / s('shop_orders'),
+        profit_low: s('shop_orders') * m('low') - spend,
+        profit_high: gp - spend,
+        aov: shopRev / s('shop_orders'),
+        roas_meta: metaRev / spend,
+        roas_ga: gaRev / spend,
+        roas_shop: shopRev / spend,
+        breakeven: shopRev / adsets.reduce((a, r) => a + (Number(r.shop_orders) || 0) * (Number(r.margin_region) || 0), 0),
+        confirmed: shopRev / metaRev,
+        confirmed_ga: gaRev / metaRev,
+        n_adsets: adsets.filter((r) => (Number(r.spend) || 0) > 0).length,
+        extra_orders: s('meta_orders') - s('shop_orders'),
+        overclaim: metaRev / shopRev - 1,
+        loss: adsets.reduce((a, r) => { const p = (Number(r.shop_orders) || 0) * (Number(r.margin_region) || 0) - (Number(r.spend) || 0); return p < 0 ? a + p : a; }, 0),
+        ga_meta_match: gaRev / shopRev,
+        ga_site_match: tot('ga_all', 'revenue') / tot('shopify_all', 'revenue'),
+      }];
+    },
+  });
+
+  dash.calc('scen', {
+    title: 'Сценарії маржі',
+    description: 'Прибуток після реклами за 30 днів для кожного сценарію маржі (базовий — за ринками з таблиці маржі CORE): за замовленнями, підтвердженими Shopify, і за замовленнями, які приписує собі Meta; поріг ROAS = середній чек ÷ маржа.',
+    inputs: ['adsets', 'margins'],
+    fn: (adsets, margins) => {
+      const s = (k) => adsets.reduce((a, r) => a + (Number(r[k]) || 0), 0);
+      const spend = s('spend'), so = s('shop_orders'), mo = s('meta_orders'), rev = s('shop_revenue'), gp = s('shop_gross_profit');
+      const aov = rev / so;
+      const rows = margins.map((x) => ({ key: x.key, label: x.label, source: x.source, margin: Number(x.margin) || 0 }));
+      const mr = adsets.reduce((a, r) => a + (Number(r.shop_orders) || 0) * (Number(r.margin_region) || 0), 0) / so;
+      rows.unshift({ key: 'region', label: 'Базовий: за ринками', source: 'Таблиця маржі CORE за ринком кожного адсету (середнє, зважене за замовленнями)', margin: mr });
+      rows.push({ key: 'high', label: 'За собівартістю Shopify', source: 'Валовий прибуток Shopify на замовлення (умовна собівартість)', margin: gp / so });
+      return rows.map((r) => ({ ...r, be_roas: aov / r.margin, profit_utm: so * r.margin - spend, profit_meta: mo * r.margin - spend }));
+    },
+  });
+
+  dash.calc('market_calc', {
+    title: 'Маржа по ринках',
+    description: 'Маржа до реклами для кожного ринку з таблиці маржі CORE (ціна мінус собівартість, роялті, доставка, склад, комісія Shopify і мито); вартість замовлення за місяць = витрати Meta в країнах ринку ÷ покупки 7 днів після кліку; результат = маржа мінус вартість замовлення; виграш від складу в США порівняно з відправкою з Гонконгу.',
+    inputs: ['market_margins', 'countries'],
+    fn: (market_margins, countries) => {
+      const n = (v) => (v === '' || v == null ? null : Number(v));
+      const geo = { us_hk_599: ['US'], us_hk_699: ['US'], us_wh_699: ['US'], ca: ['CA'], hk: ['HK'], tw: ['TW'], eu: ['IT', 'NL', 'CZ', 'DE', 'ES', 'CY'] };
+      const sum = (codes, f) => countries.filter((c) => codes.includes(c.Country)).reduce((a, c) => a + (Number(c[f]) || 0), 0);
+      const rows = market_margins.map((r) => {
+        const costs = ['cog', 'royalty', 'shipping', 'warehouse', 'shopify_fee', 'duty'].reduce((a, k) => a + (n(r[k]) || 0), 0);
+        const margin = n(r.price) - costs;
+        const codes = geo[r.key] || [];
+        const spend = sum(codes, 'spend'), pur = sum(codes, 'pur');
+        const cpo = pur ? spend / pur : null;
+        return { key: r.key, market: r.market, price: n(r.price), costs, duty: n(r.duty), margin, spend, pur, cpo_actual: cpo, result: cpo == null ? null : margin - cpo, mkt_plan: n(r.mkt_plan) };
+      });
+      const hk = (rows.find((r) => r.key === 'us_hk_699') || {}).margin;
+      return rows.map((r) => ({ ...r, gain_vs_hk: r.key === 'us_wh_699' ? r.margin - hk : null }));
+    },
+  });
+
+  const adsum = (rows) => {
+    const n = (v) => Number(v) || 0;
+    return rows.map((r) => {
+      const spend = n(r.spend), atc = n(r.atc), co = n(r.co), pur = n(r.pur), val = n(r.val), clicks = n(r.clicks), lpv = n(r.lpv);
+      return { ...r, spend, atc, co, pur, val, clicks, lpv, cpa_atc: atc ? spend / atc : null, cpa_co: co ? spend / co : null, cpa: pur ? spend / pur : null, roas: spend ? val / spend : 0, lpv_rate: clicks ? lpv / clicks : null };
+    });
+  };
+
+  dash.calc('creative_calc', {
+    title: 'Креативи за ринками',
+    description: 'Для кожного креативу на кожному ринку: ціна кошика, ціна покупки й ROAS (покупки 7 днів після кліку) з даних Meta.',
+    inputs: ['creative_market'],
+    fn: (creative_market) => adsum(creative_market),
+  });
+
+  dash.calc('country_calc', {
+    title: 'Країни: результат з урахуванням маржі',
+    description: 'Ціна покупки й результат = покупки × маржа до реклами з таблиці маржі CORE мінус витрати, для кожної країни.',
+    inputs: ['countries'],
+    fn: (countries) => adsum(countries).map((r) => ({ ...r, margin: Number(r.margin) || 0, res: r.pur * (Number(r.margin) || 0) - r.spend })),
+  });
+
+  dash.calc('placement_calc', {
+    title: 'Плейсменти',
+    description: 'Частка кліків, що доходять до сайту, ціна покупки й ROAS для кожного плейсменту.',
+    inputs: ['placements'],
+    fn: (placements) => adsum(placements),
+  });
+
+  dash.calc('weekly_calc', {
+    title: 'Реклама по тижнях',
+    description: 'Ціна кошика й ціна оформлення замовлення по тижнях.',
+    inputs: ['ads_weekly'],
+    fn: (ads_weekly) => adsum(ads_weekly),
+  });
+
+  dash.calc('junk_calc', {
+    title: 'Креативи з малоцінними кліками',
+    description: 'CTR = кліки ÷ покази для креативів, що дали багато кліків без покупок.',
+    inputs: ['junk_creatives'],
+    fn: (junk_creatives) => junk_creatives.map((r) => ({ ...r, spend: Number(r.spend) || 0, clicks: Number(r.clicks) || 0, pur: Number(r.pur) || 0, ctr: (Number(r.clicks) || 0) / (Number(r.impr) || 1) })),
+  });
+
+  dash.calc('ads_calc', {
+    title: 'Покупки за кліком і частка Hook 1',
+    description: 'Сума покупок протягом 7 днів після кліку по всіх оголошеннях за період і частка витрат на креатив Hook 1 від усіх витрат.',
+    inputs: ['ads_weekly', 'creative_market'],
+    fn: (ads_weekly, creative_market) => {
+      const tot = ads_weekly.reduce((a, r) => a + (Number(r.spend) || 0), 0);
+      const h1 = creative_market.filter((r) => String(r.creative).startsWith('Art icon hook1')).reduce((a, r) => a + (Number(r.spend) || 0), 0);
+      return [{ pur: ads_weekly.reduce((a, r) => a + (Number(r.pur) || 0), 0), co: ads_weekly.reduce((a, r) => a + (Number(r.co) || 0), 0), hook1_share: h1 / tot }];
+    },
+  });
+
+  dash.calc('ga_calc', {
+    title: 'GA4: канали продажів',
+    description: 'Частка виручки та конверсія сесії в покупку для кожного каналу GA4; частка каналів без прямих рекламних витрат (пошук, прямі заходи, органіка Instagram і Facebook, сайти-огляди).',
+    inputs: ['ga_sources'],
+    fn: (ga_sources) => {
+      const rows = ga_sources.map((r) => ({ key: r.key, channel: r.channel, sessions: Number(r.sessions) || 0, engaged: Number(r.engaged) || 0, purchases: Number(r.purchases) || 0, revenue: Number(r.revenue) || 0 }));
+      const totRev = rows.reduce((a, r) => a + r.revenue, 0), totP = rows.reduce((a, r) => a + r.purchases, 0);
+      const organic = rows.filter((r) => ['search', 'direct', 'ig_org', 'fb_org', 'referral'].includes(r.key)).reduce((a, r) => a + r.revenue, 0);
+      return rows.map((r) => ({ ...r, rev_share: r.revenue / totRev, conv: r.sessions ? r.purchases / r.sessions : 0, tot_revenue: totRev, tot_purchases: totP, organic_share: organic / totRev }));
+    },
+  });
+
+  dash.calc('shop_calc', {
+    title: 'Shopify: канали продажів',
+    description: 'Частка виручки, валовий прибуток і середній чек для кожного каналу Shopify; частка всіх каналів, крім реклами Meta.',
+    inputs: ['shopify_channels'],
+    fn: (shopify_channels) => {
+      const rows = shopify_channels.map((r) => ({ key: r.key, channel: r.channel, orders: Number(r.orders) || 0, revenue: Number(r.revenue) || 0, gross_profit: Number(r.gross_profit) || 0 }));
+      const totRev = rows.reduce((a, r) => a + r.revenue, 0), totO = rows.reduce((a, r) => a + r.orders, 0);
+      const other = rows.filter((r) => r.key !== 'meta_paid').reduce((a, r) => a + r.revenue, 0);
+      return rows.map((r) => ({ ...r, rev_share: r.revenue / totRev, aov: r.orders ? r.revenue / r.orders : 0, tot_revenue: totRev, tot_orders: totO, other_share: other / totRev }));
+    },
+  });
+
+  dash.calc('compare', {
+    title: 'Порівняння каналів у трьох системах',
+    description: 'Замовлення й виручка кожного каналу в Meta Ads Manager (лише реклама Meta), GA4 і Shopify; різниця виручки GA4 і Shopify.',
+    inputs: ['ga_calc', 'shop_calc', 'kpi'],
+    fn: (ga_calc, shop_calc, kpi) => {
+      const k = kpi[0] || {};
+      const keys = [...new Set([...shop_calc.map((r) => r.key), ...ga_calc.filter((r) => r.revenue > 0).map((r) => r.key)])];
+      return keys.map((key) => {
+        const g = ga_calc.find((r) => r.key === key) || {}, sh = shop_calc.find((r) => r.key === key) || {};
+        const meta = key === 'meta_paid';
+        return {
+          key, channel: sh.channel || g.channel,
+          meta_orders: meta ? k.meta_orders : null, meta_revenue: meta ? k.meta_revenue : null,
+          ga_orders: g.purchases || 0, ga_revenue: g.revenue || 0,
+          shop_orders: sh.orders || 0, shop_revenue: sh.revenue || 0,
+          ga_vs_shop: (g.revenue || 0) - (sh.revenue || 0),
+        };
+      });
+    },
+  });
+
+  dash.calc('recon_all', {
+    title: 'Звірка всіх каналів',
+    description: 'Замовлення й виручка кожного каналу в Shopify, GA4 і Meta Ads Manager плюс рядок «Усього по магазину» (Meta — лише її реклама).',
+    inputs: ['compare'],
+    fn: (compare) => {
+      const sum = (f) => compare.reduce((a, r) => a + (Number(r[f]) || 0), 0);
+      const total = { key: 'total', channel: 'Усього по магазину', shop_orders: sum('shop_orders'), shop_revenue: sum('shop_revenue'), ga_orders: sum('ga_orders'), ga_revenue: sum('ga_revenue'), meta_orders: null, meta_revenue: null };
+      return [total, ...compare.map((r) => ({ key: r.key, channel: r.channel, shop_orders: r.shop_orders, shop_revenue: r.shop_revenue, ga_orders: r.ga_orders, ga_revenue: r.ga_revenue, meta_orders: r.meta_orders, meta_revenue: r.meta_revenue }))];
+    },
+  });
+
+  dash.calc('recon', {
+    title: 'Звірка джерел',
+    description: 'Замовлення і виручка за кожним джерелом та різниця з відповідним рядком Shopify (весь сайт або замовлення з Meta-UTM).',
+    inputs: ['site_totals', 'kpi'],
+    fn: (site_totals, kpi) => {
+      const k = kpi[0] || {};
+      const t = (key) => site_totals.find((r) => r.key === key) || {};
+      const base = Number(t('shopify_all').revenue) || 1;
+      return [
+        { source: 'Shopify — усі замовлення', orders: Number(t('shopify_all').orders), revenue: Number(t('shopify_all').revenue) },
+        { source: 'GA4 — увесь сайт', orders: Number(t('ga_all').orders), revenue: Number(t('ga_all').revenue) },
+        { source: 'Meta Ads Manager (заявлено)', orders: k.meta_orders, revenue: k.meta_revenue },
+        { source: 'Shopify — замовлення з Meta-UTM', orders: k.shop_orders, revenue: k.shop_revenue },
+        { source: 'GA4 — Meta, останній клік', orders: k.ga_orders, revenue: k.ga_revenue },
+        { source: 'Shopify — без Meta-UTM', orders: Number(t('shopify_no_utm').orders), revenue: Number(t('shopify_no_utm').revenue) },
+      ].map((r, i) => {
+        const ref = [null, 'all', 'utm', null, 'utm', null][i];
+        const refRev = ref === 'all' ? base : ref === 'utm' ? k.shop_revenue : null;
+        const role = [ 'truth', 'check', 'claim', 'truth', 'check', 'truth' ][i];
+        return { ...r, role, diff_pct: refRev ? r.revenue / refRev - 1 : null };
+      });
+    },
+  });
+
+  dash.draw('kpi', (el) => {
+    const src = el.dataset.source, field = el.dataset.field, fmt = window.bbFmt[el.dataset.fmt] || String;
+    const d = dash.data(src);
+    if (d.status !== 'ok') { el.textContent = '—'; return; }
+    let row;
+    if (el.dataset.where) { const [k, v] = el.dataset.where.split('='); row = d.data.find((r) => String(r[k]) === v); }
+    else row = d.data[Number(el.dataset.row || 0)];
+    el.textContent = row && row[field] != null ? fmt(N(row[field])) : '—';
+  });
+
+  dash.draw('thr', (el) => { el.textContent = d3.format('.0%')(window.bbThr[el.dataset.k]); });
+
+  dash.draw('sw', (el) => { el.style.background = window.bbC[Number(el.dataset.i)]; });
+
+  const fail = (el, d) => {
+    el.replaceChildren();
+    if (d.status === 'error') { const f = document.createElement('div'); f.className = 'bb-fail'; f.textContent = 'Failed to load'; el.append(f); }
+    else el.textContent = '—';
+  };
+
+  const tip = (host) => {
+    let t = host.querySelector('.bb-tip');
+    if (!t) { t = document.createElement('div'); t.className = 'bb-tip'; t.hidden = true; host.append(t); }
+    return {
+      show(ev, title, lines) {
+        t.replaceChildren();
+        const h = document.createElement('div'); h.className = 't'; h.textContent = title; t.append(h);
+        lines.forEach(([color, label, val]) => {
+          const l = document.createElement('div');
+          if (color) { const s = document.createElement('span'); s.style.cssText = `display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;background:${color}`; l.append(s); }
+          l.append(document.createTextNode(`${label}: ${val}`)); t.append(l);
+        });
+        t.hidden = false;
+        const box = host.getBoundingClientRect();
+        let x = ev.clientX - box.left + 12, y = ev.clientY - box.top + 12;
+        const w = t.offsetWidth, hh = t.offsetHeight;
+        if (x + w > box.width) x = Math.max(0, ev.clientX - box.left - w - 12);
+        if (y + hh > box.height) y = Math.max(0, ev.clientY - box.top - hh - 12);
+        t.style.left = x + 'px'; t.style.top = y + 'px';
+      },
+      hide() { t.hidden = true; },
+    };
+  };
+
+  const measure = (svg, texts, cls) => {
+    let w = 0;
+    texts.forEach((s) => { const t = svg.append('text').attr('class', cls).style('font-size', 'var(--cds-font-size-caption)').style('font-variant-numeric', 'tabular-nums').text(s); w = Math.max(w, t.node().getComputedTextLength()); t.remove(); });
+    return w;
+  };
+
+  const fit = (sel, maxW) => sel.each(function () {
+    const full = this.textContent; let txt = full;
+    while (txt.length > 1 && this.getComputedTextLength() > maxW) { txt = txt.slice(0, -1); this.textContent = txt.trimEnd() + '…'; }
+    if (txt !== full) d3.select(this).append('title').text(full);
+  });
+
+  window.bbM = 'profit';
+  document.querySelectorAll('.bb-segbtn').forEach((b) => b.addEventListener('click', () => {
+    window.bbM = b.dataset.m;
+    document.querySelectorAll('.bb-segbtn').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    dash.draw('profitChart');
+  }));
+
+  dash.draw('profitChart', (el) => {
+    const d = dash.data('adset_calc');
+    if (d.status !== 'ok') { fail(el, d); return; }
+    el.replaceChildren();
+    const F = window.bbFmt;
+    const f = window.bbM || 'profit';
+    const rows = [...d.data].map((r) => ({ ...r, profit: r[f] })).sort((a, b) => b.profit - a.profit);
+    const W = Math.max(280, el.clientWidth), row = 26, top = 8, bottom = 24;
+    const H = top + bottom + rows.length * row;
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).style('display', 'block');
+    const labW = Math.min(W * 0.45, measure(svg, rows.map((r) => r.adset), 'lab') + 10);
+    const valW = measure(svg, rows.map((r) => F.signed(r.profit)), 'val') + 8;
+    const ext = d3.extent([0, ...rows.map((r) => r.profit)]);
+    const x = d3.scaleLinear(ext, [labW + valW, W - valW]).nice();
+    const y = d3.scaleBand(rows.map((r) => r.adset), [top, H - bottom]).padding(0.28);
+    svg.append('g').attr('transform', `translate(0,${H - bottom})`).call(d3.axisBottom(x).ticks(Math.max(2, Math.floor((W - labW - valW * 2) / 110))).tickFormat((v) => F.signed(v)).tickSize(-(H - top - bottom)))
+      .attr('font-size', null).attr('font-family', null)
+      .call((g) => g.select('.domain').remove())
+      .call((g) => g.selectAll('line').attr('stroke', 'var(--cds-chart-grid)'))
+      .call((g) => g.selectAll('text').attr('fill', 'var(--color-fg-muted)').style('font-size', 'var(--cds-font-size-caption)'));
+    svg.append('line').attr('x1', x(0)).attr('x2', x(0)).attr('y1', top).attr('y2', H - bottom).attr('stroke', 'var(--cds-chart-axis)');
+    svg.append('g').selectAll('text').data(rows).join('text')
+      .attr('x', 0).attr('y', (r) => y(r.adset) + y.bandwidth() / 2).attr('dy', '0.35em')
+      .style('font-size', 'var(--cds-font-size-caption)')
+      .attr('fill', 'var(--color-fg)')
+      .text((r) => r.adset).call(fit, labW - 8);
+    const t = tip(el);
+    svg.append('g').selectAll('rect').data(rows).join('rect')
+      .attr('x', (r) => Math.min(x(0), x(r.profit))).attr('width', (r) => Math.max(1, Math.abs(x(r.profit) - x(0))))
+      .attr('y', (r) => y(r.adset)).attr('height', Math.min(18, y.bandwidth())).attr('rx', 3)
+      .attr('fill', (r) => r.profit >= 0 ? window.bbC[0] : 'var(--cds-chart-status-critical)')
+      .on('pointermove', (ev, r) => t.show(ev, r.adset, [[null, 'Прибуток після реклами', F.signed(r.profit)], [null, 'Валовий прибуток', F.money(r.shop_gross_profit)], [null, 'Spend', F.money(r.spend)]]))
+      .on('pointerleave', () => t.hide());
+    svg.append('g').selectAll('text').data(rows).join('text')
+      .attr('x', (r) => r.profit >= 0 ? x(r.profit) + 4 : x(r.profit) - 4)
+      .attr('text-anchor', (r) => r.profit >= 0 ? 'start' : 'end')
+      .attr('y', (r) => y(r.adset) + Math.min(18, y.bandwidth()) / 2).attr('dy', '0.35em')
+      .style('font-size', 'var(--cds-font-size-caption)').style('font-variant-numeric', 'tabular-nums')
+      .attr('fill', 'var(--color-fg-muted)')
+      .text((r) => F.signed(r.profit));
+  });
+
+  const fillRows = (tb, src, sortFn, cellsFn) => {
+    const d = dash.data(src);
+    tb.replaceChildren();
+    if (d.status !== 'ok') return;
+    [...d.data].sort(sortFn).forEach((r) => {
+      const tr = document.createElement('tr');
+      cellsFn(r).forEach(([v, c]) => { const td = document.createElement('td'); td.textContent = v; if (c) td.className = c; tr.append(td); });
+      tb.append(tr);
+    });
+  };
+
+  dash.draw('scenTable', (tb) => {
+    const F = window.bbFmt, order = { region: 0, mid: 1, low: 2, high: 3 };
+    fillRows(tb, 'scen', (a, b) => order[a.key] - order[b.key], (r) => [
+      [r.label, r.key === 'region' ? 'claim-strong' : ''], [r.source, 'muted'], [F.money(r.margin)], [F.roas(r.be_roas)],
+      [F.signed(r.profit_utm), 'truth ' + (r.profit_utm >= 0 ? 'pos' : 'neg')], [F.signed(r.profit_meta), r.profit_meta >= 0 ? 'pos' : 'neg'],
+    ]);
+  });
+
+  dash.draw('marketTable', (tb) => {
+    const F = window.bbFmt;
+    fillRows(tb, 'market_calc', () => 0, (r) => [
+      [r.market], [F.money(r.price)], [F.money(r.costs)], [F.money(r.duty), 'muted'], [F.money(r.margin), 'truth claim-strong'],
+      [F.money(r.spend)], [F.int(r.pur)],
+      [r.cpo_actual == null ? '—' : F.money(r.cpo_actual)],
+      [r.result == null ? '—' : F.signed(r.result), r.result == null ? 'muted' : r.result >= 0 ? 'lvl-ok' : 'lvl-bad'],
+    ]);
+  });
+
+  dash.draw('cogTable', (tb) => {
+    const F = window.bbFmt;
+    fillRows(tb, 'cog_sources', (a, b) => N(a.cog) - N(b.cog), (r) => [[r.source], [F.money(N(r.cog))]]);
+  });
+
+  const mOrDash = (v) => (v == null ? '—' : window.bbFmt.money(v));
+
+  dash.draw('creativeTbl', (tb) => {
+    const F = window.bbFmt;
+    fillRows(tb, 'creative_calc', (a, b) => b.spend - a.spend, (r) => [
+      [r.creative.replace(/ \| /g, ' · ')], [r.market, 'muted'], [F.money(r.spend)], [F.int(r.atc)], [mOrDash(r.cpa_atc)], [F.int(r.pur)],
+      [mOrDash(r.cpa), r.cpa == null ? 'lvl-bad' : r.cpa <= 250 ? 'lvl-ok' : r.cpa <= 400 ? 'lvl-warn' : 'lvl-bad'], [F.roas(r.roas)], [r.note, 'muted'],
+    ]);
+  });
+
+  dash.draw('countryTbl', (tb) => {
+    const F = window.bbFmt;
+    fillRows(tb, 'country_calc', (a, b) => b.spend - a.spend, (r) => [
+      [r.country], [F.money(r.spend)], [F.int(r.pur)], [mOrDash(r.cpa)], [F.money(r.margin), 'muted'], [F.signed(r.res), r.res >= 0 ? 'lvl-ok' : 'lvl-bad'],
+    ]);
+  });
+
+  dash.draw('placementTbl', (tb) => {
+    const F = window.bbFmt;
+    fillRows(tb, 'placement_calc', (a, b) => b.spend - a.spend, (r) => [
+      [r.placement], [F.money(r.spend)], [r.lpv_rate == null ? '—' : F.pct(Math.min(1, r.lpv_rate))], [F.int(r.pur)], [mOrDash(r.cpa), r.pur === 0 ? 'lvl-bad' : ''], [F.roas(r.roas)],
+    ]);
+  });
+
+  dash.draw('weeklyTbl', (tb) => {
+    const F = window.bbFmt;
+    fillRows(tb, 'weekly_calc', (a, b) => String(a.week).localeCompare(String(b.week)), (r) => [
+      [r.label], [F.money(r.spend)], [mOrDash(r.cpa_atc)], [mOrDash(r.cpa_co)], [F.int(r.pur)],
+    ]);
+  });
+
+  dash.draw('junkTbl', (tb) => {
+    const F = window.bbFmt;
+    fillRows(tb, 'junk_calc', (a, b) => b.clicks - a.clicks, (r) => [
+      [r.creative.replace(/ \| /g, ' · ')], [F.money(r.spend)], [F.int(r.clicks)], [d3.format('.1%')(r.ctr), 'lvl-bad'], [F.int(r.pur)],
+    ]);
+  });
+
+  dash.draw('w44Camp', (tb) => {
+    const F = window.bbFmt;
+    fillRows(tb, 'w44_campaigns', (a, b) => N(b.spend) - N(a.spend), (r) => [
+      [r.campaign], [F.money(N(r.spend))], [F.money(N(r.cost_per_cart))], [F.int(N(r.meta_purchases))], [r.verdict, 'muted'],
+    ]);
+  });
+
+  dash.draw('w44Funnel', (tb) => {
+    const F = window.bbFmt;
+    const order = ['Сесії', 'Сесії з кошиком', 'Перейшли до оформлення', 'Оформили замовлення'];
+    fillRows(tb, 'w44_funnel', (a, b) => order.indexOf(a.step) - order.indexOf(b.step), (r) => {
+      const c = N(r.w44) / N(r.w43) - 1;
+      return [[r.step], [F.int(N(r.w43))], [F.int(N(r.w44))], [F.pctSigned(c), c >= 0 ? 'pos' : 'neg']];
+    });
+  });
+
+  dash.draw('w44Budget', (tb) => {
+    const F = window.bbFmt;
+    fillRows(tb, 'w44_budget', () => 0, (r) => {
+      const dlt = N(r.proposed) - N(r.now);
+      return [[r.line], [F.money(N(r.now))], [F.money(N(r.proposed))], [dlt === 0 ? 'без змін' : F.signed(dlt), dlt === 0 ? 'muted' : '']];
+    });
+  });
+
+  dash.draw('srcBar', (el) => {
+    const d = dash.data('shopify_sources');
+    if (d.status !== 'ok') { fail(el, d); return; }
+    el.replaceChildren();
+    const F = window.bbFmt;
+    const col = { meta_utm: window.bbC[0], ig_social: window.bbC[1], none: '#d1d5db' };
+    const rows = d.data.map((r) => ({ ...r, orders: N(r.orders), revenue: N(r.revenue) }));
+    const total = d3.sum(rows, (r) => r.revenue);
+    const W = Math.max(280, el.clientWidth), H = 64;
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).style('display', 'block');
+    const x = d3.scaleLinear([0, total], [0, W]);
+    let acc = 0;
+    const segs = rows.map((r) => { const s = { ...r, x0: acc }; acc += r.revenue; return s; });
+    const t = tip(el);
+    svg.selectAll('rect').data(segs).join('rect')
+      .attr('x', (r) => x(r.x0) + 1).attr('width', (r) => Math.max(1, x(r.revenue) - x(0) - 2)).attr('y', 4).attr('height', 32).attr('rx', 4)
+      .attr('fill', (r) => col[r.key] || '#d1d5db')
+      .on('pointermove', (ev, r) => t.show(ev, r.source, [[null, 'Замовлення', F.int(r.orders)], [null, 'Виручка', F.money(r.revenue)], [null, 'Частка виручки', F.pct(r.revenue / total)]]))
+      .on('pointerleave', () => t.hide());
+    svg.selectAll('text.seg').data(segs).join('text').attr('class', 'seg')
+      .attr('x', (r) => x(r.x0) + 8).attr('y', 54)
+      .style('font-size', 'var(--cds-font-size-caption)').style('font-variant-numeric', 'tabular-nums').attr('fill', 'var(--color-fg-muted)')
+      .text((r) => `${F.pct(r.revenue / total)} · ${F.int(r.orders)} зам.`)
+      .each(function (r) { if (this.getComputedTextLength() > x(r.revenue) - x(0) - 14) this.textContent = ''; });
+  });
+
+  dash.draw('gaChart', (el) => {
+    const d = dash.data('ga_calc');
+    if (d.status !== 'ok') { fail(el, d); return; }
+    el.replaceChildren();
+    const F = window.bbFmt;
+    const rows = d.data.filter((r) => r.revenue > 0).sort((a, b) => b.revenue - a.revenue);
+    const W = Math.max(280, el.clientWidth), row = 30, top = 4, bottom = 8;
+    const H = top + bottom + rows.length * row;
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).style('display', 'block');
+    const lab = (r) => `${F.money(r.revenue)} · ${F.pct(r.rev_share)}`;
+    const labW = Math.min(W * 0.42, measure(svg, rows.map((r) => r.channel), 'lab') + 12);
+    const valW = measure(svg, rows.map(lab), 'val') + 10;
+    const x = d3.scaleLinear([0, d3.max(rows, (r) => r.revenue)], [labW, W - valW]);
+    const y = d3.scaleBand(rows.map((r) => r.channel), [top, H - bottom]).padding(0.3);
+    svg.append('g').selectAll('text').data(rows).join('text')
+      .attr('x', 0).attr('y', (r) => y(r.channel) + y.bandwidth() / 2).attr('dy', '0.35em')
+      .style('font-size', 'var(--cds-font-size-caption)').attr('fill', 'var(--color-fg)')
+      .text((r) => r.channel).call(fit, labW - 8);
+    const t = tip(el);
+    svg.append('g').selectAll('rect').data(rows).join('rect')
+      .attr('x', labW).attr('width', (r) => Math.max(2, x(r.revenue) - labW)).attr('y', (r) => y(r.channel)).attr('height', y.bandwidth()).attr('rx', 3)
+      .attr('fill', (r) => r.key === 'meta_paid' ? window.bbC[2] : r.key === 'not_set' ? '#d1d5db' : window.bbC[1])
+      .on('pointermove', (ev, r) => t.show(ev, r.channel, [[null, 'Виручка', F.money(r.revenue)], [null, 'Покупки', F.int(r.purchases)], [null, 'Сесії', F.int(r.sessions)], [null, 'Конверсія', F.pct2(r.conv)]]))
+      .on('pointerleave', () => t.hide());
+    svg.append('g').selectAll('text').data(rows).join('text')
+      .attr('x', (r) => x(r.revenue) + 4).attr('y', (r) => y(r.channel) + y.bandwidth() / 2).attr('dy', '0.35em')
+      .style('font-size', 'var(--cds-font-size-caption)').style('font-variant-numeric', 'tabular-nums').attr('fill', 'var(--color-fg-muted)')
+      .text(lab);
+  });
+
+  dash.draw('gaTable', (tb) => {
+    const d = dash.data('ga_calc');
+    tb.replaceChildren();
+    if (d.status !== 'ok') return;
+    const F = window.bbFmt;
+    [...d.data].sort((a, b) => b.revenue - a.revenue).forEach((r) => {
+      const tr = document.createElement('tr');
+      [[r.channel, r.key === 'meta_paid' ? 'claim-strong' : ''], [F.int(r.sessions)], [F.int(r.purchases)], [F.money(r.revenue)], [F.pct(r.rev_share)], [F.pct2(r.conv)]]
+        .forEach(([v, c]) => { const td = document.createElement('td'); td.textContent = v; if (c) td.className = c; tr.append(td); });
+      tb.append(tr);
+    });
+  });
+
+  const channelBars = (el, rows, color) => {
+    el.replaceChildren();
+    const F = window.bbFmt;
+    const W = Math.max(280, el.clientWidth), row = 30, top = 4, bottom = 8;
+    const H = top + bottom + rows.length * row;
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).style('display', 'block');
+    const lab = (r) => `${F.money(r.revenue)} · ${F.pct(r.rev_share)}`;
+    const labW = Math.min(W * 0.42, measure(svg, rows.map((r) => r.channel), 'lab') + 12);
+    const valW = measure(svg, rows.map(lab), 'val') + 10;
+    const x = d3.scaleLinear([0, d3.max(rows, (r) => r.revenue)], [labW, W - valW]);
+    const y = d3.scaleBand(rows.map((r) => r.channel), [top, H - bottom]).padding(0.3);
+    svg.append('g').selectAll('text').data(rows).join('text')
+      .attr('x', 0).attr('y', (r) => y(r.channel) + y.bandwidth() / 2).attr('dy', '0.35em')
+      .style('font-size', 'var(--cds-font-size-caption)').attr('fill', 'var(--color-fg)')
+      .text((r) => r.channel).call(fit, labW - 8);
+    const t = tip(el);
+    svg.append('g').selectAll('rect').data(rows).join('rect')
+      .attr('x', labW).attr('width', (r) => Math.max(2, x(r.revenue) - labW)).attr('y', (r) => y(r.channel)).attr('height', y.bandwidth()).attr('rx', 3)
+      .attr('fill', color)
+      .on('pointermove', (ev, r) => t.show(ev, r.channel, r.tipLines))
+      .on('pointerleave', () => t.hide());
+    svg.append('g').selectAll('text').data(rows).join('text')
+      .attr('x', (r) => x(r.revenue) + 4).attr('y', (r) => y(r.channel) + y.bandwidth() / 2).attr('dy', '0.35em')
+      .style('font-size', 'var(--cds-font-size-caption)').style('font-variant-numeric', 'tabular-nums').attr('fill', 'var(--color-fg-muted)')
+      .text(lab);
+  };
+
+  dash.draw('shopChart', (el) => {
+    const d = dash.data('shop_calc');
+    if (d.status !== 'ok') { fail(el, d); return; }
+    const F = window.bbFmt;
+    const rows = [...d.data].sort((a, b) => b.revenue - a.revenue).map((r) => ({ ...r, tipLines: [[null, 'Виручка', F.money(r.revenue)], [null, 'Замовлення', F.int(r.orders)], [null, 'Валовий прибуток', F.money(r.gross_profit)]] }));
+    channelBars(el, rows, (r) => r.key === 'meta_paid' ? window.bbC[2] : r.key === 'not_set' ? '#d1d5db' : window.bbC[0]);
+  });
+
+  dash.draw('shopTable', (tb) => {
+    const d = dash.data('shop_calc');
+    tb.replaceChildren();
+    if (d.status !== 'ok') return;
+    const F = window.bbFmt;
+    [...d.data].sort((a, b) => b.revenue - a.revenue).forEach((r) => {
+      const tr = document.createElement('tr');
+      [[r.channel, r.key === 'meta_paid' ? 'claim-strong' : ''], [F.int(r.orders)], [F.money(r.revenue)], [F.pct(r.rev_share)], [F.money(r.gross_profit)], [F.money(r.aov)]]
+        .forEach(([v, c]) => { const td = document.createElement('td'); td.textContent = v; if (c) td.className = c; tr.append(td); });
+      tb.append(tr);
+    });
+  });
+
+  window.bbDonutColors = { meta_paid: '#d08a0e', search: '#1f7a4d', direct: '#4a9b70', referral: '#7fbf9a', ig_org: '#64748b', fb_org: '#94a3b8', not_set: '#d1d5db' };
+
+  dash.draw('donutChart', (el) => {
+    const d = dash.data('shop_calc');
+    if (d.status !== 'ok') { fail(el, d); return; }
+    el.replaceChildren();
+    const F = window.bbFmt;
+    const rows = [...d.data].sort((a, b) => (a.key === 'meta_paid' ? -1 : b.key === 'meta_paid' ? 1 : b.orders - a.orders));
+    const total = d3.sum(rows, (r) => r.orders);
+    const W = Math.min(240, Math.max(160, el.clientWidth)), R0 = W / 2;
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${W}`).style('display', 'block').style('max-width', `${W}px`);
+    const g = svg.append('g').attr('transform', `translate(${R0},${R0})`);
+    const arcs = d3.pie().sort(null).value((r) => r.orders).padAngle(0.012)(rows);
+    const arc = d3.arc().innerRadius(R0 * 0.62).outerRadius(R0 - 2).cornerRadius(2);
+    const t = tip(el);
+    g.selectAll('path').data(arcs).join('path').attr('d', arc).attr('fill', (a) => window.bbDonutColors[a.data.key] || '#cbd5e1')
+      .on('pointermove', (ev, a) => t.show(ev, a.data.channel, [[null, 'Замовлення', `${F.int(a.data.orders)} · ${F.pct(a.data.orders / total)}`], [null, 'Виручка', F.money(a.data.revenue)]]))
+      .on('pointerleave', () => t.hide());
+    const meta = rows.find((r) => r.key === 'meta_paid');
+    g.append('text').attr('text-anchor', 'middle').attr('dy', '-0.1em').style('font-size', 'var(--cds-font-size-title)').style('font-weight', 700).attr('fill', '#d08a0e').text(F.pct(meta ? meta.orders / total : 0));
+    g.append('text').attr('text-anchor', 'middle').attr('dy', '1.4em').style('font-size', 'var(--cds-font-size-caption)').attr('fill', 'var(--color-fg-muted)').text('замовлень з Meta');
+  });
+
+  dash.draw('donutLegend', (el) => {
+    const d = dash.data('shop_calc');
+    el.replaceChildren();
+    if (d.status !== 'ok') { el.textContent = '—'; return; }
+    const F = window.bbFmt;
+    const rows = [...d.data].sort((a, b) => (a.key === 'meta_paid' ? -1 : b.key === 'meta_paid' ? 1 : b.orders - a.orders));
+    const total = d3.sum(rows, (r) => r.orders);
+    rows.forEach((r) => {
+      const row = document.createElement('div'); row.className = 'row' + (r.key === 'meta_paid' ? ' main' : '');
+      const sw = document.createElement('span'); sw.className = 'sw2'; sw.style.background = window.bbDonutColors[r.key] || '#cbd5e1';
+      const nm = document.createElement('span'); nm.textContent = r.channel;
+      const n = document.createElement('span'); n.className = 'num'; n.textContent = F.int(r.orders) + ' зам.';
+      const pc = document.createElement('span'); pc.className = 'num'; pc.textContent = F.pct(r.orders / total);
+      row.append(sw, nm, n, pc); el.append(row);
+    });
+  });
+
+  window.bbV = 'orders';
+  document.querySelectorAll('.bb-cmpbtn').forEach((b) => b.addEventListener('click', () => {
+    window.bbV = b.dataset.v;
+    document.querySelectorAll('.bb-cmpbtn').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    dash.draw('reconChart');
+  }));
+
+  dash.draw('reconChart', (el) => {
+    const d = dash.data('recon_all');
+    if (d.status !== 'ok') { fail(el, d); return; }
+    el.replaceChildren();
+    const F = window.bbFmt, v = window.bbV || 'orders';
+    const fmt = v === 'orders' ? F.int : F.money;
+    const fld = (src) => `${src}_${v}`;
+    const total = d.data.find((r) => r.key === 'total');
+    const rows = [total, ...d.data.filter((r) => r.key !== 'total').sort((a, b) => (b[fld('shop')] || 0) - (a[fld('shop')] || 0))];
+    const series = [['shop', 0, 'Shopify'], ['ga', 1, 'GA4'], ['meta', 2, 'Meta']];
+    const W = Math.max(280, el.clientWidth), top = 6, bottom = 26, bh = 14, gap = 3;
+    const nser = (r) => series.filter(([sr]) => r[fld(sr)] != null).length;
+    const bandH = (r) => nser(r) * (bh + gap) + 18;
+    const H = top + bottom + d3.sum(rows, bandH);
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).style('display', 'block');
+    const labW = Math.min(W * 0.36, measure(svg, rows.map((r) => r.channel), 'lab') + 14);
+    const valW = measure(svg, rows.flatMap((r) => series.filter(([sr]) => r[fld(sr)] != null).map(([sr]) => fmt(r[fld(sr)]))), 'val') + 12;
+    const maxV = d3.max(rows, (r) => d3.max(series, ([sr]) => r[fld(sr)] || 0));
+    const x = d3.scaleLinear([0, maxV], [labW, W - valW]);
+    svg.append('g').attr('transform', `translate(0,${H - bottom})`).call(d3.axisBottom(x).ticks(Math.max(2, Math.floor((W - labW - valW) / 110))).tickFormat((t) => fmt(t)).tickSize(-(H - top - bottom)))
+      .attr('font-size', null).attr('font-family', null)
+      .call((g) => g.select('.domain').remove())
+      .call((g) => g.selectAll('line').attr('stroke', 'var(--cds-chart-grid)'))
+      .call((g) => g.selectAll('text').attr('fill', 'var(--color-fg-muted)').style('font-size', 'var(--cds-font-size-caption)'));
+    const t = tip(el);
+    let yy = top;
+    rows.forEach((r) => {
+      const h = bandH(r);
+      const g = svg.append('g').attr('transform', `translate(0,${yy})`);
+      if (r.key === 'meta_paid') g.append('rect').attr('x', 0).attr('y', 0).attr('width', W).attr('height', h - 6).attr('rx', 4).style('fill', 'color-mix(in srgb, var(--color-warn) 9%, transparent)');
+      if (r.key === 'total') g.append('line').attr('x1', 0).attr('x2', W).attr('y1', h - 3).attr('y2', h - 3).attr('stroke', 'var(--color-border-line)');
+      const ser = series.filter(([sr]) => r[fld(sr)] != null);
+      g.append('text').attr('x', 4).attr('y', (ser.length * (bh + gap)) / 2 + 4).attr('dy', '0.35em')
+        .style('font-size', 'var(--cds-font-size-caption)').style('font-weight', r.key === 'total' || r.key === 'meta_paid' ? 600 : 400)
+        .attr('fill', 'var(--color-fg)').text(r.channel).call(fit, labW - 12);
+      ser.forEach(([sr, i], j) => {
+        const val = r[fld(sr)];
+        g.append('rect').attr('x', labW).attr('y', 4 + j * (bh + gap)).attr('height', bh).attr('rx', 3).attr('width', Math.max(2, x(val) - labW)).attr('fill', window.bbC[i]);
+        g.append('text').attr('x', x(val) + 4).attr('y', 4 + j * (bh + gap) + bh / 2).attr('dy', '0.35em')
+          .style('font-size', 'var(--cds-font-size-caption)').style('font-variant-numeric', 'tabular-nums')
+          .style('font-weight', sr === 'meta' ? 600 : 400).attr('fill', sr === 'meta' ? 'var(--color-warn)' : 'var(--color-fg-muted)').text(fmt(val));
+      });
+      g.append('rect').attr('x', 0).attr('width', W).attr('y', 0).attr('height', h - 4).attr('fill', 'transparent')
+        .on('pointermove', (ev) => t.show(ev, r.channel, ser.map(([sr, i, name]) => [window.bbC[i], name, `${F.int(r[sr + '_orders'])} зам. · ${F.money(r[sr + '_revenue'])}`])))
+        .on('pointerleave', () => t.hide());
+      yy += h;
+    });
+  });
+
+  dash.draw('cmpChart', (el) => {
+    const d = dash.data('compare');
+    if (d.status !== 'ok') { fail(el, d); return; }
+    el.replaceChildren();
+    const F = window.bbFmt;
+    const rows = [...d.data].sort((a, b) => b.shop_revenue - a.shop_revenue);
+    const series = [['shop_revenue', 0, 'Shopify'], ['ga_revenue', 1, 'GA4'], ['meta_revenue', 2, 'Meta']];
+    const W = Math.max(280, el.clientWidth), top = 4, bottom = 24;
+    const bandH = (r) => (r.meta_revenue != null ? 3 : 2) * 13 + 14;
+    const H = top + bottom + d3.sum(rows, bandH);
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).style('display', 'block');
+    const labW = Math.min(W * 0.4, measure(svg, rows.map((r) => r.channel), 'lab') + 12);
+    const valW = measure(svg, rows.flatMap((r) => series.filter(([f]) => r[f] != null).map(([f]) => F.money(r[f]))), 'val') + 10;
+    const maxV = d3.max(rows, (r) => Math.max(r.shop_revenue, r.ga_revenue, r.meta_revenue || 0));
+    const x = d3.scaleLinear([0, maxV], [labW, W - valW]);
+    svg.append('g').attr('transform', `translate(0,${H - bottom})`).call(d3.axisBottom(x).ticks(Math.max(2, Math.floor((W - labW - valW) / 110))).tickFormat((v) => F.money(v)).tickSize(-(H - top - bottom)))
+      .attr('font-size', null).attr('font-family', null)
+      .call((g) => g.select('.domain').remove())
+      .call((g) => g.selectAll('line').attr('stroke', 'var(--cds-chart-grid)'))
+      .call((g) => g.selectAll('text').attr('fill', 'var(--color-fg-muted)').style('font-size', 'var(--cds-font-size-caption)'));
+    const t = tip(el);
+    let yy = top;
+    rows.forEach((r) => {
+      const g = svg.append('g').attr('transform', `translate(0,${yy})`);
+      const ser = series.filter(([f]) => r[f] != null);
+      g.append('text').attr('x', 0).attr('y', (ser.length * 13) / 2 + 2).attr('dy', '0.35em')
+        .style('font-size', 'var(--cds-font-size-caption)').attr('fill', 'var(--color-fg)').text(r.channel).call(fit, labW - 8);
+      ser.forEach(([f, i], j) => {
+        g.append('rect').attr('x', labW).attr('y', 2 + j * 13).attr('height', 11).attr('rx', 2).attr('width', Math.max(2, x(r[f]) - labW)).attr('fill', window.bbC[i]);
+        g.append('text').attr('x', x(r[f]) + 4).attr('y', 2 + j * 13 + 5.5).attr('dy', '0.35em')
+          .style('font-size', 'var(--cds-font-size-caption)').style('font-variant-numeric', 'tabular-nums').attr('fill', 'var(--color-fg-muted)').text(F.money(r[f]));
+      });
+      g.append('rect').attr('x', 0).attr('width', W).attr('y', 0).attr('height', bandH(r) - 4).attr('fill', 'transparent')
+        .on('pointermove', (ev) => t.show(ev, r.channel, ser.map(([f, i, name]) => [window.bbC[i], name, `${F.money(r[f])} · ${F.int(r[f.replace('revenue', 'orders')])} зам.`])))
+        .on('pointerleave', () => t.hide());
+      yy += bandH(r);
+    });
+  });
+
+  dash.draw('cmpTable', (tb) => {
+    const d = dash.data('compare');
+    tb.replaceChildren();
+    if (d.status !== 'ok') return;
+    const F = window.bbFmt;
+    [...d.data].sort((a, b) => b.shop_revenue - a.shop_revenue).forEach((r) => {
+      const tr = document.createElement('tr');
+      const dv = r.ga_vs_shop, base = r.shop_revenue || 1;
+      const lvl = Math.abs(dv) / base < 0.1 ? 'lvl-ok' : 'lvl-warn';
+      [[r.channel], [r.meta_orders == null ? '—' : F.int(r.meta_orders), r.key === 'meta_paid' ? 'lvl-bad' : 'muted'], [r.meta_revenue == null ? '—' : F.money(r.meta_revenue), r.key === 'meta_paid' ? 'lvl-bad' : 'muted'],
+        [F.int(r.ga_orders)], [F.money(r.ga_revenue)], [F.int(r.shop_orders), 'truth'], [F.money(r.shop_revenue), 'truth'], [F.signed(dv), lvl]]
+        .forEach(([v, c]) => { const td = document.createElement('td'); td.textContent = v; if (c) td.className = c; tr.append(td); });
+      tb.append(tr);
+    });
+  });
+
+  dash.draw('refTable', (tb) => {
+    const d = dash.data('referral_sites');
+    tb.replaceChildren();
+    if (d.status !== 'ok') return;
+    const F = window.bbFmt;
+    const v = (x) => (x === '' || x == null ? null : Number(x));
+    [...d.data].sort((a, b) => (v(b.shop_revenue) || 0) - (v(a.shop_revenue) || 0) || (v(b.ga_sessions) || 0) - (v(a.ga_sessions) || 0)).forEach((r) => {
+      const tr = document.createElement('tr');
+      const so = v(r.shop_orders), sr = v(r.shop_revenue), gs = v(r.ga_sessions);
+      [[r.site, so ? 'claim-strong' : ''], [r.kind, 'muted'], [gs == null ? '—' : F.int(gs)], [so ? F.int(so) : '—', 'truth'], [sr ? F.money(sr) : '—', 'truth']]
+        .forEach(([val, c]) => { const td = document.createElement('td'); td.textContent = val; if (c) td.className = c; tr.append(td); });
+      tb.append(tr);
+    });
+  });
+
+  dash.draw('gapChart', (el) => {
+    const d = dash.data('adset_calc');
+    if (d.status !== 'ok') { fail(el, d); return; }
+    el.replaceChildren();
+    const F = window.bbFmt;
+    const rows = d.data.filter((r) => r.meta_revenue > 0 || r.shop_revenue > 0).sort((a, b) => b.gap - a.gap);
+    const W = Math.max(280, el.clientWidth), row = 26, top = 8, bottom = 24;
+    const H = top + bottom + rows.length * row;
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).style('display', 'block');
+    const lab = (r) => `${F.signed(r.gap)} · ${r.confirm == null ? '—' : F.pct(r.confirm)}`;
+    const labW = Math.min(W * 0.42, measure(svg, rows.map((r) => r.adset), 'lab') + 10);
+    const valW = measure(svg, rows.map(lab), 'val') + 10;
+    const x = d3.scaleLinear(d3.extent([0, ...rows.map((r) => r.gap)]), [labW + valW, W - valW]).nice();
+    const y = d3.scaleBand(rows.map((r) => r.adset), [top, H - bottom]).padding(0.28);
+    svg.append('g').attr('transform', `translate(0,${H - bottom})`).call(d3.axisBottom(x).ticks(Math.max(2, Math.floor((W - labW - valW * 2) / 110))).tickFormat((v) => F.signed(v)).tickSize(-(H - top - bottom)))
+      .attr('font-size', null).attr('font-family', null)
+      .call((g) => g.select('.domain').remove())
+      .call((g) => g.selectAll('line').attr('stroke', 'var(--cds-chart-grid)'))
+      .call((g) => g.selectAll('text').attr('fill', 'var(--color-fg-muted)').style('font-size', 'var(--cds-font-size-caption)'));
+    svg.append('line').attr('x1', x(0)).attr('x2', x(0)).attr('y1', top).attr('y2', H - bottom).attr('stroke', 'var(--cds-chart-axis)');
+    svg.append('g').selectAll('text').data(rows).join('text')
+      .attr('x', 0).attr('y', (r) => y(r.adset) + y.bandwidth() / 2).attr('dy', '0.35em')
+      .style('font-size', 'var(--cds-font-size-caption)')
+      .attr('fill', 'var(--color-fg)')
+      .text((r) => r.adset).call(fit, labW - 8);
+    const t = tip(el);
+    const bh = Math.min(18, y.bandwidth());
+    svg.append('g').selectAll('rect').data(rows).join('rect')
+      .attr('x', (r) => Math.min(x(0), x(r.gap))).attr('width', (r) => Math.max(1, Math.abs(x(r.gap) - x(0))))
+      .attr('y', (r) => y(r.adset)).attr('height', bh).attr('rx', 3)
+      .attr('fill', (r) => window.bbLevelColor[window.bbLevel(r.confirm)])
+      .on('pointermove', (ev, r) => t.show(ev, r.adset, [[null, 'Meta заявляє', F.money(r.meta_revenue)], [null, 'Shopify підтверджує', F.money(r.shop_revenue)], [null, 'Різниця', F.signed(r.gap)], [null, 'Оцінка', window.bbLevelText[window.bbLevel(r.confirm)]]]))
+      .on('pointerleave', () => t.hide());
+    svg.append('g').selectAll('text').data(rows).join('text')
+      .attr('x', (r) => r.gap >= 0 ? x(r.gap) + 4 : x(r.gap) - 4)
+      .attr('text-anchor', (r) => r.gap >= 0 ? 'start' : 'end')
+      .attr('y', (r) => y(r.adset) + bh / 2).attr('dy', '0.35em')
+      .style('font-size', 'var(--cds-font-size-caption)').style('font-variant-numeric', 'tabular-nums')
+      .attr('fill', 'var(--color-fg-muted)')
+      .text(lab);
+  });
+
+  dash.draw('roasChart', (el) => {
+    const d = dash.data('adset_calc'), k = dash.data('kpi');
+    if (d.status !== 'ok') { fail(el, d); return; }
+    if (k.status !== 'ok') { fail(el, k); return; }
+    el.replaceChildren();
+    const F = window.bbFmt;
+    const be = k.data[0].breakeven;
+    const rows = [...d.data].sort((a, b) => b.spend - a.spend);
+    const W = Math.max(280, el.clientWidth), row = 26, top = 8, bottom = 24;
+    const H = top + bottom + rows.length * row;
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).style('display', 'block');
+    const labW = Math.min(W * 0.45, measure(svg, rows.map((r) => r.adset), 'lab') + 10);
+    const maxV = d3.max(rows, (r) => Math.max(r.roas_meta, r.roas_ga, r.roas_shop, be));
+    const x = d3.scaleLinear([0, maxV], [labW + 18, W - 18]).nice();
+    const y = d3.scaleBand(rows.map((r) => r.adset), [top, H - bottom]).padding(0.2);
+    svg.append('g').attr('transform', `translate(0,${H - bottom})`).call(d3.axisBottom(x).ticks(Math.max(2, Math.floor((W - labW) / 80))).tickFormat(d3.format('.1f')).tickSize(-(H - top - bottom)))
+      .attr('font-size', null).attr('font-family', null)
+      .call((g) => g.select('.domain').remove())
+      .call((g) => g.selectAll('line').attr('stroke', 'var(--cds-chart-grid)'))
+      .call((g) => g.selectAll('text').attr('fill', 'var(--color-fg-muted)').style('font-size', 'var(--cds-font-size-caption)'));
+    svg.append('line').attr('x1', x(be)).attr('x2', x(be)).attr('y1', top).attr('y2', H - bottom)
+      .attr('stroke', 'var(--cds-chart-reference)').attr('stroke-width', 1.5).attr('stroke-dasharray', '4 3');
+    svg.append('g').selectAll('text').data(rows).join('text')
+      .attr('x', 0).attr('y', (r) => y(r.adset) + y.bandwidth() / 2).attr('dy', '0.35em')
+      .style('font-size', 'var(--cds-font-size-caption)')
+      .attr('fill', 'var(--color-fg)')
+      .text((r) => r.adset).call(fit, labW - 8);
+    const g = svg.append('g').selectAll('g').data(rows).join('g').attr('transform', (r) => `translate(0,${y(r.adset) + y.bandwidth() / 2})`);
+    g.append('line').attr('x1', (r) => x(r.roas_shop)).attr('x2', (r) => x(r.roas_meta))
+      .attr('stroke', (r) => window.bbLevelColor[window.bbLevel(r.confirm)]).attr('stroke-opacity', 0.55).attr('stroke-width', 4).attr('stroke-linecap', 'round');
+    const series = [['roas_meta', 2], ['roas_ga', 1], ['roas_shop', 0]];
+    series.forEach(([f, i]) => g.append('circle').attr('cx', (r) => x(r[f])).attr('r', i === 0 ? 6 : 5).attr('fill', window.bbC[i]).attr('stroke', 'var(--color-panel)').attr('stroke-width', 1.5));
+    const t = tip(el);
+    g.append('rect').attr('x', labW).attr('width', W - labW).attr('y', -y.bandwidth() / 2).attr('height', y.bandwidth()).attr('fill', 'transparent')
+      .on('pointermove', (ev, r) => t.show(ev, r.adset, [[window.bbC[0], 'Shopify', F.roas(r.roas_shop)], [window.bbC[1], 'GA4', F.roas(r.roas_ga)], [window.bbC[2], 'Meta', F.roas(r.roas_meta)], [null, 'Беззбитковість', F.roas(be)], [null, 'Shopify ÷ Meta', r.confirm == null ? '—' : F.pct(r.confirm)]]))
+      .on('pointerleave', () => t.hide());
+  });
+
+  dash.draw('recon', (tb) => {
+    const d = dash.data('recon');
+    tb.replaceChildren();
+    if (d.status !== 'ok') return;
+    const F = window.bbFmt;
+    d.data.forEach((r) => {
+      const tr = document.createElement('tr');
+      tr.className = 'row-' + r.role;
+      const diff = r.diff_pct == null ? 'еталон' : F.pctSigned(r.diff_pct);
+      const lvl = r.diff_pct == null ? '' : Math.abs(r.diff_pct) < 0.05 ? 'lvl-ok' : r.diff_pct > 0.1 ? 'lvl-bad' : 'lvl-warn';
+      [[r.source], [F.int(r.orders)], [F.money(r.revenue)], [diff, lvl || 'muted']].forEach(([v, c]) => { const td = document.createElement('td'); td.textContent = v; if (c) td.className = c; tr.append(td); });
+      tb.append(tr);
+    });
+  });
+
+  dash.draw('adsetTable', (tb) => {
+    const d = dash.data('adset_calc');
+    tb.replaceChildren();
+    if (d.status !== 'ok') return;
+    const F = window.bbFmt;
+    [...d.data].sort((a, b) => b.spend - a.spend).forEach((r) => {
+      const tr = document.createElement('tr');
+      const cells = [
+        [r.adset], [r.geo, 'muted'], [F.money(r.spend)],
+        [F.money(r.meta_revenue), 'claim'],
+        [F.money(r.shop_revenue), 'truth'],
+        [r.confirm == null ? '—' : F.pct(r.confirm), 'lvl-' + window.bbLevel(r.confirm)],
+        [F.roas(r.roas_shop), 'truth'],
+        [F.signed(r.profit), 'truth ' + (r.profit >= 0 ? 'pos' : 'neg')],
+        [F.signed(r.profit_low), r.profit_low >= 0 ? 'pos' : 'neg'],
+      ];
+      cells.forEach(([v, c]) => { const td = document.createElement('td'); td.textContent = v; if (c) td.className = c; tr.append(td); });
+      tb.append(tr);
+    });
+  });
+
+  dash.draw('creativeTable', (tb) => {
+    const d = dash.data('creatives');
+    tb.replaceChildren();
+    if (d.status !== 'ok') return;
+    const F = window.bbFmt;
+    d.data.map((r) => ({ ...r, spend: N(r.spend), purchases: N(r.purchases), meta_roas: N(r.meta_roas) }))
+      .sort((a, b) => b.spend - a.spend)
+      .forEach((r) => {
+        const tr = document.createElement('tr'); tr.dataset.key = r.key;
+        [[r.ad], [r.adset, 'muted'], [F.money(r.spend)], [F.int(r.purchases)], [F.roas(r.meta_roas)]]
+          .forEach(([v, c]) => { const td = document.createElement('td'); td.textContent = v; if (c) td.className = c; tr.append(td); });
+        tb.append(tr);
+      });
+  });
+</script>
+
+<script>window.dash._runAll();</script>
+</body>
+</html>
