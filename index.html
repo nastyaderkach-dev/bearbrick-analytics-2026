@@ -166,6 +166,31 @@
   .bb-chart-short { min-height: 70px; }
   .bb-caveats b { font-weight: 600; color: var(--color-fg); font-variant-numeric: tabular-nums; }
   .bb-legend .k-ok { background: var(--color-ok); } .bb-legend .k-warn { background: var(--color-warn); } .bb-legend .k-bad { background: var(--color-bad); }
+  .bb-cal { min-width: 64rem; table-layout: fixed; }
+  .bb .bb-tablewrap:has(.bb-cal) { max-height: none; }
+  .bb .bb-cal th, .bb .bb-cal td { text-align: left; white-space: normal; vertical-align: top; font-size: 12px; line-height: 1.35; padding: 6px; border-left: 1px solid var(--color-border-line); }
+  .bb .bb-cal th:first-child, .bb .bb-cal td:first-child { width: 10rem; min-width: 0; border-left: 0; font-weight: 600; color: var(--color-fg); }
+  .bb .bb-cal th .d { display: block; font-weight: 400; }
+  .bb .bb-cal th.bf { color: var(--color-bad); }
+  .bb .bb-cal th.drop { color: var(--color-fg); }
+  .bb .bb-cal td.c-done { background: color-mix(in srgb, var(--color-ok) 13%, transparent); }
+  .bb .bb-cal td.c-run { background: color-mix(in srgb, var(--color-fg-muted) 8%, transparent); }
+  .bb .bb-cal td.c-act { background: color-mix(in srgb, var(--color-warn) 15%, transparent); }
+  .bb .bb-cal td.c-key { background: color-mix(in srgb, var(--color-bad) 11%, transparent); font-weight: 600; }
+  .bb-legend .k-done { background: color-mix(in srgb, var(--color-ok) 35%, #fff); } .bb-legend .k-run { background: #d1d5db; } .bb-legend .k-act { background: color-mix(in srgb, var(--color-warn) 45%, #fff); } .bb-legend .k-key { background: color-mix(in srgb, var(--color-bad) 35%, #fff); }
+  .bb-dates { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 10.5rem), 1fr)); gap: var(--cds-gap-sm); margin-bottom: var(--cds-gap-md); }
+  .bb-date { border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-sm) var(--cds-pad-md); font-size: var(--cds-font-size-caption); line-height: 1.4; }
+  .bb-date b { display: block; font-size: var(--cds-font-size-body); font-weight: 700; font-variant-numeric: tabular-nums; }
+  .bb-date.hot { border-color: color-mix(in srgb, var(--color-bad) 45%, var(--color-border-line)); }
+  .bb-rhythm { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); gap: var(--cds-gap-sm); margin-bottom: var(--cds-gap-md); }
+  .bb-rhythm > div { background: color-mix(in srgb, var(--color-fg-muted) 7%, var(--color-panel)); border-radius: var(--cds-radius); padding: var(--cds-pad-sm) var(--cds-pad-md); font-size: var(--cds-font-size-caption); line-height: 1.45; }
+  .bb-rhythm b { font-weight: 600; }
+  .bb-tcol .bb-chip { margin-bottom: 2px; }
+  .bb-tcol h3 { margin: 0; font-size: var(--cds-font-size-body); font-weight: 600; }
+  .bb-tcol .when { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .bb-tcol .res { font-size: var(--cds-font-size-caption); line-height: 1.45; border-top: 1px solid var(--color-border-line); padding-top: var(--cds-gap-xs); margin-top: auto; }
+  .bb-tcol .res b { font-weight: 600; }
+  .bb-chip-done { color: var(--color-ok); background: color-mix(in srgb, var(--color-ok) 12%, transparent); }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
 <script>
@@ -499,6 +524,259 @@
         <tbody data-draw="budgetTbl"></tbody>
       </table>
     </div>
+  </section>
+
+  <section class="bb-card bb-step" id="calendar">
+    <div class="bb-stephead"><span class="bb-stepn">Крок 8</span><span class="bb-stepk">Календар до Нового року</span></div>
+    <h2>Календар робіт: 10 листопада – 5 січня</h2>
+    <p class="bb-lead">Базова аналітика готова. Далі робота йде у двох ритмах: <b>щотижневому</b> (зведення по всіх каналах і пропозиції по рекламі) і <b>проєктному</b> — швидкі покращення сайту, креативна стратегія, запуск дропу The Weeknd 8 грудня, нові канали і новорічна стратегія. Новорічну стратегію готую паралельно з дропом: подарунковий сезон починається раніше, ніж закінчується запуск, тому чекати на нього не можна.</p>
+
+    <h3 class="bb-h3">Ключові дати</h3>
+    <div class="bb-dates">
+      <div class="bb-date"><b>11 лист</b>UTM і країна в посиланнях реклами, тест оформлення разом з командою дропу</div>
+      <div class="bb-date"><b>16 лист</b>Перше щотижневе зведення і список швидких рішень для сайту</div>
+      <div class="bb-date"><b>24 лист</b>Тизер дропу: перший лист, соцмережі, старт реклами дропу</div>
+      <div class="bb-date hot"><b>27 лист</b>Black Friday: реклама дорожчає, без власної пропозиції бюджет не нарощуємо</div>
+      <div class="bb-date"><b>1 груд</b>Розкриття дропу і реєстрація</div>
+      <div class="bb-date"><b>4 груд</b>Погодження новорічної стратегії і пропозиції по нових каналах</div>
+      <div class="bb-date hot"><b>8 груд</b>Запуск дропу The Weeknd</div>
+      <div class="bb-date hot"><b>≈ 15–18 груд</b>Останній день доставки до Різдва по ринках — уточнити з Юлею</div>
+      <div class="bb-date"><b>25 груд · 31 груд</b>Різдво і Новий рік</div>
+      <div class="bb-date"><b>5 січ</b>Підсумкова презентація дропу і план на китайський Новий рік (початок лютого)</div>
+    </div>
+
+    <h3 class="bb-h3">Тижневий ритм</h3>
+    <div class="bb-rhythm">
+      <div><b>Понеділок — зведення.</b> Оновлюю дашборд за минулий тиждень по всіх каналах: замовлення й виручка за Shopify, трафік і оформлення за GA4, витрати й ціна замовлення в Meta, втрати в оформленні за Zuko. Три висновки — Марії, таргетологу і Бену.</div>
+      <div><b>Вівторок — пропозиції по рекламі.</b> До 2–3 рішень на тиждень: що вимкнути, куди перенести бюджет, який креатив тестувати. Не більше однієї суттєвої зміни на адсет — щоб не скидати навчання.</div>
+      <div><b>Четвер — контроль.</b> Чи спрацювали автоматичні правила, як іде тест креативів, чи немає збоїв в оформленні. Якщо все стабільно — нічого не міняємо.</div>
+    </div>
+
+    <h3 class="bb-h3">Календар по тижнях</h3>
+    <div class="bb-legend"><span><span class="sq k-done"></span>Зроблено</span><span><span class="sq k-run"></span>Щотижнева робота</span><span><span class="sq k-act"></span>Активний етап</span><span><span class="sq k-key"></span>Ключова подія</span></div>
+    <div class="bb-tablewrap">
+      <table class="bb-cal">
+        <thead><tr>
+          <th>Напрям</th>
+          <th>Тиждень 1<span class="d">9–15 лист</span></th>
+          <th>Тиждень 2<span class="d">16–22 лист</span></th>
+          <th class="bf">Тиждень 3<span class="d">23–29 лист · BF</span></th>
+          <th>Тиждень 4<span class="d">30 лист – 6 груд</span></th>
+          <th class="drop">Тиждень 5<span class="d">7–13 груд · дроп</span></th>
+          <th>Тиждень 6<span class="d">14–20 груд</span></th>
+          <th>Тиждень 7<span class="d">21–27 груд</span></th>
+          <th>Тиждень 8<span class="d">28 груд – 3 січ</span></th>
+          <th>4–5 січ</th>
+        </tr></thead>
+        <tbody>
+          <tr><td>1. Базова аналітика</td>
+            <td class="c-done">Готово: аудит Meta / GA4 / Shopify, маржа по ринках, план таргету, правила; аналіз оформлення в Zuko і GA4</td>
+            <td class="c-act">Виключити свій трафік з GA4 і Zuko; собівартість у Shopify</td>
+            <td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          <tr><td>2. Щотижневе зведення по всіх каналах</td>
+            <td class="c-act">Формат зведення, джерела, доступи</td>
+            <td class="c-run">Пн 16.11</td>
+            <td class="c-run">Пн 23.11</td>
+            <td class="c-run">Пн 30.11 · + тизер дропу</td>
+            <td class="c-run">Пн 7.12</td>
+            <td class="c-run">Пн 14.12 · + підсумок запуску</td>
+            <td class="c-run">Пн 21.12</td>
+            <td class="c-run">Пн 28.12</td>
+            <td class="c-run">Пн 4.01 · підсумок грудня</td></tr>
+          <tr><td>3. Пропозиції по рекламі</td>
+            <td class="c-act">Правила, бюджет $609, UTM і країна в посиланнях (11.11)</td>
+            <td class="c-run">Вт 17.11 · перевірка правил і нової структури</td>
+            <td class="c-run">Вт 24.11 · тиждень BF: без нарощування</td>
+            <td class="c-run">Вт 1.12 · бюджет під дроп</td>
+            <td class="c-key">Вт 8.12 · запуск дропу, щоденний контроль</td>
+            <td class="c-run">Вт 15.12 · бюджет під дедлайни доставки</td>
+            <td class="c-run">Вт 22.12 · холод — лише де доставка встигає</td>
+            <td class="c-run">Вт 29.12</td>
+            <td class="c-run">Підсумок місяця</td></tr>
+          <tr><td>4. Швидкі покращення конверсії сайту</td>
+            <td class="c-done">Аналіз оформлення: Zuko, GA4, тест з США</td>
+            <td class="c-key">Пн 16.11 — список рішень; старт впровадження</td>
+            <td class="c-act">Впровадження до 27.11, до тизеру і BF</td>
+            <td class="c-run">Перевірка ефекту 1.12</td>
+            <td class="c-run">Контроль оформлення під час дропу</td>
+            <td class="c-act">Банер «встигне до Різдва»</td>
+            <td class="c-act">Банер після дедлайну доставки</td>
+            <td></td>
+            <td class="c-run">Підсумок у Zuko</td></tr>
+          <tr><td>5. Креативна стратегія</td>
+            <td></td>
+            <td class="c-act">Конкуренти, аудиторії, тригери</td>
+            <td class="c-act">Пропозиція по контенту і бюджету · погодження 27.11</td>
+            <td class="c-act">Погодження Medicom, виробництво</td>
+            <td class="c-act">Виробництво, перші тести</td>
+            <td class="c-run">Тести новорічних креативів</td>
+            <td class="c-run">Масштабування переможців</td>
+            <td class="c-run">План тестів на січень</td>
+            <td></td></tr>
+          <tr><td>6. Запуск дропу The Weeknd (з командою)</td>
+            <td class="c-act">Налаштування реклами і тест оформлення (10–11.11)</td>
+            <td class="c-act">План вимірювання: UTM по каналах, реєстрації</td>
+            <td class="c-key">Тизер 24.11</td>
+            <td class="c-key">Розкриття і реєстрація 1.12</td>
+            <td class="c-key">Запуск 8.12</td>
+            <td class="c-act">Звіт по запуску; ретаргет на реєстрації без покупки</td>
+            <td class="c-run">Контроль продажів дропу</td>
+            <td></td>
+            <td class="c-key">Підсумкова презентація 5.01</td></tr>
+          <tr><td>7. Нові канали</td>
+            <td></td><td></td>
+            <td class="c-act">Збір даних: попит, бенчмарки, витрати</td>
+            <td class="c-key">Пропозиція 4.12</td>
+            <td class="c-act">Погодження, запуск тесту одного каналу</td>
+            <td class="c-run">Тест</td>
+            <td class="c-run">Тест</td>
+            <td class="c-run">Тест</td>
+            <td class="c-run">Висновки і план на січень</td></tr>
+          <tr><td>8. Новорічна стратегія</td>
+            <td></td><td></td>
+            <td class="c-act">Вхідні дані: дедлайни доставки, сток, пропозиція</td>
+            <td class="c-key">Стратегія і медіаплан · погодження 4.12</td>
+            <td class="c-act">Креативи, листи, банер; старт 9.12</td>
+            <td class="c-act">Фаза 1: подарунок встигне до Різдва</td>
+            <td class="c-act">Фаза 2: після дедлайну доставки</td>
+            <td class="c-act">Фаза 3: Новий рік</td>
+            <td class="c-run">Підсумки і план на китайський Новий рік</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="bb-h3">Що саме входить у кожен напрям</h3>
+    <div class="bb-tactic">
+      <div class="bb-tcol">
+        <span class="bb-chip bb-chip-done">Зроблено</span>
+        <h3>1. Базова аналітика</h3>
+        <span class="when">3 жовтня – 10 листопада</span>
+        <ul class="bb-tlist">
+          <li>Звірка Meta, GA4 і Shopify: Meta приписує собі на ~36% більше покупок, ніж підтверджує Shopify.</li>
+          <li>Маржа по ринках з урахуванням доставки, мита й комісій; прибуток після реклами.</li>
+          <li>Збиткові адсети, ринки й плейсменти; зведений план таргету, 8 автоматичних правил, бюджет $609 на день.</li>
+          <li>Презентація з правилами і порядком впровадження.</li>
+          <li>Аналіз оформлення в Zuko і GA4: американці купують добре (37% від відкритих оформлень), проблемні — Тайвань і Філіппіни; Індія дає трафік без жодної покупки.</li>
+          <li><b>Залишилось:</b> виключити свій трафік (тести команди), внести собівартість у Shopify.</li>
+        </ul>
+        <div class="res"><b>Результат:</b> рішення ухвалюються за фактичними продажами Shopify, а не за звітом Meta.</div>
+      </div>
+
+      <div class="bb-tcol">
+        <span class="bb-chip bb-chip-ongoing">Щопонеділка з 16 листопада</span>
+        <h3>2. Щотижневе зведення по всіх каналах</h3>
+        <span class="when">16.11, 23.11, 30.11, 7.12, 14.12, 21.12, 28.12, 4.01</span>
+        <ul class="bb-tlist">
+          <li><b>Канали:</b> реклама Meta, пошук Google, Instagram без реклами, розсилки, сайти-партнери й медіа (HYPEBEAST тощо), прямі заходи.</li>
+          <li><b>Цифри:</b> замовлення й виручка за Shopify — головне джерело; ціна замовлення і прибуток після реклами; конверсія оформлення по країнах; втрати в оформленні за Zuko.</li>
+          <li><b>Порівняння:</b> з минулим тижнем і з ціллю — ціна замовлення нижча за маржу ~$263.</li>
+          <li><b>Формат:</b> оновлений дашборд + 3 висновки в повідомленні для Марії, таргетолога й Бена.</li>
+          <li>Окремий блок про дроп у тижні 24.11–14.12: реєстрації й продажі по каналах.</li>
+        </ul>
+        <div class="res"><b>Результат:</b> одна версія правди щотижня; таргетолог і Бен оцінюють рекламу за Shopify.</div>
+      </div>
+
+      <div class="bb-tcol">
+        <span class="bb-chip bb-chip-ongoing">Щовівторка з 17 листопада</span>
+        <h3>3. Пропозиції по покращенню реклами</h3>
+        <span class="when">11.11 — старт змін, далі щотижня</span>
+        <ul class="bb-tlist">
+          <li><b>11.11:</b> UTM і параметр країни в посиланнях (адсети на одну країну, крім США); зміни з плану таргету — одним заходом, щоб навчання скинулось один раз.</li>
+          <li><b>Щотижня:</b> до 2–3 рішень — вимкнути збиткове, перенести бюджет, замінити креатив, що вигорає; перевірка, чи спрацювали правила.</li>
+          <li><b>Тиждень BF (23–29.11):</b> реклама дорожчає, бюджет не нарощуємо без власної пропозиції.</li>
+          <li><b>Дроп (24.11–14.12):</b> бюджет і аудиторії під тизер, реєстрацію і запуск; щоденний контроль у перші 3 дні.</li>
+          <li><b>Після дедлайну доставки:</b> холодна реклама — лише на ринки, куди посилка ще встигає; решта — ретаргет.</li>
+          <li><b>Індія:</b> перевірити, звідки трафік; якщо з реклами — виключити.</li>
+        </ul>
+        <div class="res"><b>Результат:</b> +$2,400–3,000 на місяць (оцінка з карти робіт) — менше збиткових витрат, ціна замовлення нижча за маржу.</div>
+      </div>
+
+      <div class="bb-tcol">
+        <span class="bb-chip bb-chip-now">Список — 16 листопада</span>
+        <h3>4. Швидкі покращення конверсії сайту</h3>
+        <span class="when">16–27 листопада, перевірка 1.12</span>
+        <ul class="bb-tlist">
+          <li><b>Список рішень, які можна зробити самим у Shopify без розробника:</b></li>
+          <li>Тайвань і Філіппіни: гнучкий формат телефону, необов'язкові поля адреси (район, регіон).</li>
+          <li>Телефон в оформленні — необов'язковий.</li>
+          <li>Назва доставки з терміном: «Free express delivery · X–Y days · duties included».</li>
+          <li>Блок довіри під ціною: доставка, мито включене, гарантія 12 місяців, повернення.</li>
+          <li>Оплата частинами на сторінці товару: «або 4 × $174.75» (Shop Pay вже є).</li>
+          <li>Повідомлення для країн без доставки (Японія, Китай та ін.) у вікні вибору країни.</li>
+          <li>Прибрати розпродані товари з блоку «схожі».</li>
+          <li><b>Що потребує розробника</b> (автоприйняття країни після закриття вікна тощо) — окремим завданням для Netpeak.</li>
+        </ul>
+        <div class="res"><b>Результат:</b> +$1,300–1,800 на місяць (оцінка з карти робіт); перевірка — у Zuko й GA4 по країнах.</div>
+      </div>
+
+      <div class="bb-tcol">
+        <span class="bb-chip bb-chip-next">17–27 листопада</span>
+        <h3>5. Креативна стратегія</h3>
+        <span class="when">погодження 27.11, виробництво з 30.11</span>
+        <ul class="bb-tlist">
+          <li><b>17–19.11 · Конкуренти:</b> як продають преміальні колонки і колекційні арт-об'єкти; що показують у святковий сезон (бібліотека реклами Meta, сайти, соцмережі).</li>
+          <li><b>18–20.11 · Аудиторії:</b> колекціонер, меломан, покупець подарунка, поціновувач дизайну — по ринках; хто купує зараз.</li>
+          <li><b>19–21.11 · Тригери і бар'єри:</b> лімітованість і колаборації, подарунок, якість звуку, гарантія, мито включене; бар'єри з опитування — ціна (57%) і сумніви щодо звуку (28%).</li>
+          <li><b>23–25.11 · Пропозиція по контенту:</b> 4–5 кутів подачі × формати, план тестів, креативи на чорну колонку до того, як закінчаться білі.</li>
+          <li><b>25–26.11 · Бюджет:</b> виробництво і тестовий бюджет.</li>
+          <li><b>27.11:</b> погодження з Марією; далі погодження Medicom TOY (≈ тиждень за процесом команди).</li>
+        </ul>
+        <div class="res"><b>Результат:</b> +$1,600–2,600 на місяць (оцінка з карти робіт) — ціна замовлення нижча на 10–15%, менша залежність від Hook 1.</div>
+      </div>
+
+      <div class="bb-tcol">
+        <span class="bb-chip bb-chip-now">10 листопада – 5 січня</span>
+        <h3>6. Запуск дропу The Weeknd з командою</h3>
+        <span class="when">тизер 24.11 · реєстрація 1.12 · запуск 8.12</span>
+        <ul class="bb-tlist">
+          <li><b>10–11.11:</b> вхідні дані для налаштування реклами і тесту оформлення — результати аналізу Zuko і GA4, параметри посилань.</li>
+          <li><b>до 20.11:</b> план вимірювання — UTM на кожен канал (розсилки, соцмережі, реклама, PR), відстеження реєстрацій, окремий блок у дашборді.</li>
+          <li><b>24.11 · тизер:</b> контроль перших 3 днів — охоплення, переходи, реєстрації.</li>
+          <li><b>1.12 · розкриття і реєстрація:</b> реєстрації по каналах і ціна реєстрації.</li>
+          <li><b>8.12 · запуск:</b> контроль у день запуску — продажі, помилки оформлення, захист від шахрайства, залишки, витрати реклами.</li>
+          <li><b>9–14.12:</b> звіт по запуску; ретаргет на тих, хто зареєструвався, але не купив.</li>
+          <li><b>5.01:</b> дані для підсумкової презентації команди.</li>
+        </ul>
+        <div class="res"><b>Результат:</b> видно, який канал продав дроп і скільки коштувала кожна покупка; висновки для наступних релізів.</div>
+      </div>
+
+      <div class="bb-tcol">
+        <span class="bb-chip bb-chip-next">Пропозиція — 4 грудня</span>
+        <h3>7. Нові канали</h3>
+        <span class="when">збір даних 23–30.11, тест з 9.12</span>
+        <ul class="bb-tlist">
+          <li><b>Кандидати:</b> Google (пошук за брендом, Shopping / Performance Max — святковий попит), TikTok, Pinterest, Reddit і спільноти колекціонерів, співпраця з авторами контенту, медіа на кшталт HYPEBEAST.</li>
+          <li><b>Для кожного:</b> чи є там наш покупець, орієнтовна ціна замовлення, мінімальний бюджет на тест, що потрібно з контенту.</li>
+          <li><b>Пропозиція 4.12:</b> 1–2 канали для тесту, бюджет, критерії успіху.</li>
+          <li><b>Тест з 9.12:</b> один канал, щоб встигнути на подарунковий попит; рішення про масштабування — на початку січня.</li>
+        </ul>
+        <div class="res"><b>Результат:</b> менша залежність від Meta; канал, готовий до китайського Нового року.</div>
+      </div>
+
+      <div class="bb-tcol">
+        <span class="bb-chip bb-chip-next">Погодження — 4 грудня</span>
+        <h3>8. Новорічна стратегія</h3>
+        <span class="when">підготовка 23.11–4.12, кампанія 9.12–3.01</span>
+        <ul class="bb-tlist">
+          <li><b>Вхідні дані до 27.11:</b> останні дні доставки до Різдва по ринках, залишки на грудень, новорічна пропозиція.</li>
+          <li><b>Стратегія і медіаплан:</b> бюджет по тижнях, ринки, креативи, розсилки, банер на сайті; як поєднати з дропом.</li>
+          <li><b>Фаза 1 · 9.12 – дедлайн:</b> «подарунок встигне до Різдва», холодна реклама на ринки, куди встигає доставка.</li>
+          <li><b>Фаза 2 · після дедлайну – 27.12:</b> ретаргет і розсилки; повідомлення про терміни доставки.</li>
+          <li><b>Фаза 3 · 28.12–3.01:</b> новорічний подарунок собі, теплі аудиторії.</li>
+          <li><b>4–5.01:</b> підсумки і план на китайський Новий рік (початок лютого) — важливий для Азії.</li>
+        </ul>
+        <div class="res"><b>Результат:</b> бюджет іде туди, де посилка встигає до свята; реклама не працює вхолосту після дедлайнів.</div>
+      </div>
+    </div>
+
+    <h3 class="bb-h3">Від чого залежить календар</h3>
+    <ul class="bb-caveats">
+      <li><b>Юля (логістика):</b> останні дні доставки до Різдва по країнах, залишки на грудень, терміни складу в США — до 24.11.</li>
+      <li><b>Марія:</b> новорічна пропозиція, бюджет на виробництво креативів і тест нового каналу, хто виробляє креативи.</li>
+      <li><b>Medicom TOY:</b> погодження нових креативів — закладено близько тижня.</li>
+      <li><b>Netpeak:</b> рішення для сайту, які потребують розробника.</li>
+      <li>Оцінки в грошах — з карти робіт; вони частково перетинаються, тому загальний ефект нижчий за суму.</li>
+    </ul>
   </section>
 
   <details class="bb-app" id="appendix">
