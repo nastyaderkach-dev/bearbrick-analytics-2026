@@ -2,7 +2,7 @@
 Bearbrick: аудит аналітики 3 жовтня – 1 листопада
 
 - `index.html` — дашборд аудиту аналітики
-- `october.html` — аналітичний дашборд за жовтень 2026: https://nastyaderkach-dev.github.io/bearbrick-analytics-2026/october.html (цифри — в об'єкті `D` у скрипті внизу файлу)
+- аналітика по місяцях і тижнях тепер в окремому дашборді **Bearbrick report**: https://nastyaderkach-dev.github.io/bearbrick-report/
 - `calendar.html` — календар робіт до Нового року: https://nastyaderkach-dev.github.io/bearbrick-analytics-2026/calendar.html
 
 ## Як правити календар
