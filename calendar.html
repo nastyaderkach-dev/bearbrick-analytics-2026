@@ -92,6 +92,12 @@
   details.fold > summary { cursor: pointer; padding: 9px 14px; font-size: 13px; font-weight: 600; color: var(--ok); }
   details.fold > summary:hover { background: var(--soft); }
   details.fold > div { padding: 4px 14px 14px; }
+  details.sec > summary { list-style: none; cursor: pointer; display: flex; align-items: baseline; gap: 12px; margin: 26px 0 6px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+  details.sec > summary::-webkit-details-marker { display: none; }
+  details.sec > summary h2 { margin: 0; }
+  details.sec > summary:hover h2 { color: var(--ok); }
+  details.sec[open] .tog::after { content: "Згорнути ▴"; }
+  details.sec > .sec-body { display: flex; flex-direction: column; gap: 10px; }
   a { color: var(--ok); } a:focus-visible { outline: 2px solid var(--ok); outline-offset: 2px; }
 </style>
 </head>
@@ -103,7 +109,7 @@
 <span class="period">10 листопада 2026 – 5 січня 2027 · 10 напрямів · оновлено 15 листопада, 22:00</span>
 <p class="lead">Робота ділиться на <b>щотижневу</b> — у понеділок збір і перевірка даних, у вівторок звіт і рекомендації по рекламі — і <b>проєктну</b>: креативна стратегія, дроп The Weeknd і листи після нього, подарункова кампанія CORE, Google Ads. З 2 грудня конверсію сайту і retention ведемо разом з командами Netpeak. <b>До 8 грудня</b> фокус — дроп, CORE, доставка, креативи, готовність листів і сайту; SMM, локалізація і тест нового каналу — <b>після піку</b>.</p>
 
-<h2>Найближчі два тижні · 16–29 листопада</h2>
+<details class="sec"><summary><h2>Найближчі два тижні · 16–29 листопада</h2><span class="tog" aria-hidden="true"></span></summary><div class="sec-body">
 <div class="wrap"><table class="tbl"><thead><tr><th>Коли</th><th>Що</th><th>Хто</th></tr></thead><tbody>
 <tr class="grp"><td colspan="3">Тиждень 16–22 листопада</td></tr>
 <tr><td class="d">Пн 16.11</td><td>Збір і перевірка даних за 9–15.11; старт креативної стратегії</td><td class="who">Настя</td></tr>
@@ -121,6 +127,7 @@
 <tr><td class="d">23–26.11</td><td>Пропозиція по креативах і бюджет на виробництво й тести</td><td class="who">Настя</td></tr>
 <tr><td class="d">Пт 27.11</td><td>Black Friday: CORE без знижки · погодження креативної стратегії</td><td class="who">Марія</td></tr>
 </tbody></table></div>
+</div></details>
 
 <h2>Ключові запуски</h2>
 <div class="dates">
@@ -161,7 +168,7 @@
 <div class="date"><b>≈12 січ</b>Пілотний ринок для локалізації</div>
 </div></div></details>
 
-<h2>Що блокує запуск</h2>
+<details class="sec"><summary><h2>Що блокує запуск</h2><span class="tog" aria-hidden="true"></span></summary><div class="sec-body">
 <p class="note">Статуси на 15.11; оновлюю щовівторка разом зі звітом.</p>
 <div class="wrap"><table class="tbl"><thead><tr><th>Завдання</th><th>Хто</th><th>Дата</th><th>Статус</th></tr></thead><tbody>
 <tr><td>Час старту дропу і часовий пояс (дата 8.12)</td><td class="who">Марія</td><td class="d">13.11</td><td><span class="st wait">очікує підтвердження</span></td></tr>
@@ -177,6 +184,7 @@
 <tr><td>Перевірка сайту: основна і повторна</td><td class="who">Netpeak, Настя</td><td class="d">3–4.12 · 7.12</td><td><span class="st plan">заплановано</span></td></tr>
 <tr><td>Сторінка зі знижкою −10% і сторінка після завершення продажів</td><td class="who">Джеймс; Марія</td><td class="d">7.12</td><td><span class="st plan">заплановано</span></td></tr>
 </tbody></table></div>
+</div></details>
 
 <h2>Готовність до дропу · контрольний список до 4 грудня</h2>
 <p class="note">Одне місце, де видно, чи готові ми запускатися. 4.12 — рішення за списком; 7.12 — повторна перевірка того, що не закрилось.</p>
@@ -190,7 +198,7 @@
 <tr><td>Визначено, хто контролює рекламу, сайт, листи й підтримку покупців у день запуску</td><td class="who">Марія</td><td>Список відповідальних з контактами і годинами чергування 8–9.12</td><td><span class="st no">не перевірено</span></td></tr>
 </tbody></table></div>
 
-<h2>Бюджети і залишки</h2>
+<details class="sec"><summary><h2>Бюджети і залишки</h2><span class="tog" aria-hidden="true"></span></summary><div class="sec-body">
 <p class="note">Зараз незрозуміло, чи ці суми додаткові, чи частини вже погодженого бюджету, — тому колонка «У загальному бюджеті» заповнюється після погодження з Марією (до 20.11).</p>
 <div class="wrap"><table class="tbl"><thead><tr><th>Період</th><th>Продукт</th><th>Канал</th><th>Бюджет</th><th>У загальному бюджеті чи додатковий</th><th>Погодження</th></tr></thead><tbody>
 <tr><td class="d">листопад</td><td>CORE</td><td>Meta · поточна реклама (p3)</td><td>план $609 на день (пропозиція від 9.11); факт 2–8.11 — $4,686</td><td>базовий</td><td><span class="st wait">ліміт на грудень — уточнити</span></td></tr>
@@ -207,6 +215,7 @@
 <li><b>160 Black:</b> дата надходження приблизна (≈17.11). Перша подарункова хвиля, масштабування реклами і ретаргет CORE — після фактичного надходження.</li>
 <li><b>Розподіл між Meta, Google і листами</b> — це прогноз попиту за каналами, а не резерв. Складський резерв — лише під конкретну пропозицію або сегмент, якщо команда вирішить його створити.</li>
 </ul>
+</div></details>
 
 <h2>Фокус у пік сезону</h2>
 <div class="rhythm">
